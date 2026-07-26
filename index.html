@@ -683,5 +683,62 @@
             }, 2000);
         }
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+<script>
+// PASTE LINK CSV PUBLISH TO WEB GOOGLE SHEETS KAMU DI DALAM TANDA KUTIP DI BAWAH INI:
+const googleSheetURL = "https://docs.google.com/spreadsheets/d/10wvJ_UZMr8_QpMw8kZH9azVTU2rhs_IDMYRgZuGBxoo/edit?usp=sharing";
+
+function loadGoogleSheetData() {
+    if (!googleSheetURL || googleSheetURL.includes("PASTE_LINK_CS")) return;
+
+    Papa.parse(googleSheetURL, {
+        download: true,
+        header: true,
+        complete: function(results) {
+            const data = results.data;
+            const tbody = document.getElementById('tableBodyData'); 
+            if (!tbody) return;
+            
+            tbody.innerHTML = ''; // Kosongkan data lama
+
+            data.forEach(row => {
+                // Abaikan jika baris di Google Sheet kosong
+                if (!row.Nama && !row.OPD) return;
+
+                // Atur warna badge status
+                let statusBadge = (row.Status === 'Aktif') 
+                    ? '<span class="px-3 py-1 text-sm font-semibold text-green-700 bg-green-100 rounded-full">Aktif</span>' 
+                    : '<span class="px-3 py-1 text-sm font-semibold text-red-700 bg-red-100 rounded-full">Tidak Aktif</span>';
+
+                let tr = document.createElement('tr');
+                tr.className = "border-b border-gray-200 hover:bg-gray-50 transition";
+                
+                tr.innerHTML = `
+                    <td class="p-4 text-sm text-gray-700">${row.OPD || '-'}</td>
+                    <td class="p-4 text-sm text-gray-700">
+                        <div class="font-bold text-gray-900">${row.Nama || '-'}</div>
+                        <div class="text-xs text-gray-500">${row.Jabatan || '-'}</div>
+                    </td>
+                    <td class="p-4 text-sm text-gray-700">${row.Lembaga || '-'}</td>
+                    <td class="p-4 text-sm text-gray-700">
+                        <div>SKEP: ${row.No_SKEP || '-'}</div>
+                        <div class="text-gray-500">KTA: ${row.KTA || '-'}</div>
+                    </td>
+                    <td class="p-4 text-sm text-gray-700">${row.Tgl_Berlaku || '-'}</td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 text-blue-600 hover:text-blue-800 cursor-pointer text-center">
+                        <i class="fas fa-eye"></i>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    });
+}
+
+// Jalankan fungsi otomatis saat halaman dimuat
+window.addEventListener('load', loadGoogleSheetData);
+</script>
 </body>
 </html>
