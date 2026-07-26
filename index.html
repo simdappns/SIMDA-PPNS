@@ -180,6 +180,7 @@
                         <div class="flex gap-2">
                             <button class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 transition shadow-sm"><i class="fas fa-filter mr-1"></i> Filter</button>
                             <button class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-700 transition shadow-sm"><i class="fas fa-file-excel mr-1"></i> Export Excel</button>
+                            <input type="file" id="fileInput" style="display: none;" accept=".xlsx, .xls, .csv" onchange="prosesFileImport(event)">
                         </div>
                     </div>
 
@@ -739,6 +740,15 @@ function loadGoogleSheetData() {
 
 // Jalankan fungsi otomatis saat halaman dimuat
 window.addEventListener('load', loadGoogleSheetData);
+</script>
+    <script>
+    function prosesFileImport(event) {
+        const file = event.target.files[0];
+        if (file) {
+            alert("File berhasil dipilih: " + file.name);
+            // Tambahkan logika untuk membaca file excel di sini jika diperlukan
+        }
+    }
 </script>
 </body>
 </html>
