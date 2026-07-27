@@ -736,25 +736,69 @@ function loadGoogleSheetData() {
             });
         }
     });
-    <script>
-        <!DOCTYPE html>
-<html lang="id">
-<head>
-    <!-- ... kode head, css, dan title Anda ... -->
-</head>
-<body>
+ <script>
+  document.getElementById("btnKirim").addEventListener("click", function(e) {
+    e.preventDefault(); 
     
-    <!-- ... KODE TAMPILAN FORM DAN TOMBOL ANDA DI SINI ... -->
-    <button id="btnKirim">Kirim Laporan</button>
+    // Ambil elemen form
+    const fileInput = document.getElementById("fileUpload");
+    const periodeEl = document.getElementById("periodeTahun");
+    const catatanEl = document.getElementById("catatanLaporan");
+    const btn = document.getElementById("btnKirim");
 
-    <!-- LETAKKAN SCRIPT DI SINI, TEPAT SEBELUM TAG BODY TERTUTUP -->
-    <script>
-        document.getElementById("btnKirim").addEventListener("click", function(e) {
-          e.preventDefault(); 
-          
-          // ... (masukkan seluruh kode JavaScript dari jawaban sebelumnya di sini) ...
-          
-        });
-     </script>
+    // Validasi file
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+      alert("Silakan pilih file PDF terlebih dahulu!");
+      return;
+    }
+    
+    const file = fileInput.files[0];
+    const periode = periodeEl ? periodeEl.value : "2026";
+    const catatan = catatanEl ? catatanEl.value : "";
+
+    // Ubah status tombol saat mengirim
+    btn.innerHTML = "Mengirim...";
+    btn.disabled = true;
+    
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const base64String = event.target.result;
+      
+      const payload = {
+        base64: base64String,
+        fileName: file.name,
+        mimeType: file.type,
+        periode: periode,
+        catatan: catatan
+      };
+      
+      // GANTI URL DI BAWAH DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+      const scriptURL = "MASUKKAN_URL_WEB_APP_APPS_SCRIPT_ANDA_DI_SINI"; 
+      
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          alert("Laporan berhasil dikirim dan tersimpan di Google Drive!");
+        } else {
+          alert("Terjadi kesalahan dari server: " + (data.message || "Gagal menyimpan"));
+        }
+      })
+      .catch(err => {
+        console.error("Error:", err);
+        alert("Gagal mengirim laporan. Periksa koneksi atau URL Apps Script.");
+      })
+      .finally(() => {
+        btn.innerHTML = "Kirim Laporan";
+        btn.disabled = false;
+      });
+    };
+    
+    reader.readAsDataURL(file);
+  });
+    </script>
 </body>
 </html>
