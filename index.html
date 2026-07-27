@@ -216,6 +216,39 @@
                 <!-- SECTION 3: LAPORAN TAHUNAN -->
                 <div id="sec-laporan" class="tab-content space-y-6">
                     <div class="mb-6">
+                        <div class="p-6 bg-white rounded-lg shadow-md mt-4">
+    <h3 class="font-bold text-lg mb-4 border-b pb-2">Kirim Laporan Baru</h3>
+    
+    <!-- Form Upload -->
+    <div class="flex flex-col gap-3 max-w-md">
+        <label class="text-sm text-gray-600">Nama Laporan:</label>
+        <input type="text" id="namaLaporan" placeholder="Contoh: Laporan Giat Penertiban Satpol PP" class="border p-2 rounded">
+        
+        <label class="text-sm text-gray-600">Pilih File (Gambar / PDF kecil):</label>
+        <input type="file" id="fileLaporan" class="border p-2 rounded">
+        
+        <button onclick="simpanLaporanLokal()" class="bg-blue-600 text-white font-bold px-4 py-2 rounded hover:bg-blue-700 transition mt-2">
+            <i class="fas fa-upload mr-2"></i> Upload Laporan
+        </button>
+    </div>
+
+    <!-- Tabel Riwayat Laporan -->
+    <h3 class="font-bold text-lg mt-8 mb-4 border-b pb-2">Riwayat Laporan Tersimpan</h3>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="py-2 px-4 border-b text-left text-sm font-semibold">Waktu</th>
+                    <th class="py-2 px-4 border-b text-left text-sm font-semibold">Nama Laporan</th>
+                    <th class="py-2 px-4 border-b text-center text-sm font-semibold">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tabelLaporan">
+                <!-- Data akan muncul di sini otomatis -->
+            </tbody>
+        </table>
+    </div>
+</div>
                         <h2 class="text-2xl font-bold text-gray-800">Laporan Tahunan PPNS</h2>
                         <p class="text-sm text-gray-500">Modul pelaporan kinerja dan rekapitulasi penindakan tahunan.</p>
                     </div>
@@ -781,5 +814,89 @@ function lihatDetail() {
     alert("Menampilkan rincian profil PPNS terkait...");
 }
     </script>
+    // Fungsi untuk memuat data saat halaman dibuka
+document.addEventListener("DOMContentLoaded", function() {
+    muatLaporanLokal();
+});
+
+function simpanLaporanLokal() {
+    const nama = document.getElementById('namaLaporan').value;
+    const input = document.getElementById('fileLaporan');
+    
+    if (!nama || input.files.length === 0) {
+        alert("Mohon isi nama laporan dan pilih file terlebih dahulu!");
+        return;
+    }
+
+    const file = input.files[0];
+    
+    // Karena Local Storage punya batas kecil (sekitar 5MB), kita batasi ukuran file
+    if(file.size > 2000000) { // 2MB
+        alert("Ukuran file terlalu besar untuk purwarupa ini. Mohon gunakan file di bawah 2MB.");
+        return;
+    }
+
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        // Mendapatkan data file berupa teks (Base64)
+        const fileData = e.target.result;
+        
+        // Mengambil data lama dari memori (jika ada)
+        let riwayat = JSON.parse(localStorage.getItem('dataLaporan')) || [];
+        
+        // Membuat data baru
+        const laporanBaru = {
+            id: Date.now(),
+            waktu: new Date().toLocaleString('id-ID'),
+            nama: nama,
+            data: fileData,
+            namaFile: file.name
+        };
+        
+        // Menyimpan ke memori browser
+        riwayat.push(laporanBaru);
+        localStorage.setItem('dataLaporan', JSON.stringify(riwayat));
+        
+        alert("Laporan berhasil disimpan di sistem!");
+        
+        // Reset form dan perbarui tabel
+        document.getElementById('namaLaporan').value = '';
+        input.value = '';
+        muatLaporanLokal();
+    };
+    
+    // Membaca file
+    reader.readAsDataURL(file);
+}
+
+function muatLaporanLokal() {
+    const tabel = document.getElementById('tabelLaporan');
+    if(!tabel) return; // Jika tabel tidak ada di halaman ini, abaikan
+    
+    tabel.innerHTML = '';
+    const riwayat = JSON.parse(localStorage.getItem('dataLaporan')) || [];
+    
+    if(riwayat.length === 0) {
+        tabel.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-gray-500">Belum ada laporan tersimpan.</td></tr>';
+        return;
+    }
+    
+    riwayat.forEach(laporan => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-gray-50";
+        tr.innerHTML = `
+            <td class="py-2 px-4 border-b text-sm">${laporan.waktu}</td>
+            <td class="py-2 px-4 border-b text-sm font-medium">${laporan.nama} <br><span class="text-xs text-gray-500">${laporan.namaFile}</span></td>
+            <td class="py-2 px-4 border-b text-center text-sm">
+                <a href="${laporan.data}" download="${laporan.namaFile}" class="text-green-600 hover:text-green-800 bg-green-100 px-2 py-1 rounded text-xs">
+                    <i class="fas fa-download"></i> Unduh
+                </a>
+            </td>
+        `;
+        tabel.appendChild(tr);
+    });
+}
+     </script>
 </body>
 </html>
