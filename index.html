@@ -9,6 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SheetJS (Untuk Import/Export Excel) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- Leaflet CSS & JS for Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -287,7 +289,7 @@
                             </button>
                         </div>
                         
-                        <form id="dataForm" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4" onsubmit="handleFormSubmit(event)">
+                        <form id="formLaporan" onsubmit="handleKirimLaporan(event)" class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Perangkat Daerah (OPD)</label>
                                 <select id="inputOpd" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -425,6 +427,117 @@
             if (nip === "199408312025061003") {
                 if (pass === usersDB[nip].pass) {
                     processLogin(usersDB[nip]);
+                    // ==========================================
+// FITUR 1: IMPORT & EXPORT EXCEL
+// ==========================================
+
+// Fungsi untuk mengekspor tabel ke Excel
+function exportData() {
+    // Membaca tabel HTML berdasarkan tag table
+    let table = document.querySelector("table");
+    
+    if(!table) {
+        alert("Tabel data tidak ditemukan!");
+        return;
+    }
+
+    // Mengonversi tabel HTML ke Worksheet Excel
+    let worksheet = XLSX.utils.table_to_sheet(table);
+    let workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data PPNS");
+
+    // Mengunduh file Excel
+    XLSX.writeFile(workbook, "Data_Direktori_PPNS.xlsx");
+}
+
+// Fungsi untuk memproses Import Excel
+function prosesFileImport(event) {
+    const file = event.target.files[0];
+    
+    if (!file) return;
+
+    // Validasi ekstensi file
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop().toLowerCase();
+    
+    if (fileExtension !== 'xlsx' && fileExtension !== 'xls' && fileExtension !== 'csv') {
+        alert("Format file tidak didukung! Harap unggah file Excel (.xlsx, .xls) atau .csv.");
+        event.target.value = ''; // Reset input
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        // Mengambil data dari sheet pertama
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+
+        // Mengonversi isi sheet menjadi JSON (Array of Objects)
+        const excelData = XLSX.utils.sheet_to_json(worksheet);
+
+        if (excelData.length > 0) {
+            console.log("Data berhasil di-import:", excelData);
+            alert(`Berhasil membaca ${excelData.length} baris data dari ${fileName}.\n(Cek Console untuk melihat output datanya)`);
+            
+            // Di sini Anda bisa memanggil fungsi untuk merender / memasukkan excelData ke dalam tabel HTML
+            // contoh: renderTabel(excelData);
+        } else {
+            alert("File Excel kosong atau format kolom tidak sesuai.");
+        }
+    };
+
+    reader.readAsArrayBuffer(file);
+    
+    // Reset value agar bisa mengimpor file yang sama lagi jika dibutuhkan
+    event.target.value = ''; 
+}
+
+// ==========================================
+// FITUR 2: SIMULASI PENGIRIMAN FILE (UPLOAD)
+// ==========================================
+
+function handleKirimLaporan(event) {
+    // Mencegah halaman me-refresh secara otomatis saat disubmit
+    event.preventDefault(); 
+    
+    const form = event.target;
+    const periodeSelect = form.querySelector('select');
+    const fileInput = form.querySelector('input[type="file"]');
+    const catatanInput = form.querySelector('textarea');
+
+    // Validasi apakah file sudah dipilih
+    if (fileInput.files.length === 0) {
+        alert("Mohon pilih file Laporan (PDF) terlebih dahulu sebelum mengirim!");
+        return;
+    }
+
+    const uploadedFile = fileInput.files[0];
+
+    // Simulasi proses upload
+    const btnSubmit = form.querySelector('button[type="submit"], button[type="button"]');
+    const teksAsli = btnSubmit.innerText;
+    
+    btnSubmit.innerText = "Mengirim...";
+    btnSubmit.classList.add('opacity-70', 'cursor-not-allowed');
+    btnSubmit.disabled = true;
+
+    // setTimeout digunakan untuk mensimulasikan jeda waktu pengiriman ke server
+    setTimeout(() => {
+        alert(`Laporan Tahun ${periodeSelect.value} berhasil terkirim!\nNama File: ${uploadedFile.name}\nUkuran: ${(uploadedFile.size / 1024).toFixed(2)} KB`);
+        
+        // Reset form setelah "berhasil"
+        form.reset();
+        
+        // Kembalikan tombol ke state awal
+        btnSubmit.innerText = teksAsli;
+        btnSubmit.classList.remove('opacity-70', 'cursor-not-allowed');
+        btnSubmit.disabled = false;
+    }, 1500);
+}
                 } else {
                     showError("Password Admin salah!");
                 }
