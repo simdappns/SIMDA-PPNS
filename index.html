@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        @import url('https://docs.google.com/spreadsheets/d/10wvJ_UZMr8_QpMw8kZH9azVTU2rhs_IDMYRgZuGBxoo/edit?usp=sharing');
+        
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; overflow-x: hidden; }
         #map { height: 350px; z-index: 1; border-radius: 0.5rem; }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
@@ -214,13 +214,17 @@
                 </div>
 
                 <!-- SECTION 3: LAPORAN TAHUNAN -->
-                <div id="sec-laporan" class="tab-content space-y-6">
-                   
-                        <h2 class="text-2xl font-bold text-gray-800">Laporan Tahunan PPNS</h2>
-                        <p class="text-sm text-gray-500">Modul pelaporan kinerja dan rekapitulasi penindakan tahunan.</p>
-                    </div>
+                <!-- KODE YANG BENAR: -->
+<div id="sec-laporan" class="tab-content space-y-6">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800">Laporan Tahunan PPNS</h2>
+        <p class="text-sm text-gray-500">Modul pelaporan kinerja dan rekapitulasi penindakan tahunan.</p>
+    </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Form upload & Riwayat ada di dalam sini -->
+    </div>
+</div>
                         <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-upload text-blue-500 mr-2"></i>Upload Laporan Kinerja (Tahun Berjalan)</h3>
                             <form class="space-y-4">
@@ -465,6 +469,7 @@
             document.getElementById('profilNameDisplay').innerText = user.name;
             document.getElementById('profilRoleDisplay').innerText = user.role;
             document.getElementById('profilNipDisplay').innerText = user.nip;
+            </script>
 
             // Setup Profile/Password section based on Role
             if (user.role === 'Admin') {
@@ -803,5 +808,8 @@ function loadGoogleSheetData() {
     reader.readAsDataURL(file);
   });
     </script>
+    <script src="app.js"></script>
+<!-- Atau <script src="script.js"></script> sesuaikan dengan nama file JS Anda -->
+     </script>
 </body>
 </html>
