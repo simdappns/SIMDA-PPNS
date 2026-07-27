@@ -178,8 +178,8 @@
                             <p class="text-sm text-gray-500">Daftar lengkap seluruh PPNS di lingkup Pemprov NTT</p>
                         </div>
                         <div class="flex gap-2">
-                            <button class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 transition shadow-sm"><i class="fas fa-filter mr-1"></i> Filter</button>
-                            <button class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-700 transition shadow-sm"><i class="fas fa-file-excel mr-1"></i> Export Excel</button>
+                            <button onclick=<button onclick="fokusPencarian()" class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-50 transition shadow-sm"><i class="fas fa-filter mr-1"></i> Filter</button>
+                            <button onclick="exportData()" class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-700 transition shadow-sm"><i class="fas fa-file-excel mr-1"></i> Export Excel</button>
                             <input type="file" id="fileInput" style="display: none;" accept=".xlsx, .xls, .csv" onchange="prosesFileImport(event)">
                         </div>
                     </div>
@@ -750,5 +750,36 @@ window.addEventListener('load', loadGoogleSheetData);
         }
     }
 </script>
+    function exportData() {
+    // Ini akan mengunduh data tabel sebagai file CSV sederhana
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "OPD,Nama & Jabatan,Lembaga Pendidikan,No SKEP & KTA,Tgl Berlaku,Status\n";
+    csvContent += "Satpol PP,Budi Santoso S.H.,Diklat Reserse Polri,SKEP: SK-001/2020 KTA: KTA-9981,2027-12-31,Aktif\n";
+    csvContent += "Dinas Perhubungan,Siti Aminah,Pusdiklat Darat,SKEP: SK-042/2019 KTA: KTA-8822,2023-05-10,Tidak Aktif\n";
+
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Data_PPNS_Pemprov_NTT.csv"); // Nama file yang akan terunduh
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Fungsi untuk tombol Filter
+function fokusPencarian() {
+    // Secara otomatis mengarahkan kursor ke kolom pencarian
+    const searchBox = document.querySelector('input[placeholder="Cari nama atau NIP..."]');
+    if(searchBox) {
+        searchBox.focus();
+        searchBox.classList.add('ring-2', 'ring-blue-500'); // Memberikan efek highlight
+        setTimeout(() => searchBox.classList.remove('ring-2', 'ring-blue-500'), 1000);
+    }
+}
+
+// Fungsi untuk ikon Aksi/Mata
+function lihatDetail() {
+    alert("Menampilkan rincian profil PPNS terkait...");
+}
 </body>
 </html>
