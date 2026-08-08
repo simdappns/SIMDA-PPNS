@@ -1,16 +1,42 @@
-<script>
-// Jalankan fungsi otomatis saat halaman dimuat
-window.addEventListener('load', loadGoogleSheetData);
-    <script>
-    function prosesFileImport(event) {
-        const file = event.target.files[0];
-        if (file) {
-            alert("File berhasil dipilih: " + file.name);
-            // Tambahkan logika untuk membaca file excel di sini jika diperlukan
-        }
-    }
-    function exportData() {
-    // Ini akan mengunduh data tabel sebagai file CSV sederhana
+// ==========================================
+// 1. FUNGSI UNTUK MENGIRIM DATA KE GOOGLE SHEETS
+// ==========================================
+function handleKirimLaporan(event) {
+    event.preventDefault(); // Mencegah halaman refresh saat tombol ditekan
+
+    // GANTI TULISAN DI BAWAH DENGAN URL WEB APP GOOGLE SCRIPT ANDA
+    const scriptURL = 'AKfycbyrnTYpPZGxIY6z07kOK2WZevoL3IxlMGn3shjWT-3y-iMdmG69nBrR9WRylTQsYe4Wmw'; 
+    
+    const formData = new FormData();
+    
+    // Mengambil data berdasarkan ID dari form di index.html
+    formData.append('opd', document.getElementById('inputOpd').value);
+    formData.append('nama', document.getElementById('inputNama').value);
+    
+    // (Opsional) Jika Anda punya input lain di HTML, hapus tanda // di bawah ini:
+    // formData.append('jabatan', document.getElementById('inputJabatan').value);
+    // formData.append('no_skep', document.getElementById('inputSkep').value);
+
+    // Proses mengirim data menggunakan mode 'no-cors' agar tidak diblokir
+    fetch(scriptURL, { 
+        method: 'POST', 
+        body: formData,
+        mode: 'no-cors' 
+    })
+    .then(response => {
+        alert('Data PPNS berhasil disimpan ke server Google Sheets!');
+        document.getElementById('formLaporan').reset(); // Mengosongkan form
+    })
+    .catch(error => {
+        alert('Terjadi kesalahan saat menyimpan data.');
+        console.error('Error!', error.message);
+    });
+}
+
+// ==========================================
+// 2. FUNGSI UNTUK TOMBOL EKSPOR & FILTER
+// ==========================================
+function exportData() {
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += "OPD,Nama & Jabatan,Lembaga Pendidikan,No SKEP & KTA,Tgl Berlaku,Status\n";
     csvContent += "Satpol PP,Budi Santoso S.H.,Diklat Reserse Polri,SKEP: SK-001/2020 KTA: KTA-9981,2027-12-31,Aktif\n";
@@ -19,32 +45,38 @@ window.addEventListener('load', loadGoogleSheetData);
     var encodedUri = encodeURI(csvContent);
     var link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "Data_PPNS_Pemprov_NTT.csv"); // Nama file yang akan terunduh
+    link.setAttribute("download", "Data_PPNS_Pemprov_NTT.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 }
 
-// Fungsi untuk tombol Filter
 function fokusPencarian() {
-    // Secara otomatis mengarahkan kursor ke kolom pencarian
     const searchBox = document.querySelector('input[placeholder="Cari nama atau NIP..."]');
     if(searchBox) {
         searchBox.focus();
-        searchBox.classList.add('ring-2', 'ring-blue-500'); // Memberikan efek highlight
+        searchBox.classList.add('ring-2', 'ring-blue-500');
         setTimeout(() => searchBox.classList.remove('ring-2', 'ring-blue-500'), 1000);
     }
 }
 
-// Fungsi untuk ikon Aksi/Mata
 function lihatDetail() {
     alert("Menampilkan rincian profil PPNS terkait...");
 }
-</script>
-    // Fungsi untuk memuat data saat halaman dibuka
+
+// ==========================================
+// 3. FUNGSI UNTUK PENYIMPANAN LAPORAN LOKAL
+// ==========================================
 document.addEventListener("DOMContentLoaded", function() {
     muatLaporanLokal();
 });
+
+function prosesFileImport(event) {
+    const file = event.target.files[0];
+    if (file) {
+        alert("File berhasil dipilih: " + file.name);
+    }
+}
 
 function simpanLaporanLokal() {
     const nama = document.getElementById('namaLaporan').value;
@@ -57,22 +89,17 @@ function simpanLaporanLokal() {
 
     const file = input.files[0];
     
-    // Karena Local Storage punya batas kecil (sekitar 5MB), kita batasi ukuran file
-    if(file.size > 2000000) { // 2MB
-        alert("Ukuran file terlalu besar untuk purwarupa ini. Mohon gunakan file di bawah 2MB.");
+    if(file.size > 2000000) { 
+        alert("Ukuran file terlalu besar. Mohon gunakan file di bawah 2MB.");
         return;
     }
 
     const reader = new FileReader();
     
     reader.onload = function(e) {
-        // Mendapatkan data file berupa teks (Base64)
         const fileData = e.target.result;
-        
-        // Mengambil data lama dari memori (jika ada)
         let riwayat = JSON.parse(localStorage.getItem('dataLaporan')) || [];
         
-        // Membuat data baru
         const laporanBaru = {
             id: Date.now(),
             waktu: new Date().toLocaleString('id-ID'),
@@ -81,25 +108,22 @@ function simpanLaporanLokal() {
             namaFile: file.name
         };
         
-        // Menyimpan ke memori browser
         riwayat.push(laporanBaru);
         localStorage.setItem('dataLaporan', JSON.stringify(riwayat));
         
         alert("Laporan berhasil disimpan di sistem!");
         
-        // Reset form dan perbarui tabel
         document.getElementById('namaLaporan').value = '';
         input.value = '';
         muatLaporanLokal();
     };
     
-    // Membaca file
     reader.readAsDataURL(file);
 }
 
 function muatLaporanLokal() {
     const tabel = document.getElementById('tabelLaporan');
-    if(!tabel) return; // Jika tabel tidak ada di halaman ini, abaikan
+    if(!tabel) return; 
     
     tabel.innerHTML = '';
     const riwayat = JSON.parse(localStorage.getItem('dataLaporan')) || [];
@@ -124,4 +148,3 @@ function muatLaporanLokal() {
         tabel.appendChild(tr);
     });
 }
-<script src="script.js"></script>
