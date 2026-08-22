@@ -182,6 +182,7 @@
                                         <th class="px-4 py-3 border-b">No SKEP & KTA</th>
                                         <th class="px-4 py-3 border-b">Tgl Berlaku</th>
                                         <th class="px-4 py-3 border-b">Status</th>
+                                        <th class="px-4 py-3 border-b th-aksi hidden">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableBodyData" class="divide-y divide-gray-200 bg-white">
@@ -512,10 +513,12 @@
             reader.readAsArrayBuffer(file);
         }
 
-        function renderTable() {
+        function renderTable(data) {
             const tbody = document.getElementById('tableBodyData');
             tbody.innerHTML = '';
 
+            renderTable(ppnsData);
+        }
             ppnsData.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-50 border-b";
@@ -702,6 +705,62 @@
                 }
             };
         }
+        <!-- MODAL EDIT DATA (KHUSUS ADMIN) -->
+<div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 relative">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2"><i class="fas fa-edit text-yellow-500 mr-2"></i>Edit Data PPNS</h3>
+        
+        <form id="formEditData" onsubmit="handleSimpanEdit(event)" class="space-y-3">
+            <input type="hidden" id="editIndex">
+            <div>
+                <label class="block text-xs font-medium text-gray-700">Nama Lengkap</label>
+                <input type="text" id="editNama" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-700">OPD</label>
+                <input type="text" id="editOpd" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700">Jabatan</label>
+                    <input type="text" id="editJabatan" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700">Lembaga Pendidikan</label>
+                    <input type="text" id="editDiklat" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700">No. SKEP</label>
+                    <input type="text" id="editSkep" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700">No. KTA</label>
+                    <input type="text" id="editKta" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700">Tanggal Berlaku</label>
+                    <input type="date" id="editTgl" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700">Status</label>
+                    <select id="editStatus" class="w-full px-3 py-1.5 border rounded-lg text-sm">
+                        <option value="Aktif">Aktif</option>
+                        <option value="Tidak Aktif">Tidak Aktif</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 mt-4 pt-2 border-t">
+                <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300">Batal</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
     </script>
 </body>
 </html>
