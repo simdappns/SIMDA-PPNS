@@ -516,11 +516,11 @@
 
         function renderTable(data) {
             const tbody = document.getElementById('tableBodyData');
+            if (!tbody) return;
+            
             tbody.innerHTML = '';
-
-            renderTable(ppnsData);
-        }
-            ppnsData.forEach(item => {
+            
+            data.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-50 border-b";
                 const isAktif = item.status === 'Aktif';
@@ -536,7 +536,7 @@
                 `;
                 tbody.appendChild(tr);
             });
-
+        }
             document.getElementById('totalDataCount').innerText = ppnsData.length;
 
         function searchTable() {
