@@ -520,11 +520,24 @@
             
             if (data && Array.isArray(data)) {
                 data.forEach(item => {
-                    });
+                    const tr = document.createElement('tr');
+            tr.className = "hover:bg-gray-50 border-b";
+            const isAktif = item.status === 'Aktif';
+            const badgeClass = isAktif ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+            tr.innerHTML = `
+                <td class="px-4 py-3"><div class="font-bold">${item.nama}</div><div class="text-xs text-gray-500">${item.jabatan}</div></td>
+                <td class="px-4 py-3">${item.diklat}</td>
+                <td class="px-4 py-3"><div class="text-xs">SKEP: ${item.skep}</div><div class="text-xs text-blue-600">KTA: ${item.kta}</div></td>
+                <td class="px-4 py-3">${item.tgl}</td>
+                <td class="px-4 py-3"><span class="px-2 py-1 text-xs rounded-full font-semibold ${badgeClass}">${item.status}</span></td>
+            `;      
+            tbody.appendChild(tr);    
+        });
              } else {
             console.warn("Data untuk tabel kosong atau bukan array:", data);
         }
-    }
+            document.getElementById('totalDataCount').innerText = ppnsData.length;
+        }
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-50 border-b";
                 const isAktif = item.status === 'Aktif';
