@@ -520,7 +520,13 @@
             
             tbody.innerHTML = '';
             
-            data.forEach(item => {
+            if (data && Array.isArray(data)) {
+                data.forEach(item => {
+                    });
+             } else {
+            console.warn("Data untuk tabel kosong atau bukan array:", data);
+        }
+    }
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-50 border-b";
                 const isAktif = item.status === 'Aktif';
