@@ -553,8 +553,9 @@
                 `;
                 tbody.appendChild(tr);
         });
+        }
             document.getElementById('totalDataCount').innerText = ppnsData.length;
-
+        }
         function searchTable() {
             const val = document.getElementById('searchInput').value.toLowerCase();
             const rows = document.querySelectorAll('#tableBodyData tr');
