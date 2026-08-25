@@ -19,7 +19,7 @@
 
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; overflow-x: hidden; }
-        #map { height: 350px; z-index: 1; border-radius: 0.5rem; }
+        #map { height: 450px; z-index: 1; border-radius: 0.5rem; }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         
         /* Tab Navigation transition */
@@ -56,7 +56,7 @@
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-blue-500 to-green-500"></div>
             
             <div class="text-center mb-8 mt-2">
-                <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo Komodo Praja" class="h-28 mx-auto mb-4 object-contain rounded-md" onerror="this.src='https://placehold.co/150x150/png?text=Logo'">
+                <img src="https://placehold.co/150x150/1e293b/ffffff?text=SIMDA" alt="Logo" class="h-28 mx-auto mb-4 object-contain rounded-md shadow-sm">
                 <h1 class="text-2xl font-bold text-gray-800 tracking-wide">SIMDA PPNS</h1>
                 <p class="text-sm text-gray-500 mt-1">Sistem Informasi Manajemen Data PPNS Pemprov NTT</p>
             </div>
@@ -83,9 +83,9 @@
     <div id="mainApp" class="hidden w-full h-full flex">
         
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-2xl z-40 transition-all duration-300 flex-shrink-0">
+        <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-2xl z-40 transition-all duration-300 flex-shrink-0 hidden md:flex">
             <div class="p-4 border-b border-slate-700 flex items-center gap-3">
-                <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo" class="h-10 w-10 object-cover bg-white rounded border border-yellow-500" onerror="this.src='https://placehold.co/100x100/png?text=Logo'">
+                <img src="https://placehold.co/100x100/1e293b/ffffff?text=SIMDA" alt="Logo" class="h-10 w-10 object-cover bg-white rounded border border-yellow-500">
                 <div>
                     <h2 class="text-lg font-bold leading-none text-yellow-400">SIMDA PPNS</h2>
                     <p class="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Pemprov NTT</p>
@@ -140,6 +140,18 @@
 
         <!-- MAIN CONTENT AREA -->
         <main class="flex-1 flex flex-col h-full bg-gray-50 overflow-hidden relative">
+            
+            <!-- Mobile Header -->
+            <header class="md:hidden bg-white shadow-sm flex items-center justify-between p-4 z-30">
+                <div class="flex items-center gap-2">
+                    <img src="https://placehold.co/100x100/1e293b/ffffff?text=SIMDA" alt="Logo" class="h-8 w-8 object-cover rounded">
+                    <h2 class="text-md font-bold text-slate-800">SIMDA PPNS</h2>
+                </div>
+                <button onclick="toggleMobileMenu()" class="text-slate-600 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </header>
+
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full">
                 
                 <!-- SECTION 1: DASHBOARD -->
@@ -171,7 +183,7 @@
                     <!-- BARIS BAWAH: PETA (FULL WIDTH) -->
                     <div class="glass-panel p-5 rounded-xl shadow-sm border border-gray-200">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-map-marker-alt text-red-500 mr-2"></i>Peta Sebaran PPNS (Pemprov NTT)</h3>
-                        <div id="map" class="w-full border border-gray-300 bg-gray-100" style="height: 450px;"></div>
+                        <div id="map" class="w-full border border-gray-300 bg-gray-100 h-96 md:h-[450px]"></div>
                     </div>
                 </div>
 
@@ -182,7 +194,7 @@
                             <h2 class="text-2xl font-bold text-gray-800">Direktori Data PPNS</h2>
                             <p class="text-sm text-gray-500">Daftar lengkap seluruh PPNS di lingkup Pemprov NTT</p>
                         </div>
-                        <div class="flex gap-2 admin-only">
+                        <div class="flex gap-2 flex-wrap admin-only">
                             <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-700 transition shadow-sm"><i class="fas fa-file-import mr-1"></i> Import Excel</button>
                             <button onclick="exportData()" class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-700 transition shadow-sm"><i class="fas fa-file-excel mr-1"></i> Export Excel</button>
                             <input type="file" id="fileInput" class="hidden" accept=".xlsx, .xls, .csv" onchange="prosesFileImport(event)">
@@ -190,15 +202,15 @@
                     </div>
 
                     <div class="glass-panel rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                        <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50/50">
-                            <div class="relative w-64">
+                        <div class="p-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-50/50 gap-4">
+                            <div class="relative w-full max-w-sm">
                                 <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari nama atau NIP..." class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
                             </div>
-                            <span class="text-sm text-gray-500">Total: <b id="totalDataCount">0</b> PPNS</span>
+                            <span class="text-sm text-gray-500 font-medium bg-white px-3 py-1 rounded-full border shadow-sm">Total: <b id="totalDataCount">0</b> PPNS</span>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-600" id="ppnsTable">
+                            <table class="w-full text-sm text-left text-gray-600 min-w-[800px]" id="ppnsTable">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-100/80">
                                     <tr>
                                         <th class="px-4 py-3 border-b">No</th>
@@ -218,19 +230,19 @@
                     </div>
                 </div>
 
-                <!-- SECTION: LAPORAN BULANAN (NEW) -->
+                <!-- SECTION: LAPORAN BULANAN -->
                 <div id="sec-laporanBulanan" class="tab-content space-y-6">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">Laporan Bulanan PPNS</h2>
                         <p class="text-sm text-gray-500">Kirim laporan ringkasan kinerja dan kegiatan PPNS setiap bulan.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Form Upload -->
                         <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-calendar-check text-blue-500 mr-2"></i>Upload Laporan Bulanan</h3>
                             <form id="formLaporanBulanan" onsubmit="uploadLaporanBulanan(event)" class="space-y-4">
-                                <div class="grid grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Bulan</label>
                                         <select id="lapBulanBln" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
@@ -240,7 +252,7 @@
                                             <option value="April">April</option>
                                             <option value="Mei">Mei</option>
                                             <option value="Juni">Juni</option>
-                                            <option value="Juli">Juli</option>
+                                            <option value="Juli" selected>Juli</option>
                                             <option value="Agustus">Agustus</option>
                                             <option value="September">September</option>
                                             <option value="Oktober">Oktober</option>
@@ -279,7 +291,7 @@
                                         <p class="text-sm font-medium text-gray-800">Laporan Kegiatan Juli 2026</p>
                                         <p class="text-xs text-gray-500">Diunggah: 2 Ags 2026</p>
                                     </div>
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">Diterima</span>
+                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium border border-green-200">Diterima</span>
                                 </li>
                             </ul>
                         </div>
@@ -293,7 +305,7 @@
                         <p class="text-sm text-gray-500">Modul pelaporan kinerja dan unggah berkas langsung ke Sistem.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Form Upload -->
                         <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-upload text-blue-500 mr-2"></i>Upload Laporan Kinerja</h3>
@@ -328,14 +340,14 @@
                                         <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS 2025</p>
                                         <p class="text-xs text-gray-500">Diunggah: 10 Jan 2026</p>
                                     </div>
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">Diterima</span>
+                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium border border-green-200">Diterima</span>
                                 </li>
                                 <li class="py-3 flex justify-between items-center">
                                     <div>
                                         <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS 2024</p>
                                         <p class="text-xs text-gray-500">Diunggah: 15 Jan 2025</p>
                                     </div>
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">Diterima</span>
+                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium border border-green-200">Diterima</span>
                                 </li>
                             </ul>
                         </div>
@@ -346,27 +358,26 @@
                 <div id="sec-update" class="tab-content space-y-6">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">Rubah / Tambah Data PPNS</h2>
-                        <p class="text-sm text-gray-500">Perbarui informasi identitas, jabatan, dan masa berlaku KTA Anda.</p>
+                        <p class="text-sm text-gray-500">Perbarui informasi identitas, jabatan, dan masa berlaku KTA.</p>
                     </div>
 
                     <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200 bg-gradient-to-br from-white to-blue-50/30">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-sync text-indigo-500 mr-2"></i>Form Entry Data PPNS</h3>
                         
                         <form id="formUpdateData" onsubmit="handleSimpanData(event)" class="space-y-4">
+                            <!-- Hidden ID field for updates -->
+                            <input type="hidden" id="inputId" value="">
+                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Perangkat Daerah (OPD)</label>
                                     <select id="inputOpd" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 outline-none">
                                         <option value="">Pilih OPD...</option>
-                                        <option value="Satuan Polisi Pamong Praja">Satuan Polisi Pamong Praja</option>
-                                        <option value="Dinas Lingkungan Hidup dan Kehutanan">Dinas Lingkungan Hidup dan Kehutanan</option>
+                                        <option value="Satpol PP">Satpol PP</option>
+                                        <option value="Dinas Lingkungan Hidup">Dinas Lingkungan Hidup</option>
                                         <option value="Dinas Perhubungan">Dinas Perhubungan</option>
-                                        <option value="Dinas Pariwisata dan Ekonomi Kreatif">Dinas Pariwisata dan Ekonomi Kreatif</option>
+                                        <option value="Dinas Pariwisata">Dinas Pariwisata</option>
                                         <option value="Inspektorat Daerah">Inspektorat Daerah</option>
-                                        <option value="Badan Kepegawaian Daerah">Badan Kepegawaian Daerah</option>
-                                        <option value="Badan Kesatuan Bangsa dan Politik">Badan Kesatuan Bangsa dan Politik</option>
-                                        <option value="Badan Pendapatan dan Aset Daerah">Badan Pendapatan dan Aset Daerah</option>
-                                        <option value="Dinas Koperasi dan UMKM">Dinas Koperasi dan UMKM</option>
                                         <option value="Dinas Kelautan dan Perikanan">Dinas Kelautan dan Perikanan</option>
                                     </select>
                                 </div>
@@ -397,7 +408,7 @@
                             </div>
                             
                             <div class="pt-4 border-t border-gray-200 flex justify-end gap-3">
-                                <button type="button" onclick="resetFormUpdate()" class="px-5 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition font-medium">Batal</button>
+                                <button type="button" onclick="resetFormUpdate()" class="px-5 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition font-medium">Reset</button>
                                 <button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium shadow-md flex items-center gap-2">
                                     <i class="fas fa-save"></i> Simpan Data
                                 </button>
@@ -418,26 +429,28 @@
                                 <i class="fas fa-user-shield"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-gray-800">Admin Utama</h3>
-                                <p class="text-gray-500">NIP: 198001012005011001</p>
-                                <span class="mt-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-medium">Administrator Sistem</span>
+                                <h3 class="text-xl font-bold text-gray-800" id="profileName">Admin Utama</h3>
+                                <p class="text-gray-500" id="profileNip">NIP: 198001012005011001</p>
+                                <span class="mt-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-medium border border-blue-200" id="profileRoleBadge">Administrator Sistem</span>
                             </div>
                         </div>
 
                         <form onsubmit="handleGantiPassword(event)" class="space-y-4">
-                            <h4 class="font-semibold text-gray-700 mb-2">Ubah Password</h4>
+                            <h4 class="font-semibold text-gray-700 mb-2 border-l-4 border-blue-500 pl-2">Ubah Password</h4>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Password Lama</label>
-                                <input type="password" required class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none">
+                                <input type="password" id="oldPassword" required class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
-                                <input type="password" required class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none">
+                                <input type="password" id="newPassword" required class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none">
                             </div>
                             <div>
-                                <button type="submit" class="px-5 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-900 transition font-medium shadow flex items-center gap-2">
-                                    <i class="fas fa-key"></i> Perbarui Password
-                                </button>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password Baru</label>
+                                <input type="password" id="confirmPassword" required class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none">
+                            </div>
+                            <div class="pt-2">
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition shadow-sm">Simpan Password Baru</button>
                             </div>
                         </form>
                     </div>
@@ -448,486 +461,467 @@
     </div>
 
     <script>
-        // --- DATA MOCKUP PPNS ---
-        let ppnsData = [
-            { id: 1, opd: 'Satuan Polisi Pamong Praja', nama: 'Budi Santoso, S.H.', nip: '198203152009021004', pangkat: 'Penata Tk. I', skep: 'AHU-123.PPNS.2021', kta: 'KTA-NTT-001', tglBerlaku: '2026-10-15' },
-            { id: 2, opd: 'Dinas Lingkungan Hidup dan Kehutanan', nama: 'Siti Aminah, S.HUT, M.Si', nip: '197905202005012008', pangkat: 'Pembina', skep: 'AHU-456.PPNS.2019', kta: 'KTA-NTT-002', tglBerlaku: '2024-12-01' },
-            { id: 3, opd: 'Dinas Perhubungan', nama: 'Alexandre Lopes, S.T.', nip: '198511102010121003', pangkat: 'Penata', skep: 'AHU-789.PPNS.2023', kta: 'KTA-NTT-003', tglBerlaku: '2027-05-20' },
-            { id: 4, opd: 'Satuan Polisi Pamong Praja', nama: 'Maria Goreti, S.IP', nip: '199008172015032001', pangkat: 'Penata Muda Tk. I', skep: 'AHU-112.PPNS.2022', kta: 'KTA-NTT-004', tglBerlaku: '2026-08-17' },
-            { id: 5, opd: 'Dinas Pariwisata dan Ekonomi Kreatif', nama: 'Yohanes B., S.E.', nip: '198302282008011005', pangkat: 'Penata Tk. I', skep: 'AHU-334.PPNS.2020', kta: 'KTA-NTT-005', tglBerlaku: '2025-01-10' },
-            { id: 6, opd: 'Badan Pendapatan dan Aset Daerah', nama: 'Desi Ratnasari, S.E., Ak', nip: '198109092006042007', pangkat: 'Pembina', skep: 'AHU-556.PPNS.2018', kta: 'KTA-NTT-006', tglBerlaku: '2023-11-30' },
-            { id: 7, opd: 'Dinas Kelautan dan Perikanan', nama: 'Agus Purnomo, S.Pi', nip: '198712122011011002', pangkat: 'Penata', skep: 'AHU-778.PPNS.2021', kta: 'KTA-NTT-007', tglBerlaku: '2026-02-28' }
-        ];
-
-        // --- GLOBAL VARIABLES ---
-        let map;
+        // --- GLOBAL STATE & MOCK DATA ---
+        let currentUserRole = 'admin'; // 'admin' or 'user'
+        let mapInstance = null;
         let opdChartInstance = null;
         let ktaChartInstance = null;
-        let currentUserRole = 'user'; // 'admin' atau 'user'
 
-        // --- TOAST NOTIFICATION ---
+        // Mock Data PPNS
+        let dataPPNS = [
+            { id: 1, opd: "Satpol PP", nama: "Drs. Yohanis, M.Si", nip: "197501012000121001", pangkat: "Pembina (IV/a)", skep: "AHU-123.45", kta: "KTA-001", tglBerlaku: "2027-12-31", lat: -10.1772, lng: 123.6070, kota: "Kupang" },
+            { id: 2, opd: "Dinas Lingkungan Hidup", nama: "Ir. Maria", nip: "198005102005012002", pangkat: "Penata Tk.I (III/d)", skep: "AHU-456.78", kta: "KTA-002", tglBerlaku: "2024-10-15", lat: -8.5833, lng: 122.9667, kota: "Maumere" },
+            { id: 3, opd: "Dinas Perhubungan", nama: "Markus, S.H.", nip: "198211202008031003", pangkat: "Penata (III/c)", skep: "AHU-789.01", kta: "KTA-003", tglBerlaku: "2028-05-20", lat: -9.6500, lng: 119.4167, kota: "Waingapu" },
+            { id: 4, opd: "Satpol PP", nama: "Agustinus, S.IP", nip: "198502142010011004", pangkat: "Penata Muda Tk.I (III/b)", skep: "AHU-111.22", kta: "KTA-004", tglBerlaku: "2026-08-10", lat: -8.4500, lng: 123.4167, kota: "Larantuka" },
+            { id: 5, opd: "Dinas Pariwisata", nama: "Elizabeth, S.Par", nip: "199007072015022005", pangkat: "Penata Muda (III/a)", skep: "AHU-333.44", kta: "KTA-005", tglBerlaku: "2025-01-30", lat: -8.6500, lng: 121.0889, kota: "Ende" },
+            { id: 6, opd: "Inspektorat Daerah", nama: "Drs. Paulus, Ak.", nip: "197212121998031006", pangkat: "Pembina Tk.I (IV/b)", skep: "AHU-555.66", kta: "KTA-006", tglBerlaku: "2023-11-01", lat: -10.1500, lng: 123.6000, kota: "Kupang" },
+            { id: 7, opd: "Dinas Kelautan dan Perikanan", nama: "Fransiscus, S.Pi", nip: "198303032009021007", pangkat: "Penata Tk.I (III/d)", skep: "AHU-777.88", kta: "KTA-007", tglBerlaku: "2027-04-12", lat: -8.5000, lng: 119.8667, kota: "Labuan Bajo" }
+        ];
+
+        // --- UTILITY: TOAST NOTIFICATION ---
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toastNotification');
-            const icon = document.getElementById('toastIcon');
-            const msg = document.getElementById('toastMessage');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
             
-            msg.innerText = message;
+            toastMsg.innerText = message;
             
-            if(type === 'success') {
-                icon.className = 'inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg';
-                icon.innerHTML = '<i class="fas fa-check"></i>';
-            } else if(type === 'error') {
-                icon.className = 'inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg';
-                icon.innerHTML = '<i class="fas fa-times"></i>';
-            } else {
-                icon.className = 'inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg';
-                icon.innerHTML = '<i class="fas fa-info"></i>';
+            if (type === 'success') {
+                toastIcon.innerHTML = '<i class="fas fa-check"></i>';
+                toastIcon.className = 'inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg';
+            } else if (type === 'error') {
+                toastIcon.innerHTML = '<i class="fas fa-exclamation"></i>';
+                toastIcon.className = 'inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg';
             }
-
+            
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
 
         // --- AUTHENTICATION ---
         function handleLogin() {
-            const nip = document.getElementById('loginNip').value.toLowerCase();
+            const nip = document.getElementById('loginNip').value;
             const pass = document.getElementById('loginPassword').value;
             const err = document.getElementById('loginError');
-
-            if (nip.trim() !== '' && pass.trim() !== '') {
-                // PENENTUAN ROLE
-                if (nip === 'admin') {
-                    currentUserRole = 'admin';
-                    document.getElementById('userNameDisplay').innerText = 'Admin Utama';
-                    document.getElementById('userRoleDisplay').innerText = 'Administrator';
-                } else {
-                    currentUserRole = 'user';
-                    // Tampilkan NIP/Username User
-                    document.getElementById('userNameDisplay').innerText = 'PPNS ' + nip.toUpperCase();
-                    document.getElementById('userRoleDisplay').innerText = 'Pengguna (PPNS)';
-                }
-
-                // Aplikasikan aturan UI berdasarkan role
-                applyRoleUI();
-
+            
+            if ((nip === 'admin' && pass === 'admin') || (nip === 'user' && pass === 'user')) {
                 err.classList.add('hidden');
+                currentUserRole = nip; // Simple role assignment based on username
+                
+                // Set UI based on role
+                applyRoleUI();
+                
+                // Transition UI
                 document.getElementById('loginScreen').style.opacity = '0';
                 setTimeout(() => {
-                    document.getElementById('loginScreen').classList.add('hidden');
+                    document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('mainApp').classList.remove('hidden');
                     
-                    // Inisialisasi komponen setelah login
+                    // Initial setup
+                    initDashboard();
+                    renderTable(dataPPNS);
                     switchTab('dashboard');
-                    renderTable();
-                    showToast(`Berhasil Login sebagai ${currentUserRole === 'admin' ? 'Administrator' : 'Pengguna PPNS'}!`, 'success');
                 }, 500);
             } else {
                 err.classList.remove('hidden');
             }
         }
 
-        // Tampilkan/Sembunyikan Menu berdasarkan Role
-        function applyRoleUI() {
-            const adminOnlyElements = document.querySelectorAll('.admin-only');
-            adminOnlyElements.forEach(el => {
-                if (currentUserRole === 'admin') {
-                    el.classList.remove('hidden');
-                    // Jika buttom navigasi (flex), kembalikan display flex agar tidak kacau
-                    if (el.tagName === 'BUTTON' && el.classList.contains('nav-btn')) {
-                        el.style.display = 'flex';
-                    } else if (el.classList.contains('flex')) {
-                        el.style.display = 'flex';
-                    } else {
-                        el.style.display = ''; 
-                    }
-                } else {
-                    el.classList.add('hidden');
-                    el.style.display = 'none'; // Paksa display none untuk menghindari layout kosong
-                }
-            });
-        }
-
         function handleLogout() {
             document.getElementById('mainApp').classList.add('hidden');
-            const loginScreen = document.getElementById('loginScreen');
-            loginScreen.classList.remove('hidden');
-            loginScreen.style.opacity = '1';
+            const login = document.getElementById('loginScreen');
+            login.style.display = 'flex';
+            setTimeout(() => {
+                login.style.opacity = '1';
+                document.getElementById('loginNip').value = '';
+                document.getElementById('loginPassword').value = '';
+            }, 100);
             
-            document.getElementById('loginNip').value = '';
-            document.getElementById('loginPassword').value = '';
+            // Clean up instances
+            if(mapInstance) { mapInstance.remove(); mapInstance = null; }
+            if(opdChartInstance) { opdChartInstance.destroy(); opdChartInstance = null; }
+            if(ktaChartInstance) { ktaChartInstance.destroy(); ktaChartInstance = null; }
+        }
+
+        function applyRoleUI() {
+            const adminElements = document.querySelectorAll('.admin-only');
+            if (currentUserRole === 'user') {
+                adminElements.forEach(el => el.classList.add('hidden'));
+                document.getElementById('userNameDisplay').innerText = 'User PPNS';
+                document.getElementById('userRoleDisplay').innerText = 'Petugas Daerah';
+                document.getElementById('profileName').innerText = 'User PPNS';
+                document.getElementById('profileNip').innerText = 'NIP: 198005102005012002';
+                document.getElementById('profileRoleBadge').innerText = 'Petugas Daerah';
+            } else {
+                adminElements.forEach(el => el.classList.remove('hidden'));
+                document.getElementById('userNameDisplay').innerText = 'Admin PPNS';
+                document.getElementById('userRoleDisplay').innerText = 'Administrator';
+                document.getElementById('profileName').innerText = 'Admin Utama';
+                document.getElementById('profileNip').innerText = 'NIP: 197501012000121001';
+                document.getElementById('profileRoleBadge').innerText = 'Administrator Sistem';
+            }
+        }
+
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('aside');
+            if(sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                sidebar.classList.add('absolute', 'h-full', 'left-0');
+            } else {
+                sidebar.classList.add('hidden');
+                sidebar.classList.remove('absolute', 'h-full', 'left-0');
+            }
         }
 
         // --- NAVIGATION ---
         function switchTab(tabId) {
             // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.remove('active');
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
             });
-            // Reset button styles
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('bg-blue-600', 'text-white');
-                el.classList.add('text-slate-300');
+            // Reset buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('text-slate-300', 'hover:bg-slate-800');
             });
-
-            // Show active tab
+            
+            // Activate selected tab
             document.getElementById(`sec-${tabId}`).classList.add('active');
-            // Style active button
             const activeBtn = document.getElementById(`btn-${tabId}`);
             activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800');
             activeBtn.classList.add('bg-blue-600', 'text-white');
-
-            // Khusus Dashboard: Render ulang Map & Chart jika ada masalah ukuran (display:none issue)
-            if (tabId === 'dashboard') {
-                setTimeout(() => {
-                    if(!map) initMap();
-                    else map.invalidateSize();
-                    initCharts();
-                }, 100);
+            
+            // Map fix for resizing issue in hidden containers
+            if(tabId === 'dashboard' && mapInstance) {
+                setTimeout(() => { mapInstance.invalidateSize(); }, 100);
+            }
+            
+            // Close mobile menu if open
+            if(window.innerWidth < 768) {
+                document.querySelector('aside').classList.add('hidden');
             }
         }
 
-        // --- LEAFLET MAP ---
-        function initMap() {
-            // Hapus instance map yang lama untuk mencegah bentrokan (re-initialize issue)
-            if(map !== undefined && map !== null) {
-                map.remove();
-            }
-
-            // Titik tengah provinsi NTT
-            map = L.map('map').setView([-8.6500, 121.0833], 7);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(map);
-
-            // Dummy markers untuk merepresentasikan OPD di area Kupang (Pusat Provinsi)
-            L.marker([-10.1583, 123.5966]).addTo(map).bindPopup('<b>Kantor Gubernur NTT</b><br>Satpol PP (2 PPNS)');
-            L.marker([-10.1650, 123.5850]).addTo(map).bindPopup('<b>Dinas Lingkungan Hidup</b><br>1 PPNS');
+        // --- DASHBOARD: CHARTS & MAPS ---
+        function initDashboard() {
+            updateDashboardStats();
+            initMap();
         }
 
-        // --- CHART.JS ---
-        function getStatusKta(tglBerlaku) {
-            const today = new Date();
-            const expDate = new Date(tglBerlaku);
-            const diffTime = expDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays < 0) return 'Kedaluwarsa';
-            if (diffDays <= 90) return 'Hampir Habis';
-            return 'Aktif';
-        }
-
-        function initCharts() {
-            // 1. Hitung Data OPD
+        function updateDashboardStats() {
+            // Data Aggregation
             const opdCounts = {};
-            let aktif = 0, hampirHabis = 0, kedaluwarsa = 0;
+            let ktaAktif = 0;
+            let ktaExpired = 0;
+            const now = new Date();
 
-            ppnsData.forEach(item => {
-                // Count OPD
+            dataPPNS.forEach(item => {
+                // OPD Count
                 opdCounts[item.opd] = (opdCounts[item.opd] || 0) + 1;
                 
-                // Count Status
-                const status = getStatusKta(item.tglBerlaku);
-                if(status === 'Aktif') aktif++;
-                else if(status === 'Hampir Habis') hampirHabis++;
-                else kedaluwarsa++;
+                // KTA Status
+                const validUntil = new Date(item.tglBerlaku);
+                if (validUntil >= now) {
+                    ktaAktif++;
+                } else {
+                    ktaExpired++;
+                }
             });
 
+            // 1. Donut Chart (OPD)
             const opdLabels = Object.keys(opdCounts);
             const opdData = Object.values(opdCounts);
-
-            // Chart 1: Donut OPD
             const ctxDonut = document.getElementById('opdDonutChart').getContext('2d');
-            if (opdChartInstance) opdChartInstance.destroy();
+            
+            if(opdChartInstance) opdChartInstance.destroy();
             opdChartInstance = new Chart(ctxDonut, {
                 type: 'doughnut',
                 data: {
                     labels: opdLabels,
                     datasets: [{
                         data: opdData,
-                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#6366f1'],
-                        borderWidth: 1
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'],
+                        borderWidth: 0
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    cutout: '70%'
+                }
             });
 
-            // Chart 2: Bar KTA Status
+            // 2. Bar Chart (KTA)
             const ctxBar = document.getElementById('ktaBarChart').getContext('2d');
-            if (ktaChartInstance) ktaChartInstance.destroy();
+            if(ktaChartInstance) ktaChartInstance.destroy();
             ktaChartInstance = new Chart(ctxBar, {
                 type: 'bar',
                 data: {
-                    labels: ['Aktif', 'Hampir Habis (< 3 Bulan)', 'Kedaluwarsa'],
+                    labels: ['Aktif', 'Kadaluarsa'],
                     datasets: [{
-                        label: 'Jumlah KTA',
-                        data: [aktif, hampirHabis, kedaluwarsa],
-                        backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
-                        borderRadius: 5
+                        label: 'Jumlah PPNS',
+                        data: [ktaAktif, ktaExpired],
+                        backgroundColor: ['#10b981', '#ef4444'],
+                        borderRadius: 4
                     }]
                 },
-                options: { 
-                    responsive: true, maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
-                    plugins: { legend: { display: false } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
                 }
             });
         }
 
-        // --- DATA TABLE CRUD & RENDER ---
-        function renderTable(dataToRender = ppnsData) {
-            const tbody = document.getElementById('tableBodyData');
-            document.getElementById('totalDataCount').innerText = dataToRender.length;
-            tbody.innerHTML = '';
+        function initMap() {
+            if(mapInstance) mapInstance.remove();
+            
+            // Center map roughly on NTT region
+            mapInstance = L.map('map').setView([-8.6500, 121.0889], 7);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(mapInstance);
 
-            // Update Table Header berdasarkan role
-            const thAksi = document.getElementById('thAksi');
-            if(currentUserRole === 'admin') {
-                thAksi.classList.remove('hidden');
-                thAksi.style.display = '';
+            // Add markers
+            dataPPNS.forEach(person => {
+                if(person.lat && person.lng) {
+                    const statusText = new Date(person.tglBerlaku) >= new Date() ? 
+                        '<span style="color:green">Aktif</span>' : '<span style="color:red">Kadaluarsa</span>';
+                    
+                    const popupContent = `
+                        <div class="text-sm">
+                            <b>${person.nama}</b><br>
+                            ${person.opd} - ${person.kota}<br>
+                            Status KTA: ${statusText}
+                        </div>
+                    `;
+                    L.marker([person.lat, person.lng]).addTo(mapInstance).bindPopup(popupContent);
+                }
+            });
+        }
+
+        // --- DATA MANAGEMENT ---
+        function getStatusHtml(tglBerlaku) {
+            const now = new Date();
+            const validUntil = new Date(tglBerlaku);
+            if (validUntil >= now) {
+                return `<span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full font-medium border border-green-200">Aktif</span>`;
             } else {
-                thAksi.classList.add('hidden');
-                thAksi.style.display = 'none';
+                return `<span class="bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded-full font-medium border border-red-200">Kadaluarsa</span>`;
             }
+        }
 
-            if (dataToRender.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${currentUserRole === 'admin' ? 7 : 6}" class="px-4 py-8 text-center text-gray-500">Data tidak ditemukan</td></tr>`;
-                return;
-            }
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBodyData');
+            tbody.innerHTML = '';
+            document.getElementById('totalDataCount').innerText = data.length;
 
-            dataToRender.forEach((item, index) => {
-                const status = getStatusKta(item.tglBerlaku);
-                let badgeClass = 'bg-green-100 text-green-800';
-                if(status === 'Kedaluwarsa') badgeClass = 'bg-red-100 text-red-800';
-                if(status === 'Hampir Habis') badgeClass = 'bg-yellow-100 text-yellow-800';
-
-                // Siapkan tombol Aksi khusus admin
-                let actionBtnHtml = '';
-                if (currentUserRole === 'admin') {
-                    actionBtnHtml = `
-                    <td class="px-4 py-3 border-b text-center admin-only">
-                        <button onclick="editData(${item.id})" class="text-blue-500 hover:text-blue-700 mx-1" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button onclick="hapusData(${item.id})" class="text-red-500 hover:text-red-700 mx-1" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </td>`;
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-blue-50/50 transition duration-150";
+                
+                let actionsHtml = '-';
+                if(currentUserRole === 'admin') {
+                    actionsHtml = `
+                        <button onclick="editData(${item.id})" class="text-blue-500 hover:text-blue-700 mr-2 p-1" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button onclick="hapusData(${item.id})" class="text-red-500 hover:text-red-700 p-1" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+                    `;
                 }
 
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-gray-50 transition';
                 tr.innerHTML = `
                     <td class="px-4 py-3 border-b">${index + 1}</td>
-                    <td class="px-4 py-3 border-b text-xs font-semibold text-gray-700">${item.opd}</td>
+                    <td class="px-4 py-3 border-b font-medium text-gray-800">${item.opd}</td>
                     <td class="px-4 py-3 border-b">
-                        <div class="font-medium text-gray-800">${item.nama}</div>
+                        <div class="font-semibold text-gray-800">${item.nama}</div>
                         <div class="text-xs text-gray-500">NIP. ${item.nip}</div>
-                        <div class="text-[10px] text-gray-400 mt-0.5">${item.pangkat}</div>
                     </td>
                     <td class="px-4 py-3 border-b">
-                        <div class="text-sm">SKEP: ${item.skep || '-'}</div>
-                        <div class="text-sm">KTA: ${item.kta || '-'}</div>
+                        <div>SKEP: ${item.skep}</div>
+                        <div class="text-xs text-gray-500">KTA: ${item.kta}</div>
                     </td>
-                    <td class="px-4 py-3 border-b">${item.tglBerlaku}</td>
-                    <td class="px-4 py-3 border-b">
-                        <span class="text-xs px-2 py-1 rounded-full font-medium ${badgeClass}">${status}</span>
+                    <td class="px-4 py-3 border-b text-center">${item.tglBerlaku}</td>
+                    <td class="px-4 py-3 border-b text-center">${getStatusHtml(item.tglBerlaku)}</td>
+                    <td class="px-4 py-3 border-b text-center admin-only ${currentUserRole !== 'admin' ? 'hidden' : ''}">
+                        ${actionsHtml}
                     </td>
-                    ${actionBtnHtml}
                 `;
                 tbody.appendChild(tr);
             });
         }
 
         function searchTable() {
-            const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = ppnsData.filter(item => 
-                item.nama.toLowerCase().includes(term) || 
-                item.nip.includes(term) ||
-                item.opd.toLowerCase().includes(term)
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const filteredData = dataPPNS.filter(item => 
+                item.nama.toLowerCase().includes(input) || 
+                item.nip.toLowerCase().includes(input) ||
+                item.opd.toLowerCase().includes(input)
             );
-            renderTable(filtered);
-        }
-
-        let editId = null;
-        function editData(id) {
-            const data = ppnsData.find(x => x.id === id);
-            if(data) {
-                editId = id;
-                document.getElementById('inputOpd').value = data.opd;
-                document.getElementById('inputNama').value = data.nama;
-                document.getElementById('inputNip').value = data.nip;
-                document.getElementById('inputPangkat').value = data.pangkat;
-                document.getElementById('inputSkep').value = data.skep;
-                document.getElementById('inputKta').value = data.kta;
-                document.getElementById('inputTglBerlaku').value = data.tglBerlaku;
-                
-                switchTab('update');
-                showToast('Siap mengedit data: ' + data.nama, 'info');
-            }
-        }
-
-        function hapusData(id) {
-            // Karena tidak bisa pakai confirm(), kita langsung hapus dan tunjukkan toast
-            ppnsData = ppnsData.filter(x => x.id !== id);
-            renderTable();
-            initCharts(); // update dashboard
-            showToast('Data berhasil dihapus', 'success');
+            renderTable(filteredData);
         }
 
         function handleSimpanData(e) {
             e.preventDefault();
-            
+            const id = document.getElementById('inputId').value;
             const newData = {
-                id: editId ? editId : Date.now(),
+                id: id ? parseInt(id) : Date.now(),
                 opd: document.getElementById('inputOpd').value,
                 nama: document.getElementById('inputNama').value,
                 nip: document.getElementById('inputNip').value,
                 pangkat: document.getElementById('inputPangkat').value,
                 skep: document.getElementById('inputSkep').value,
                 kta: document.getElementById('inputKta').value,
-                tglBerlaku: document.getElementById('inputTglBerlaku').value
+                tglBerlaku: document.getElementById('inputTglBerlaku').value,
+                lat: -8.6500, // Default for mock
+                lng: 121.0889,
+                kota: "NTT"
             };
 
-            if (editId) {
-                const index = ppnsData.findIndex(x => x.id === editId);
-                ppnsData[index] = newData;
+            if (id) {
+                const idx = dataPPNS.findIndex(d => d.id == id);
+                dataPPNS[idx] = newData;
                 showToast('Data berhasil diperbarui', 'success');
             } else {
-                ppnsData.push(newData);
-                showToast('Data baru berhasil ditambahkan', 'success');
+                dataPPNS.push(newData);
+                showToast('Data berhasil ditambahkan', 'success');
             }
-
+            
             resetFormUpdate();
-            renderTable();
-            initCharts();
-            setTimeout(() => switchTab('data'), 1000);
+            updateDashboardStats(); // Refresh charts
+            initMap(); // Refresh map
+            renderTable(dataPPNS);
+            switchTab('data');
+        }
+
+        function editData(id) {
+            const item = dataPPNS.find(d => d.id === id);
+            if(!item) return;
+            
+            document.getElementById('inputId').value = item.id;
+            document.getElementById('inputOpd').value = item.opd;
+            document.getElementById('inputNama').value = item.nama;
+            document.getElementById('inputNip').value = item.nip;
+            document.getElementById('inputPangkat').value = item.pangkat;
+            document.getElementById('inputSkep').value = item.skep;
+            document.getElementById('inputKta').value = item.kta;
+            document.getElementById('inputTglBerlaku').value = item.tglBerlaku;
+            
+            switchTab('update');
+        }
+
+        function hapusData(id) {
+            // Instead of confirm() using a simulated deletion
+            dataPPNS = dataPPNS.filter(d => d.id !== id);
+            updateDashboardStats();
+            initMap();
+            renderTable(dataPPNS);
+            showToast('Data berhasil dihapus', 'success');
         }
 
         function resetFormUpdate() {
-            editId = null;
             document.getElementById('formUpdateData').reset();
-        }
-
-        // --- LAPORAN TAHUNAN ---
-        function uploadLaporanKeDrive(e) {
-            e.preventDefault();
-            const tahun = document.getElementById('lapTahun').value;
-            const file = document.getElementById('lapFile').files[0];
-            
-            if(file) {
-                // Mockup proses upload
-                const btn = document.getElementById('btnUploadLap');
-                const oriHtml = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Mengunggah...';
-                btn.disabled = true;
-
-                setTimeout(() => {
-                    const ul = document.getElementById('riwayatLaporanList');
-                    const li = document.createElement('li');
-                    li.className = 'py-3 flex justify-between items-center bg-green-50/50 px-2 rounded-lg mt-2 transition duration-500';
-                    const tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year:'numeric'});
-                    li.innerHTML = `
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS ${tahun}</p>
-                            <p class="text-xs text-gray-500">Diunggah: ${tgl} - ${file.name}</p>
-                        </div>
-                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">Diulas</span>
-                    `;
-                    ul.insertBefore(li, ul.firstChild);
-                    
-                    document.getElementById('formLaporanTahunan').reset();
-                    btn.innerHTML = oriHtml;
-                    btn.disabled = false;
-                    showToast('Laporan berhasil dikirim ke sistem', 'success');
-                }, 1500);
-            }
-        }
-
-        // --- LAPORAN BULANAN ---
-        function uploadLaporanBulanan(e) {
-            e.preventDefault();
-            const bulan = document.getElementById('lapBulanBln').value;
-            const tahun = document.getElementById('lapBulanThn').value;
-            const file = document.getElementById('lapBulanFile').files[0];
-            
-            if(file) {
-                const btn = document.getElementById('btnUploadLapBulan');
-                const oriHtml = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Mengunggah...';
-                btn.disabled = true;
-
-                setTimeout(() => {
-                    const ul = document.getElementById('riwayatLaporanBulanList');
-                    const li = document.createElement('li');
-                    li.className = 'py-3 flex justify-between items-center bg-green-50/50 px-2 rounded-lg mt-2 transition duration-500';
-                    const tgl = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short', year:'numeric'});
-                    li.innerHTML = `
-                        <div>
-                            <p class="text-sm font-medium text-gray-800">Laporan Kegiatan ${bulan} ${tahun}</p>
-                            <p class="text-xs text-gray-500">Diunggah: ${tgl} - ${file.name}</p>
-                        </div>
-                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">Diulas</span>
-                    `;
-                    ul.insertBefore(li, ul.firstChild);
-                    
-                    document.getElementById('formLaporanBulanan').reset();
-                    btn.innerHTML = oriHtml;
-                    btn.disabled = false;
-                    showToast('Laporan bulanan berhasil dikirim', 'success');
-                }, 1500);
-            }
+            document.getElementById('inputId').value = '';
         }
 
         // --- EXPORT / IMPORT EXCEL (SheetJS) ---
         function exportData() {
-            // Persiapan data untuk export agar rapi
-            const exportArr = ppnsData.map((item, i) => ({
-                'No': i + 1,
-                'OPD': item.opd,
-                'Nama Lengkap': item.nama,
-                'NIP': item.nip,
-                'Pangkat/Golongan': item.pangkat,
-                'No SKEP': item.skep,
-                'No KTA': item.kta,
-                'Tanggal Berlaku KTA': item.tglBerlaku,
-                'Status KTA': getStatusKta(item.tglBerlaku)
-            }));
-
-            const ws = XLSX.utils.json_to_sheet(exportArr);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Data PPNS");
-            XLSX.writeFile(wb, "Data_PPNS_Pemprov_NTT.xlsx");
-            showToast('Mendownload Excel...', 'success');
+            try {
+                const exportData = dataPPNS.map(({id, lat, lng, ...rest}) => rest); // Exclude internal fields
+                const worksheet = XLSX.utils.json_to_sheet(exportData);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Data_PPNS");
+                XLSX.writeFile(workbook, "Data_PPNS_NTT.xlsx");
+                showToast('Export Excel berhasil', 'success');
+            } catch(e) {
+                showToast('Gagal export data', 'error');
+            }
         }
 
-        function prosesFileImport(e) {
-            const file = e.target.files[0];
+        function prosesFileImport(event) {
+            const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
-                const firstSheet = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheet];
-                
-                // Konversi excel to json
-                const json = XLSX.utils.sheet_to_json(worksheet);
-                
-                // Demo: Hanya mengambil panjang data karena map header ke object property cukup kompleks untuk mockup
-                if(json.length > 0) {
-                    showToast(`Berhasil membaca ${json.length} baris dari Excel (Mode Demo)`, 'info');
-                    // Di aplikasi nyata, lakukan iterasi 'json' dan .push() ke 'ppnsData' 
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const json = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    if(json && json.length > 0) {
+                        showToast(`Simulasi: ${json.length} baris dibaca dari Excel`, 'success');
+                    } else {
+                        showToast('File Excel kosong atau format tidak sesuai', 'error');
+                    }
+                } catch(error) {
+                    showToast('Gagal membaca file Excel', 'error');
                 }
+                event.target.value = ''; // Reset input
             };
             reader.readAsArrayBuffer(file);
-            // Reset input file
-            document.getElementById('fileInput').value = '';
         }
 
-        // --- PENGATURAN PROFIL ---
+        // --- FORM SUBMISSIONS (Simulations) ---
+        function uploadLaporanBulanan(e) {
+            e.preventDefault();
+            const bln = document.getElementById('lapBulanBln').value;
+            const thn = document.getElementById('lapBulanThn').value;
+            
+            const ul = document.getElementById('riwayatLaporanBulanList');
+            const li = document.createElement('li');
+            li.className = "py-3 flex justify-between items-center bg-green-50/30 px-2 rounded mt-2 border border-green-100 transition-all";
+            li.innerHTML = `
+                <div>
+                    <p class="text-sm font-medium text-gray-800">Laporan Kegiatan ${bln} ${thn}</p>
+                    <p class="text-xs text-gray-500">Diunggah: ${new Date().toLocaleDateString('id-ID')}</p>
+                </div>
+                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium border border-blue-200">Sedang Proses</span>
+            `;
+            ul.prepend(li);
+            
+            document.getElementById('formLaporanBulanan').reset();
+            showToast('Laporan bulanan berhasil dikirim', 'success');
+        }
+
+        function uploadLaporanKeDrive(e) {
+            e.preventDefault();
+            const tahun = document.getElementById('lapTahun').value;
+            
+            const ul = document.getElementById('riwayatLaporanList');
+            const li = document.createElement('li');
+            li.className = "py-3 flex justify-between items-center bg-blue-50/50 px-2 rounded mt-2 border border-blue-100 transition-all";
+            li.innerHTML = `
+                <div>
+                    <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS ${tahun}</p>
+                    <p class="text-xs text-gray-500">Diunggah: ${new Date().toLocaleDateString('id-ID')}</p>
+                </div>
+                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium border border-blue-200">Diproses</span>
+            `;
+            ul.prepend(li);
+            
+            document.getElementById('formLaporanTahunan').reset();
+            showToast('Dokumen berhasil diunggah', 'success');
+        }
+
         function handleGantiPassword(e) {
             e.preventDefault();
-            showToast('Password berhasil diperbarui', 'success');
-            e.target.reset();
-        }
+            const newPass = document.getElementById('newPassword').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
 
+            if (newPass !== confirmPass) {
+                showToast('Password baru tidak cocok', 'error');
+                return;
+            }
+            
+            e.target.reset();
+            showToast('Password berhasil diperbarui', 'success');
+        }
     </script>
 </body>
 </html>
