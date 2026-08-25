@@ -50,42 +50,40 @@
         <div id="toastMessage" class="ml-3 text-sm font-normal">Pesan notifikasi.</div>
     </div>
 
-    <!-- LOGIN SCREEN -->
     <div id="loginScreen" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50 transition-opacity duration-500">
         <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4 relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-blue-500 to-green-500"></div>
             
             <div class="text-center mb-8 mt-2">
-                <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo" class="h-28 mx-auto mb-4 object-contain rounded-md shadow-sm">
+                <!-- Fallback image placeholder -->
+                <img src="https://placehold.co/150x150/1e293b/ffffff?text=Logo+NTT" alt="Logo" class="h-28 mx-auto mb-4 object-contain rounded-md shadow-sm">
                 <h1 class="text-2xl font-bold text-gray-800 tracking-wide">SIMDA PPNS</h1>
                 <p class="text-sm text-gray-500 mt-1">Sistem Informasi Manajemen Data PPNS Pemprov NTT</p>
             </div>
             
-         <div class="space-y-4">
-    <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">NIP / Username</label>
-        <!-- Placeholder disesuaikan -->
-        <input type="text" id="loginNip" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Masukkan 18 Digit NIP Anda">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">NIP / Username</label>
+                    <input type="text" id="loginNip" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Masukkan 18 Digit NIP Anda">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <input type="password" id="loginPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Masukkan Password">
+                </div>
+                <div id="loginError" class="text-red-500 text-sm hidden text-center bg-red-50 py-2 rounded border border-red-200">NIP atau Password salah!</div>
+                
+                <button onclick="handleLogin()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200 mt-4 shadow-md flex justify-center items-center gap-2">
+                    <i class="fas fa-sign-in-alt"></i> Masuk Ke Sistem
+                </button>
+            </div>
+        </div>
     </div>
-    <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-        <!-- Placeholder disesuaikan -->
-        <input type="password" id="loginPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Masukkan Password (Sesuai NIP)">
-    </div>
-    <div id="loginError" class="text-red-500 text-sm hidden text-center bg-red-50 py-2 rounded border border-red-200">NIP atau Password salah!</div>
-    
-    <button onclick="handleLogin()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200 mt-4 shadow-md flex justify-center items-center gap-2">
-        <i class="fas fa-sign-in-alt"></i> Masuk Ke Sistem
-    </button>
-</div>
 
-    <!-- MAIN APPLICATION -->
-    <div id="mainApp" class="hidden w-full h-full flex">
-        
+    <div id="mainApp" class="hidden w-full h-full flex absolute inset-0 bg-gray-50">
         <!-- SIDEBAR NAVIGATION -->
         <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-2xl z-40 transition-all duration-300 flex-shrink-0 hidden md:flex">
             <div class="p-4 border-b border-slate-700 flex items-center gap-3">
-                <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo" class="h-10 w-10 object-cover bg-white rounded border border-yellow-500">
+                <img src="https://placehold.co/100x100/1e293b/ffffff?text=SIMDA" alt="Logo" class="h-10 w-10 object-cover bg-white rounded border border-yellow-500">
                 <div>
                     <h2 class="text-lg font-bold leading-none text-yellow-400">SIMDA PPNS</h2>
                     <p class="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Pemprov NTT</p>
@@ -138,8 +136,7 @@
             </div>
         </aside>
 
-        <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 flex flex-col h-full bg-gray-50 overflow-hidden relative">
+        <main class="flex-1 flex flex-col h-full overflow-hidden relative">
             
             <!-- Mobile Header -->
             <header class="md:hidden bg-white shadow-sm flex items-center justify-between p-4 z-30">
@@ -238,7 +235,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Form Upload -->
                         <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-calendar-check text-blue-500 mr-2"></i>Upload Laporan Bulanan</h3>
                             <form id="formLaporanBulanan" onsubmit="uploadLaporanBulanan(event)" class="space-y-4">
@@ -249,14 +245,7 @@
                                             <option value="Januari">Januari</option>
                                             <option value="Februari">Februari</option>
                                             <option value="Maret">Maret</option>
-                                            <option value="April">April</option>
-                                            <option value="Mei">Mei</option>
-                                            <option value="Juni">Juni</option>
                                             <option value="Juli" selected>Juli</option>
-                                            <option value="Agustus">Agustus</option>
-                                            <option value="September">September</option>
-                                            <option value="Oktober">Oktober</option>
-                                            <option value="November">November</option>
                                             <option value="Desember">Desember</option>
                                         </select>
                                     </div>
@@ -282,7 +271,6 @@
                             </form>
                         </div>
                         
-                        <!-- Riwayat Laporan -->
                         <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-history text-indigo-500 mr-2"></i>Riwayat Bulan Ini</h3>
                             <ul class="divide-y divide-gray-200" id="riwayatLaporanBulanList">
@@ -306,7 +294,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Form Upload -->
                         <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-upload text-blue-500 mr-2"></i>Upload Laporan Kinerja</h3>
                             <form id="formLaporanTahunan" onsubmit="uploadLaporanKeDrive(event)" class="space-y-4">
@@ -331,7 +318,6 @@
                             </form>
                         </div>
                         
-                        <!-- Riwayat Laporan -->
                         <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-history text-indigo-500 mr-2"></i>Riwayat Laporan Anda</h3>
                             <ul class="divide-y divide-gray-200" id="riwayatLaporanList">
@@ -339,13 +325,6 @@
                                     <div>
                                         <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS 2025</p>
                                         <p class="text-xs text-gray-500">Diunggah: 10 Jan 2026</p>
-                                    </div>
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium border border-green-200">Diterima</span>
-                                </li>
-                                <li class="py-3 flex justify-between items-center">
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS 2024</p>
-                                        <p class="text-xs text-gray-500">Diunggah: 15 Jan 2025</p>
                                     </div>
                                     <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium border border-green-200">Diterima</span>
                                 </li>
@@ -467,7 +446,7 @@
         let opdChartInstance = null;
         let ktaChartInstance = null;
 
-        // Mock Data PPNS
+        // Mock Data PPNS (Bisa ditambah/hapus secara dinamis)
         let dataPPNS = [
             { id: 1, opd: "Satpol PP", nama: "Drs. Yohanis, M.Si", nip: "197501012000121001", pangkat: "Pembina (IV/a)", skep: "AHU-123.45", kta: "KTA-001", tglBerlaku: "2027-12-31", lat: -10.1772, lng: 123.6070, kota: "Kupang" },
             { id: 2, opd: "Dinas Lingkungan Hidup", nama: "Ir. Maria", nip: "198005102005012002", pangkat: "Penata Tk.I (III/d)", skep: "AHU-456.78", kta: "KTA-002", tglBerlaku: "2024-10-15", lat: -8.5833, lng: 122.9667, kota: "Maumere" },
@@ -495,103 +474,89 @@
             }
             
             toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
         // --- AUTHENTICATION ---
         function handleLogin() {
-    const nip = document.getElementById('loginNip').value.trim();
-    const pass = document.getElementById('loginPassword').value.trim();
-    const errorMsg = document.getElementById('loginError');
-    
-    // Sembunyikan error setiap kali tombol ditekan
-    errorMsg.classList.add('hidden');
-
-    // KONDISI 1: Cek Master Admin
-    const isAdmin = (nip === '199408312025061003' && pass === 'admin123');
-    
-    // KONDISI 2: Cek Pengguna Biasa (NIP ASN 18 digit angka, dan Password = NIP)
-    // Regex /^\d{18}$/ memastikan input persis 18 digit angka saja
-    const isNipValid = /^\d{18}$/.test(nip); 
-    const isUser = (isNipValid && pass === nip);
-
-    if (isAdmin || isUser) {
-        // Animasi transisi hilang
-        document.getElementById('loginScreen').classList.add('opacity-0');
-        
-        // Menyesuaikan tampilan UI berdasarkan Role (Admin vs User)
-        if (isAdmin) {
-            document.getElementById('userNameDisplay').innerText = "Admin Master";
-            document.getElementById('userRoleDisplay').innerText = "Administrator";
+            const nip = document.getElementById('loginNip').value.trim();
+            const pass = document.getElementById('loginPassword').value.trim();
+            const errorMsg = document.getElementById('loginError');
             
-            // Tampilkan elemen khusus admin (jika ada class 'admin-only')
-            document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
-        } else {
-            document.getElementById('userNameDisplay').innerText = nip; // Menampilkan NIP sebagai nama
-            document.getElementById('userRoleDisplay').innerText = "Pegawai PPNS";
-            
-            // Sembunyikan elemen khusus admin untuk user biasa
-            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
-        }
+            // Sembunyikan pesan error terlebih dahulu
+            errorMsg.classList.add('hidden');
 
-        // Beralih ke halaman utama setelah 400ms
-        setTimeout(() => {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-            initDashboard();
-            renderTableData();
-        }, 400);
-        
-    } else {
-        // Jika salah, tampilkan pesan error
-        errorMsg.classList.remove('hidden');
-        if (nip === '199408312025061003' && pass !== 'admin123') {
-            errorMsg.innerText = "Password Master Admin salah!";
-        } else if (isNipValid && pass !== nip) {
-            errorMsg.innerText = "Password untuk pengguna ASN harus sesuai dengan NIP!";
-        } else if (!isNipValid && !isAdmin) {
-            errorMsg.innerText = "NIP tidak valid! Masukkan 18 digit angka NIP.";
-        } else {
-            errorMsg.innerText = "NIP atau Password salah!";
+            // KONDISI 1: Cek Master Admin
+            const isAdmin = (nip === '199408312025061003' && pass === 'admin123');
+            
+            // KONDISI 2: Cek Pengguna Biasa 
+            // Validasi NIP (Harus 18 digit angka). Password untuk semua user: pengguna123
+            const isNipValid = /^\d{18}$/.test(nip); 
+            const isUser = (isNipValid && pass === 'pengguna123');
+
+            if (isAdmin || isUser) {
+                // Animasi transisi hilang
+                document.getElementById('loginScreen').classList.add('opacity-0');
+                
+                // Menyesuaikan tampilan UI berdasarkan Role
+                if (isAdmin) {
+                    currentUserRole = 'admin';
+                    document.getElementById('userNameDisplay').innerText = "Admin Master";
+                    document.getElementById('userRoleDisplay').innerText = "Administrator";
+                    document.getElementById('profileName').innerText = "Admin Utama";
+                    document.getElementById('profileNip').innerText = "NIP: " + nip;
+                    document.getElementById('profileRoleBadge').innerText = "Administrator Sistem";
+                    document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+                } else {
+                    currentUserRole = 'user';
+                    document.getElementById('userNameDisplay').innerText = nip; 
+                    document.getElementById('userRoleDisplay').innerText = "Pegawai PPNS";
+                    document.getElementById('profileName').innerText = "Pengguna Sistem";
+                    document.getElementById('profileNip').innerText = "NIP: " + nip;
+                    document.getElementById('profileRoleBadge').innerText = "Pengguna Daerah";
+                    // Hilangkan tombol/fitur khusus admin
+                    document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+                }
+
+                // Beralih ke halaman utama setelah animasi selesai
+                setTimeout(() => {
+                    document.getElementById('loginScreen').classList.add('hidden');
+                    document.getElementById('mainApp').classList.remove('hidden');
+                    initDashboard(); // Inisiasi Grafik & Peta
+                    renderTable(dataPPNS); // Render Tabel
+                    showToast('Berhasil masuk ke sistem', 'success');
+                }, 400);
+                
+            } else {
+                // Tampilkan pesan error berdasarkan kasus salah
+                errorMsg.classList.remove('hidden');
+                if (nip === '199408312025061003' && pass !== 'admin123') {
+                    errorMsg.innerText = "Password Master Admin salah!";
+                } else if (isNipValid && pass !== 'pengguna123') {
+                    errorMsg.innerText = "Password pengguna salah! Gunakan password: pengguna123";
+                } else if (!isNipValid && !isAdmin) {
+                    errorMsg.innerText = "NIP tidak valid! Masukkan 18 digit angka NIP.";
+                } else {
+                    errorMsg.innerText = "NIP atau Password salah!";
+                }
+            }
         }
-    }
-}
 
         function handleLogout() {
             document.getElementById('mainApp').classList.add('hidden');
             const login = document.getElementById('loginScreen');
-            login.style.display = 'flex';
+            login.classList.remove('hidden');
+            
             setTimeout(() => {
-                login.style.opacity = '1';
+                login.classList.remove('opacity-0');
                 document.getElementById('loginNip').value = '';
                 document.getElementById('loginPassword').value = '';
             }, 100);
             
-            // Clean up instances
+            // Bersihkan instance Canvas dan Map agar tidak menumpuk saat login lagi
             if(mapInstance) { mapInstance.remove(); mapInstance = null; }
             if(opdChartInstance) { opdChartInstance.destroy(); opdChartInstance = null; }
             if(ktaChartInstance) { ktaChartInstance.destroy(); ktaChartInstance = null; }
-        }
-
-        function applyRoleUI() {
-            const adminElements = document.querySelectorAll('.admin-only');
-            if (currentUserRole === 'user') {
-                adminElements.forEach(el => el.classList.add('hidden'));
-                document.getElementById('userNameDisplay').innerText = 'User PPNS';
-                document.getElementById('userRoleDisplay').innerText = 'Petugas Daerah';
-                document.getElementById('profileName').innerText = 'User PPNS';
-                document.getElementById('profileNip').innerText = 'NIP: 198005102005012002';
-                document.getElementById('profileRoleBadge').innerText = 'Petugas Daerah';
-            } else {
-                adminElements.forEach(el => el.classList.remove('hidden'));
-                document.getElementById('userNameDisplay').innerText = 'Admin PPNS';
-                document.getElementById('userRoleDisplay').innerText = 'Administrator';
-                document.getElementById('profileName').innerText = 'Admin Utama';
-                document.getElementById('profileNip').innerText = 'NIP: 199408312025061003';
-                document.getElementById('profileRoleBadge').innerText = 'Administrator Sistem';
-            }
         }
 
         function toggleMobileMenu() {
@@ -605,30 +570,27 @@
             }
         }
 
-        // --- NAVIGATION ---
         function switchTab(tabId) {
-            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
-            // Reset buttons
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('bg-blue-600', 'text-white');
-                btn.classList.add('text-slate-300', 'hover:bg-slate-800');
+                btn.classList.add('text-slate-300');
             });
             
-            // Activate selected tab
             document.getElementById(`sec-${tabId}`).classList.add('active');
             const activeBtn = document.getElementById(`btn-${tabId}`);
-            activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800');
-            activeBtn.classList.add('bg-blue-600', 'text-white');
-            
-            // Map fix for resizing issue in hidden containers
-            if(tabId === 'dashboard' && mapInstance) {
-                setTimeout(() => { mapInstance.invalidateSize(); }, 100);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800');
+                activeBtn.classList.add('bg-blue-600', 'text-white');
             }
             
-            // Close mobile menu if open
+            // Fix ukuran map jika tab yang dibuka adalah dashboard
+            if(tabId === 'dashboard' && mapInstance) {
+                setTimeout(() => { mapInstance.invalidateSize(); }, 200);
+            }
+            
             if(window.innerWidth < 768) {
                 document.querySelector('aside').classList.add('hidden');
             }
@@ -641,23 +603,17 @@
         }
 
         function updateDashboardStats() {
-            // Data Aggregation
             const opdCounts = {};
             let ktaAktif = 0;
             let ktaExpired = 0;
             const now = new Date();
 
+            // Hitung secara otomatis dari dataPPNS saat ini
             dataPPNS.forEach(item => {
-                // OPD Count
                 opdCounts[item.opd] = (opdCounts[item.opd] || 0) + 1;
-                
-                // KTA Status
                 const validUntil = new Date(item.tglBerlaku);
-                if (validUntil >= now) {
-                    ktaAktif++;
-                } else {
-                    ktaExpired++;
-                }
+                if (validUntil >= now) { ktaAktif++; } 
+                else { ktaExpired++; }
             });
 
             // 1. Donut Chart (OPD)
@@ -679,7 +635,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } } },
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
                     cutout: '70%'
                 }
             });
@@ -710,18 +666,37 @@
         function initMap() {
             if(mapInstance) mapInstance.remove();
             
-            // Center map roughly on NTT region
-            mapInstance = L.map('map').setView([-8.6500, 121.0889], 7);
+            // Koordinat Satpol PP Provinsi NTT (Sekretariat / Kupang area)
+            const satpolPpCoords = [-10.162705, 123.596001];
+            
+            mapInstance = L.map('map').setView(satpolPpCoords, 8);
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(mapInstance);
 
-            // Add markers
+            // Marker khusus untuk Sekretariat Satpol PP Provinsi NTT
+            const sekreIcon = L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+
+            L.marker(satpolPpCoords, {icon: sekreIcon}).addTo(mapInstance)
+                .bindPopup(`
+                    <div class="text-sm text-center">
+                        <b class="text-red-600 text-base">Satpol PP Provinsi NTT</b><br>
+                        Sekretariat / Pusat Komando SIMDA
+                    </div>
+                `).openPopup();
+
             dataPPNS.forEach(person => {
                 if(person.lat && person.lng) {
                     const statusText = new Date(person.tglBerlaku) >= new Date() ? 
-                        '<span style="color:green">Aktif</span>' : '<span style="color:red">Kadaluarsa</span>';
+                        '<span style="color:green; font-weight:bold;">Aktif</span>' : '<span style="color:red; font-weight:bold;">Kadaluarsa</span>';
                     
                     const popupContent = `
                         <div class="text-sm">
@@ -733,6 +708,8 @@
                     L.marker([person.lat, person.lng]).addTo(mapInstance).bindPopup(popupContent);
                 }
             });
+
+            setTimeout(() => { mapInstance.invalidateSize(); }, 300);
         }
 
         // --- DATA MANAGEMENT ---
@@ -806,7 +783,7 @@
                 skep: document.getElementById('inputSkep').value,
                 kta: document.getElementById('inputKta').value,
                 tglBerlaku: document.getElementById('inputTglBerlaku').value,
-                lat: -8.6500, // Default for mock
+                lat: -8.6500, // Koordinat standar sementara jika tambah baru
                 lng: 121.0889,
                 kota: "NTT"
             };
@@ -821,9 +798,9 @@
             }
             
             resetFormUpdate();
-            updateDashboardStats(); // Refresh charts
+            updateDashboardStats(); // Refresh chart karena data berubah
             initMap(); // Refresh map
-            renderTable(dataPPNS);
+            renderTable(dataPPNS); // Refresh tabel
             switchTab('data');
         }
 
@@ -844,7 +821,6 @@
         }
 
         function hapusData(id) {
-            // Instead of confirm() using a simulated deletion
             dataPPNS = dataPPNS.filter(d => d.id !== id);
             updateDashboardStats();
             initMap();
@@ -860,8 +836,8 @@
         // --- EXPORT / IMPORT EXCEL (SheetJS) ---
         function exportData() {
             try {
-                const exportData = dataPPNS.map(({id, lat, lng, ...rest}) => rest); // Exclude internal fields
-                const worksheet = XLSX.utils.json_to_sheet(exportData);
+                const exportToExcel = dataPPNS.map(({id, lat, lng, ...rest}) => rest);
+                const worksheet = XLSX.utils.json_to_sheet(exportToExcel);
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, "Data_PPNS");
                 XLSX.writeFile(workbook, "Data_PPNS_NTT.xlsx");
@@ -897,46 +873,141 @@
             reader.readAsArrayBuffer(file);
         }
 
-        // --- FORM SUBMISSIONS (Simulations) ---
-        function uploadLaporanBulanan(e) {
-            e.preventDefault();
-            const bln = document.getElementById('lapBulanBln').value;
-            const thn = document.getElementById('lapBulanThn').value;
-            
-            const ul = document.getElementById('riwayatLaporanBulanList');
-            const li = document.createElement('li');
-            li.className = "py-3 flex justify-between items-center bg-green-50/30 px-2 rounded mt-2 border border-green-100 transition-all";
-            li.innerHTML = `
-                <div>
-                    <p class="text-sm font-medium text-gray-800">Laporan Kegiatan ${bln} ${thn}</p>
-                    <p class="text-xs text-gray-500">Diunggah: ${new Date().toLocaleDateString('id-ID')}</p>
-                </div>
-                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium border border-blue-200">Sedang Proses</span>
-            `;
-            ul.prepend(li);
-            
-            document.getElementById('formLaporanBulanan').reset();
-            showToast('Laporan bulanan berhasil dikirim', 'success');
+        // --- GOOGLE DRIVE INTEGRATION (VIA APPS SCRIPT) ---
+        // TODO: Masukkan URL Web App Google Apps Script Anda di dalam tanda kutip di bawah ini!
+        const SCRIPT_URL_LAPORAN = ""; // Contoh: "https://script.google.com/macros/s/AKfycb.../exec"
+
+        // Fungsi mengubah file PDF menjadi Base64 agar bisa dikirim via API
+        function getFileBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
         }
 
-        function uploadLaporanKeDrive(e) {
+        async function uploadLaporanBulanan(e) {
             e.preventDefault();
+            const btnSubmit = document.getElementById('btnUploadLapBulan');
+            const bln = document.getElementById('lapBulanBln').value;
+            const thn = document.getElementById('lapBulanThn').value;
+            const fileInput = document.getElementById('lapBulanFile');
+            const catatan = document.getElementById('lapBulanCatatan').value;
+            const nipPengirim = document.getElementById('profileNip').innerText.replace('NIP: ', '');
+            
+            if (!fileInput.files[0]) return;
+            const file = fileInput.files[0];
+
+            // Tampilkan animasi Loading UI
+            const originalBtnHtml = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i> Mengirim ke Drive...`;
+            btnSubmit.disabled = true;
+
+            try {
+                if (SCRIPT_URL_LAPORAN !== "") {
+                    // JIKA URL DRIVE SUDAH DI-SET, LAKUKAN PENGIRIMAN NYATA
+                    const base64Data = await getFileBase64(file);
+                    const formData = new URLSearchParams();
+                    formData.append('jenisLaporan', 'Bulanan');
+                    formData.append('periode', `${bln} ${thn}`);
+                    formData.append('nip', nipPengirim);
+                    formData.append('catatan', catatan);
+                    formData.append('fileName', file.name);
+                    formData.append('mimeType', file.type);
+                    formData.append('fileData', base64Data);
+
+                    // Kirim ke Google Apps Script
+                    await fetch(SCRIPT_URL_LAPORAN, { method: 'POST', body: formData });
+                } else {
+                    // JIKA URL KOSONG, SIMULASIKAN LOADING UNTUK DEMO
+                    await new Promise(r => setTimeout(r, 1500));
+                }
+
+                // Tambahkan ke riwayat tampilan UI
+                const ul = document.getElementById('riwayatLaporanBulanList');
+                const li = document.createElement('li');
+                li.className = "py-3 flex justify-between items-center bg-green-50/30 px-2 rounded mt-2 border border-green-100 transition-all";
+                li.innerHTML = `
+                    <div>
+                        <p class="text-sm font-medium text-gray-800">Laporan Kegiatan ${bln} ${thn}</p>
+                        <p class="text-xs text-gray-500">Diunggah: ${new Date().toLocaleDateString('id-ID')}</p>
+                    </div>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium border border-blue-200">Terkirim ke Drive</span>
+                `;
+                ul.prepend(li);
+                
+                document.getElementById('formLaporanBulanan').reset();
+                showToast(SCRIPT_URL_LAPORAN ? 'Laporan berhasil dikirim ke Google Drive!' : 'Simulasi: File terkirim!', 'success');
+            } catch (error) {
+                showToast('Gagal mengirim ke Drive. Cek koneksi.', 'error');
+                console.error(error);
+            } finally {
+                // Kembalikan tombol ke semula
+                btnSubmit.innerHTML = originalBtnHtml;
+                btnSubmit.disabled = false;
+            }
+        }
+
+        async function uploadLaporanKeDrive(e) {
+            e.preventDefault();
+            const btnSubmit = document.getElementById('btnUploadLap');
             const tahun = document.getElementById('lapTahun').value;
+            const fileInput = document.getElementById('lapFile');
+            const catatan = document.getElementById('lapCatatan').value;
+            const nipPengirim = document.getElementById('profileNip').innerText.replace('NIP: ', '');
             
-            const ul = document.getElementById('riwayatLaporanList');
-            const li = document.createElement('li');
-            li.className = "py-3 flex justify-between items-center bg-blue-50/50 px-2 rounded mt-2 border border-blue-100 transition-all";
-            li.innerHTML = `
-                <div>
-                    <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS ${tahun}</p>
-                    <p class="text-xs text-gray-500">Diunggah: ${new Date().toLocaleDateString('id-ID')}</p>
-                </div>
-                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium border border-blue-200">Diproses</span>
-            `;
-            ul.prepend(li);
-            
-            document.getElementById('formLaporanTahunan').reset();
-            showToast('Dokumen berhasil diunggah', 'success');
+            if (!fileInput.files[0]) return;
+            const file = fileInput.files[0];
+
+            // Tampilkan animasi Loading UI
+            const originalBtnHtml = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i> Mengirim ke Drive...`;
+            btnSubmit.disabled = true;
+
+            try {
+                if (SCRIPT_URL_LAPORAN !== "") {
+                    // JIKA URL DRIVE SUDAH DI-SET, LAKUKAN PENGIRIMAN NYATA
+                    const base64Data = await getFileBase64(file);
+                    const formData = new URLSearchParams();
+                    formData.append('jenisLaporan', 'Tahunan');
+                    formData.append('periode', tahun);
+                    formData.append('nip', nipPengirim);
+                    formData.append('catatan', catatan);
+                    formData.append('fileName', file.name);
+                    formData.append('mimeType', file.type);
+                    formData.append('fileData', base64Data);
+
+                    // Kirim ke Google Apps Script
+                    await fetch(SCRIPT_URL_LAPORAN, { method: 'POST', body: formData });
+                } else {
+                    // JIKA URL KOSONG, SIMULASIKAN LOADING UNTUK DEMO
+                    await new Promise(r => setTimeout(r, 1500));
+                }
+
+                // Tambahkan ke riwayat tampilan UI
+                const ul = document.getElementById('riwayatLaporanList');
+                const li = document.createElement('li');
+                li.className = "py-3 flex justify-between items-center bg-blue-50/50 px-2 rounded mt-2 border border-blue-100 transition-all";
+                li.innerHTML = `
+                    <div>
+                        <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS ${tahun}</p>
+                        <p class="text-xs text-gray-500">Diunggah: ${new Date().toLocaleDateString('id-ID')}</p>
+                    </div>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium border border-blue-200">Terkirim ke Drive</span>
+                `;
+                ul.prepend(li);
+                
+                document.getElementById('formLaporanTahunan').reset();
+                showToast(SCRIPT_URL_LAPORAN ? 'Laporan tahunan berhasil dikirim ke Google Drive!' : 'Simulasi: File terkirim!', 'success');
+            } catch (error) {
+                showToast('Gagal mengirim ke Drive. Cek koneksi.', 'error');
+                console.error(error);
+            } finally {
+                // Kembalikan tombol ke semula
+                btnSubmit.innerHTML = originalBtnHtml;
+                btnSubmit.disabled = false;
+            }
         }
 
         function handleGantiPassword(e) {
@@ -953,169 +1024,5 @@
             showToast('Password berhasil diperbarui', 'success');
         }
     </script>
-   
-    <script>
-        // Variable global untuk menyimpan instance Chart & Map
-        let opdChartInstance = null;
-        let ktaChartInstance = null;
-        let mapInstance = null;
-
-        // --- LOGIKA LOGIN & PEMBAGIAN HAK AKSES ---
-        function handleLogin() {
-            const nipInput = document.getElementById('loginNip').value.trim();
-            const passwordInput = document.getElementById('loginPassword').value.trim();
-            const loginError = document.getElementById('loginError');
-            
-            const isFormatNipValid = /^\d{18}$/.test(nipInput);
-
-            if (nipInput === '199408312025061003' && passwordInput === 'admin123') {
-                masukKeSistem('admin', nipInput, 'Administrator PPNS');
-            } 
-            else if (isFormatNipValid && nipInput !== '199408312025061003' && passwordInput === 'pengguna123') {
-                masukKeSistem('user', nipInput, 'Pengguna (User)');
-            } 
-            else {
-                loginError.classList.remove('hidden');
-                loginError.innerText = "NIP atau Password salah!";
-                if (nipInput.length !== 18 && nipInput !== '') {
-                    loginError.innerText = "NIP harus terdiri dari 18 digit angka!";
-                }
-            }
-        }
-
-        function masukKeSistem(role, nip, roleName) {
-            document.getElementById('loginError').classList.add('hidden');
-
-            const loginScreen = document.getElementById('loginScreen');
-            loginScreen.classList.add('opacity-0');
-            setTimeout(() => {
-                loginScreen.classList.add('hidden');
-                document.getElementById('mainApp').classList.remove('hidden');
-                
-                // MANGGIL FUNGSI GRAFIK & PETA SAAT DOKUMEN/APP SUDAH MUNCUL
-                initDashboardVisuals();
-            }, 500);
-
-            document.getElementById('userNameDisplay').innerText = nip;
-            document.getElementById('userRoleDisplay').innerText = roleName;
-            
-            if(document.getElementById('profileName')) document.getElementById('profileName').innerText = roleName;
-            if(document.getElementById('profileNip')) document.getElementById('profileNip').innerText = 'NIP: ' + nip;
-
-            const adminElements = document.querySelectorAll('.admin-only');
-            adminElements.forEach(el => {
-                el.style.display = (role === 'admin') ? '' : 'none';
-            });
-
-            showToast('Berhasil masuk sebagai ' + roleName);
-            switchTab('dashboard');
-        }
-
-        function handleLogout() {
-            document.getElementById('loginNip').value = '';
-            document.getElementById('loginPassword').value = '';
-            
-            document.getElementById('mainApp').classList.add('hidden');
-            const loginScreen = document.getElementById('loginScreen');
-            loginScreen.classList.remove('hidden');
-            
-            setTimeout(() => {
-                loginScreen.classList.remove('opacity-0');
-            }, 10);
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-blue-600', 'text-white');
-                btn.classList.add('text-slate-300');
-            });
-
-            document.getElementById('sec-' + tabId).classList.add('active');
-            
-            const activeBtn = document.getElementById('btn-' + tabId);
-            if(activeBtn) {
-                activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800');
-                activeBtn.classList.add('bg-blue-600', 'text-white');
-            }
-
-            // Memastikan ukuran peta otomatis menyesuaikan saat tab Dashboard dibuka
-            if (tabId === 'dashboard' && mapInstance) {
-                setTimeout(() => { mapInstance.invalidateSize(); }, 200);
-            }
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMessage').innerText = message;
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
-        }
-
-        // --- FUNGSI MENGGAMBAR GRAFIK & MEMUAT PETA ---
-        function initDashboardVisuals() {
-            // 1. Render Donut Chart (Persentase per OPD)
-            const ctxOpd = document.getElementById('opdDonutChart');
-            if (ctxOpd && !opdChartInstance) {
-                opdChartInstance = new Chart(ctxOpd, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Satpol PP', 'Dinas Lingkungan Hidup', 'Dinas Perhubungan', 'Dinas Pariwisata', 'DKP'],
-                        datasets: [{
-                            data: [40, 20, 15, 15, 10],
-                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { position: 'bottom' } }
-                    }
-                });
-            }
-
-            // 2. Render Bar Chart (Status KTA PPNS)
-            const ctxKta = document.getElementById('ktaBarChart');
-            if (ctxKta && !ktaChartInstance) {
-                ktaChartInstance = new Chart(ctxKta, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Aktif', 'Hampir Kadaluarsa', 'Kadaluarsa'],
-                        datasets: [{
-                            label: 'Jumlah PPNS',
-                            data: [35, 12, 5],
-                            backgroundColor: ['#22c55e', '#eab308', '#ef4444']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { y: { beginAtZero: true } }
-                    }
-                });
-            }
-
-            // 3. Render Leaflet Map (Peta NTT)
-            const mapEl = document.getElementById('map');
-            if (mapEl && !mapInstance) {
-                // Set titik pusat ke NTT (Kupang)
-                mapInstance = L.map('map').setView([-10.1772, 123.6070], 8);
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap contributors'
-                }).addTo(mapInstance);
-
-                // Tambahkan Marker contoh lokasi Kantor Pemprov NTT
-                L.marker([-10.1772, 123.6070]).addTo(mapInstance)
-                    .bindPopup('<b>Kantor Gubernur NTT</b><br>Pusat Komando SIMDA PPNS')
-                    .openPopup();
-
-                setTimeout(() => { mapInstance.invalidateSize(); }, 300);
-            }
-        }
-</script>
 </body>
 </html>
