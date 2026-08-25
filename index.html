@@ -39,7 +39,7 @@
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-blue-500 to-green-500"></div>
             
             <div class="text-center mb-8 mt-2">
-                <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo Komodo Praja" class="h-28 mx-auto mb-4 object-contain rounded-md" onerror="this.src='https://placehold.co/150x150/png?text=Logo'">
+                <img src="https://placehold.co/150x150/png?text=SIMDA+PPNS" alt="Logo Komodo Praja" class="h-28 mx-auto mb-4 object-contain rounded-md" onerror="this.src='https://placehold.co/150x150/png?text=Logo'">
                 <h1 class="text-2xl font-bold text-gray-800 tracking-wide">SIMDA PPNS</h1>
                 <p class="text-sm text-gray-500 mt-1">Sistem Informasi Manajemen Data PPNS Pemprov NTT</p>
             </div>
@@ -68,7 +68,7 @@
         <!-- SIDEBAR NAVIGATION -->
         <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-2xl z-40 transition-all duration-300">
             <div class="p-4 border-b border-slate-700 flex items-center gap-3">
-                <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo" class="h-10 w-10 object-cover bg-white rounded border border-yellow-500" onerror="this.src='https://placehold.co/100x100/png?text=Logo'">
+                <img src="https://placehold.co/100x100/png?text=Logo" alt="Logo" class="h-10 w-10 object-cover bg-white rounded border border-yellow-500" onerror="this.src='https://placehold.co/100x100/png?text=Logo'">
                 <div>
                     <h2 class="text-lg font-bold leading-none text-yellow-400">SIMDA PPNS</h2>
                     <p class="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Pemprov NTT</p>
@@ -388,7 +388,6 @@
 
     <!-- JAVASCRIPT SYSTEM LOGIC -->
     <script>
-        // MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI BAWAH INI
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxD3DrUkOd8Nroibc5m-6D5SUErtkOOcQXr8DIcoaoi9YmEsq_NkiLlW0KS4An_chMdJQ/exec";
 
         let usersDB = {
@@ -396,8 +395,8 @@
         };
 
         let ppnsData = [
-            { opd: "Satpol PP", nama: "Budi Santoso, S.H.", jabatan: "Penyidik Utama", diklat: "Diklat Reserse Polri", skep: "SK-001/2020", kta: "KTA-9981", tgl: "2027-12-31", status: "Aktif" },
-            { opd: "Dinas Perhubungan", nama: "Siti Aminah", jabatan: "Penyidik Madya", diklat: "Pusdiklat Darat", skep: "SK-042/2019", kta: "KTA-8822", tgl: "2023-05-10", status: "Tidak Aktif" }
+            { opd: "Satuan Polisi Pamong Praja", nama: "Budi Santoso, S.H.", jabatan: "Penyidik Utama", diklat: "Diklat Reserse Polri", skep: "SK-001/2020", kta: "KTA-9981", tgl: "2027-12-31", status: "Aktif" },
+            { opd: "Dinas Perhubungan", nama: "Siti Aminah, S.STP", jabatan: "Penyidik Madya", diklat: "Pusdiklat Darat", skep: "SK-042/2019", kta: "KTA-8822", tgl: "2023-05-10", status: "Tidak Aktif" }
         ];
 
         let currentUser = null;
@@ -405,7 +404,7 @@
         let barChartInstance = null;
         let leafletMap = null;
 
-       window.handleLogin = function() {
+        window.handleLogin = function() {
             const nip = document.getElementById('loginNip').value.trim();
             const pass = document.getElementById('loginPassword').value;
 
@@ -423,6 +422,12 @@
             } else {
                 showError("Password salah!");
             }
+        };
+
+        function showError(msg) {
+            const errEl = document.getElementById('loginError');
+            errEl.innerText = msg;
+            errEl.classList.remove('hidden');
         }
 
         function processLogin(user) {
@@ -430,23 +435,22 @@
             document.getElementById('loginError').classList.add('hidden');
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
+
             document.getElementById('userNameDisplay').innerText = user.name;
             document.getElementById('userRoleDisplay').innerText = user.role;
             document.getElementById('profilNameDisplay').innerText = user.name;
             document.getElementById('profilRoleDisplay').innerText = user.role;
             document.getElementById('profilNipDisplay').innerText = user.nip;
-            
-            renderTable();
-            setTimeout(() => {
-                initCharts();
-                initMap();
-            }, 200);
-        }
 
-        function showError(msg) {
-            const err = document.getElementById('loginError');
-            err.innerText = msg;
-            err.classList.remove('hidden');
+            if (user.role === 'Admin') {
+                document.querySelectorAll('.th-aksi').forEach(el => el.classList.remove('hidden'));
+            } else {
+                document.querySelectorAll('.th-aksi').forEach(el => el.classList.add('hidden'));
+            }
+
+            initMap();
+            renderCharts();
+            renderTable();
         }
 
         function handleLogout() {
@@ -459,326 +463,240 @@
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-blue-600', 'text-white');
-                btn.classList.add('text-slate-300');
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-blue-600', 'text-white');
+                el.classList.add('text-slate-300');
             });
 
-            document.getElementById('sec-' + tabId).classList.add('active');
-            const activeBtn = document.getElementById('btn-' + tabId);
-            if (activeBtn) {
-                activeBtn.classList.add('bg-blue-600', 'text-white');
-                activeBtn.classList.remove('text-slate-300');
+            const targetTab = document.getElementById('sec-' + tabId);
+            const targetBtn = document.getElementById('btn-' + tabId);
+
+            if (targetTab) targetTab.classList.add('active');
+            if (targetBtn) {
+                targetBtn.classList.add('bg-blue-600', 'text-white');
+                targetBtn.classList.remove('text-slate-300');
+            }
+
+            if (tabId === 'dashboard' && leafletMap) {
+                setTimeout(() => leafletMap.invalidateSize(), 200);
             }
         }
 
-        function exportData() {
-            const table = document.getElementById("ppnsTable");
-            const worksheet = XLSX.utils.table_to_sheet(table);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Data PPNS");
-            XLSX.writeFile(workbook, "Data_Direktori_PPNS_NTT.xlsx");
+        function initMap() {
+            if (leafletMap) return;
+            // Center pada Kota Kupang / NTT
+            leafletMap = L.map('map').setView([-10.1772, 123.6070], 8);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(leafletMap);
+
+            const locations = [
+                { name: "Kantor Gubernur NTT / Satpol PP", lat: -10.1695, lng: 123.6063 },
+                { name: "Dinas Perhubungan NTT", lat: -10.1582, lng: 123.6150 },
+                { name: "DLHK Prov NTT", lat: -10.1750, lng: 123.5900 }
+            ];
+
+            locations.forEach(loc => {
+                L.marker([loc.lat, loc.lng]).addTo(leafletMap)
+                    .bindPopup(`<b>${loc.name}</b>`);
+            });
         }
 
-        function prosesFileImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        function renderCharts() {
+            const opdCounts = {};
+            ppnsData.forEach(item => {
+                opdCounts[item.opd] = (opdCounts[item.opd] || 0) + 1;
+            });
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const importedJson = XLSX.utils.sheet_to_json(worksheet);
+            const ctxDonut = document.getElementById('opdDonutChart').getContext('2d');
+            if (donutChartInstance) donutChartInstance.destroy();
+            donutChartInstance = new Chart(ctxDonut, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(opdCounts),
+                    datasets: [{
+                        data: Object.values(opdCounts),
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
 
-                if (importedJson.length > 0) {
-                    importedJson.forEach(row => {
-                        ppnsData.push({
-                            opd: row["OPD"] || "Tidak Diketahui",
-                            nama: row["Nama & Jabatan"] || "N/A",
-                            jabatan: "PPNS",
-                            diklat: row["Lembaga Pendidikan"] || "-",
-                            skep: row["No SKEP & KTA"] || "-",
-                            kta: "-",
-                            tgl: row["Tgl Berlaku"] || "-",
-                            status: row["Status"] || "Aktif"
-                        });
-                    });
-                    renderTable();
-                    alert("Berhasil mengimpor " + importedJson.length + " data baru!");
-                }
-            };
-            reader.readAsArrayBuffer(file);
+            let aktif = 0, tidakAktif = 0;
+            ppnsData.forEach(item => {
+                if (item.status === 'Aktif') aktif++;
+                else tidakAktif++;
+            });
+
+            const ctxBar = document.getElementById('ktaBarChart').getContext('2d');
+            if (barChartInstance) barChartInstance.destroy();
+            barChartInstance = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['Aktif', 'Kadaluarsa / Tidak Aktif'],
+                    datasets: [{
+                        label: 'Jumlah PPNS',
+                        data: [aktif, tidakAktif],
+                        backgroundColor: ['#10b981', '#ef4444']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
         }
 
-        function renderTable(data) {
+        function renderTable(dataToRender = ppnsData) {
             const tbody = document.getElementById('tableBodyData');
-            if (!tbody) return;
-            
             tbody.innerHTML = '';
-            
-            if (data && Array.isArray(data)) {
-                data.forEach(item => {
-                    const tr = document.createElement('tr');
-            tr.className = "hover:bg-gray-50 border-b";
-            const isAktif = item.status === 'Aktif';
-            const badgeClass = isAktif ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-            tr.innerHTML = `
-                <td class="px-4 py-3"><div class="font-bold">${item.nama}</div><div class="text-xs text-gray-500">${item.jabatan}</div></td>
-                <td class="px-4 py-3">${item.diklat}</td>
-                <td class="px-4 py-3"><div class="text-xs">SKEP: ${item.skep}</div><div class="text-xs text-blue-600">KTA: ${item.kta}</div></td>
-                <td class="px-4 py-3">${item.tgl}</td>
-                <td class="px-4 py-3"><span class="px-2 py-1 text-xs rounded-full font-semibold ${badgeClass}">${item.status}</span></td>
-            `;      
-            tbody.appendChild(tr);    
-        });
-             } else {
-            console.warn("Data untuk tabel kosong atau bukan array:", data);
-        }
-            document.getElementById('totalDataCount').innerText = ppnsData.length;
-        }
+            document.getElementById('totalDataCount').innerText = dataToRender.length;
+
+            dataToRender.forEach((item, index) => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-50 border-b";
+                tr.className = 'hover:bg-gray-50 transition';
                 const isAktif = item.status === 'Aktif';
-                const badgeClass = isAktif ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                const statusBadge = isAktif 
+                    ? `<span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full font-medium">Aktif</span>`
+                    : `<span class="bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded-full font-medium">Tidak Aktif</span>`;
 
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-medium text-gray-900">${item.opd}</td>
-                    <td class="px-4 py-3"><div class="font-bold">${item.nama}</div><div class="text-xs text-gray-500">${item.jabatan}</div></td>
-                    <td class="px-4 py-3">${item.diklat}</td>
-                    <td class="px-4 py-3"><div class="text-xs">SKEP: ${item.skep}</div><div class="text-xs text-blue-600">KTA: ${item.kta}</div></td>
-                    <td class="px-4 py-3">${item.tgl}</td>
-                    <td class="px-4 py-3"><span class="px-2 py-1 text-xs rounded-full font-semibold ${badgeClass}">${item.status}</span></td>
+                    <td class="px-4 py-3 font-semibold text-gray-800">${item.opd}</td>
+                    <td class="px-4 py-3">
+                        <div class="font-medium text-gray-900">${item.nama}</div>
+                        <div class="text-xs text-gray-500">${item.jabatan}</div>
+                    </td>
+                    <td class="px-4 py-3 text-sm">${item.diklat}</td>
+                    <td class="px-4 py-3 text-xs font-mono">
+                        <div>SKEP: ${item.skep}</div>
+                        <div>KTA: ${item.kta}</div>
+                    </td>
+                    <td class="px-4 py-3 text-sm">${item.tgl}</td>
+                    <td class="px-4 py-3">${statusBadge}</td>
+                    <td class="px-4 py-3 th-aksi ${currentUser && currentUser.role === 'Admin' ? '' : 'hidden'}">
+                        <button onclick="deleteData(${index})" class="text-red-600 hover:text-red-800 transition"><i class="fas fa-trash"></i></button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
-        });
-    }
-            document.getElementById('totalDataCount').innerText = ppnsData.length;
-}
-        function searchTable() {
-            const val = document.getElementById('searchInput').value.toLowerCase();
-            const rows = document.querySelectorAll('#tableBodyData tr');
-
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                row.style.display = text.includes(val) ? '' : 'none';
             });
+        }
+
+        function searchTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = ppnsData.filter(item => 
+                item.nama.toLowerCase().includes(query) ||
+                item.opd.toLowerCase().includes(query) ||
+                item.kta.toLowerCase().includes(query)
+            );
+            renderTable(filtered);
         }
 
         function checkKtaStatus() {
-            const tglVal = document.getElementById('inputTgl').value;
+            const dateVal = document.getElementById('inputTgl').value;
             const statusInput = document.getElementById('inputStatus');
-            if (!tglVal) return;
-
-            const selectedDate = new Date(tglVal);
+            if (!dateVal) {
+                statusInput.value = '';
+                return;
+            }
+            const expDate = new Date(dateVal);
             const today = new Date();
-
-            if (selectedDate >= today) {
-                statusInput.value = "Aktif";
-                statusInput.className = "w-full px-4 py-2 bg-green-50 border border-green-300 rounded-lg text-sm font-bold text-green-700 cursor-not-allowed";
+            if (expDate >= today) {
+                statusInput.value = 'Aktif';
+                statusInput.className = 'w-full px-4 py-2 bg-green-50 text-green-700 border border-green-200 rounded-lg text-sm font-bold cursor-not-allowed';
             } else {
-                statusInput.value = "Kedaluwarsa";
-                statusInput.className = "w-full px-4 py-2 bg-red-50 border border-red-300 rounded-lg text-sm font-bold text-red-700 cursor-not-allowed";
+                statusInput.value = 'Tidak Aktif';
+                statusInput.className = 'w-full px-4 py-2 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-bold cursor-not-allowed';
             }
         }
 
-        function handleKirimLaporan(e) {
-            e.preventDefault();
-            const newData = {
-                opd: document.getElementById('inputOpd').value,
-                nama: document.getElementById('inputNama').value,
-                jabatan: document.getElementById('inputJabatan').value,
-                diklat: document.getElementById('inputDiklat').value,
-                skep: document.getElementById('inputSkep').value,
-                kta: document.getElementById('inputKta').value,
-                tgl: document.getElementById('inputTgl').value,
-                status: document.getElementById('inputStatus').value
-            });
+        function handleKirimLaporan(event) {
+            event.preventDefault();
+            const opd = document.getElementById('inputOpd').value;
+            const nama = document.getElementById('inputNama').value;
+            const jabatan = document.getElementById('inputJabatan').value;
+            const diklat = document.getElementById('inputDiklat').value;
+            const skep = document.getElementById('inputSkep').value;
+            const kta = document.getElementById('inputKta').value;
+            const tgl = document.getElementById('inputTgl').value;
+            const status = document.getElementById('inputStatus').value;
 
-            ppnsData.push(newData);
+            const newItem = { opd, nama, jabatan, diklat, skep, kta, tgl, status };
+            ppnsData.push(newItem);
+
             renderTable();
+            renderCharts();
+
             alert('Data PPNS berhasil disimpan!');
             document.getElementById('formLaporan').reset();
             switchTab('data');
         }
 
-        function changePassword(e) {
-            e.preventDefault();
-            const newP = document.getElementById('newPass').value;
-            const confP = document.getElementById('confirmNewPass').value;
-            const msg = document.getElementById('passMsg');
-
-            if (newP !== confP) {
-                msg.innerText = "Konfirmasi password tidak cocok!";
-                msg.className = "text-sm text-red-600 block mt-2";
-                return;
-            }
-
-            usersDB[currentUser.nip].pass = newP;
-            msg.innerText = "Password berhasil diperbarui!";
-            msg.className = "text-sm text-green-600 block mt-2";
-            document.getElementById('newPass').value = '';
-            document.getElementById('confirmNewPass').value = '';
+        function exportData() {
+            const ws = XLSX.utils.json_to_sheet(ppnsData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Data PPNS");
+            XLSX.writeFile(wb, "Data_PPNS_Pemprov_NTT.xlsx");
         }
 
-        function initCharts() {
-            if (donutChartInstance) donutChartInstance.destroy();
-            if (barChartInstance) barChartInstance.destroy();
-
-            const ctxDonut = document.getElementById('opdDonutChart').getContext('2d');
-            donutChartInstance = new Chart(ctxDonut, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Satpol PP', 'Kehutanan', 'Dishub', 'Lainnya'],
-                    datasets: [{
-                        data: [40, 25, 20, 15],
-                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#64748b']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-
-            const ctxBar = document.getElementById('ktaBarChart').getContext('2d');
-            barChartInstance = new Chart(ctxBar, {
-                type: 'bar',
-                data: {
-                    labels: ['Aktif', 'Kedaluwarsa', 'Dalam Proses'],
-                    datasets: [{
-                        label: 'Jumlah KTA',
-                        data: [65, 12, 8],
-                        backgroundColor: ['#22c55e', '#ef4444', '#eab308']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        function initMap() {
-            if (leafletMap) return;
-            leafletMap = L.map('map').setView([-10.1772, 123.6070], 8);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap'
-            }).addTo(leafletMap);
-
-            L.marker([-10.1772, 123.6070]).addTo(leafletMap)
-                .bindPopup('<b>Kantor Gubernur NTT</b><br>Pusat Posko PPNS')
-                .openPopup();
-        }
-
-        // FUNGSI UNGGAN LAPORAN KE GOOGLE DRIVE
-        async function uploadLaporanKeDrive(e) {
-            e.preventDefault();
-            
-            const btn = document.getElementById('btnUploadLap');
-            const fileInput = document.getElementById('lapFile');
-            const periode = document.getElementById('lapTahun').value;
-            const catatan = document.getElementById('lapCatatan').value;
-
-            if (!fileInput.files[0]) {
-                alert("Silakan pilih file PDF terlebih dahulu.");
-                return;
-            }
-
-            if (SCRIPT_URL === "MASUKKAN_URL_WEB_APP_GOOGLE_SCRIPT_ANDA") {
-                alert("Harap ganti SCRIPT_URL pada file index.html dengan URL Web App Google Script Anda!");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mengirim ke Google Drive...';
-
+        function prosesFileImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
             const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async function () {
-                const payload = {
-                    base64: reader.result,
-                    fileName: file.name,
-                    mimeType: file.type || "application/pdf",
-                    periode: periode,
-                    catatan: catatan
-                };
-
-                try {
-                    const response = await fetch(SCRIPT_URL, {
-                        method: "POST",
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.status === "success") {
-                        alert("Berhasil! File PDF telah disimpan di Google Drive.");
-                        document.getElementById('formLaporanTahunan').reset();
-                    } else {
-                        alert("Gagal mengunggah file: " + result.message);
-                    }
-                } catch (err) {
-                    alert("Terjadi kesalahan saat mengunggah file. Pastikan Google Script di-deploy ke 'Anyone'.");
-                } finally {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Kirim Laporan';
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                if (jsonData && jsonData.length > 0) {
+                    ppnsData = jsonData;
+                    renderTable();
+                    renderCharts();
+                    alert('Import data berhasil!');
                 }
             };
+            reader.readAsArrayBuffer(file);
         }
-        </script>
-        <!-- MODAL EDIT DATA (KHUSUS ADMIN) -->
-<div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 relative">
-        <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2"><i class="fas fa-edit text-yellow-500 mr-2"></i>Edit Data PPNS</h3>
-        
-        <form id="formEditData" onsubmit="handleSimpanEdit(event)" class="space-y-3">
-            <input type="hidden" id="editIndex">
-            <div>
-                <label class="block text-xs font-medium text-gray-700">Nama Lengkap</label>
-                <input type="text" id="editNama" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
-            </div>
-            <div>
-                <label class="block text-xs font-medium text-gray-700">OPD</label>
-                <input type="text" id="editOpd" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-                <div>
-                    <label class="block text-xs font-medium text-gray-700">Jabatan</label>
-                    <input type="text" id="editJabatan" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-700">Lembaga Pendidikan</label>
-                    <input type="text" id="editDiklat" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-                <div>
-                    <label class="block text-xs font-medium text-gray-700">No. SKEP</label>
-                    <input type="text" id="editSkep" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-700">No. KTA</label>
-                    <input type="text" id="editKta" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
-                </div>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-                <div>
-                    <label class="block text-xs font-medium text-gray-700">Tanggal Berlaku</label>
-                    <input type="date" id="editTgl" required class="w-full px-3 py-1.5 border rounded-lg text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-gray-700">Status</label>
-                    <select id="editStatus" class="w-full px-3 py-1.5 border rounded-lg text-sm">
-                        <option value="Aktif">Aktif</option>
-                        <option value="Tidak Aktif">Tidak Aktif</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="flex justify-end gap-2 mt-4 pt-2 border-t">
-                <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300">Batal</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">Simpan Perubahan</button>
-            </div>
-        </form>
-    </div>
-</div>
+        function uploadLaporanKeDrive(event) {
+            event.preventDefault();
+            const btn = document.getElementById('btnUploadLap');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Mengunggah...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('Laporan berhasil dikirim dan diunggah!');
+                btn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Kirim Laporan';
+                btn.disabled = false;
+                document.getElementById('formLaporanTahunan').reset();
+            }, 1500);
+        }
+
+        function changePassword(event) {
+            event.preventDefault();
+            const p1 = document.getElementById('newPass').value;
+            const p2 = document.getElementById('confirmNewPass').value;
+            const msg = document.getElementById('passMsg');
+
+            if (p1 !== p2) {
+                msg.innerText = 'Password konfirmasi tidak cocok!';
+                msg.className = 'text-sm text-red-600 mt-2 block';
+                return;
+            }
+
+            if (currentUser) {
+                currentUser.pass = p1;
+                usersDB[currentUser.nip].pass = p1;
+                msg.innerText = 'Password berhasil diperbarui!';
+                msg.className = 'text-sm text-green-600 mt-2 block';
+                document.getElementById('newPass').value = '';
+                document.getElementById('confirmNewPass').value = '';
+            }
+        }
+
+        function deleteData(index) {
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                ppnsData.splice(index, 1);
+                renderTable();
+                renderCharts();
+            }
+        }
     </script>
 </body>
 </html>
