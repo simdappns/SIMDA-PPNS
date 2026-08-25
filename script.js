@@ -148,3 +148,19 @@ function muatLaporanLokal() {
         tabel.appendChild(tr);
     });
 }
+// Fungsi untuk mengganti tampilan halaman (Tab)
+function pindahTab(tabId) {
+  // Sembunyikan semua elemen dengan class 'tab-content'
+  const semuaTab = document.querySelectorAll('.tab-content');
+  semuaTab.forEach(tab => {
+    tab.classList.add('hidden');
+    tab.classList.remove('block');
+  });
+
+  // Tampilkan tab yang dipilih
+  const tabAktif = document.getElementById(tabId);
+  if (tabAktif) {
+    tabAktif.classList.remove('hidden');
+    tabAktif.classList.add('block');
+  }
+}
