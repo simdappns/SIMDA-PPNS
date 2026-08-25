@@ -502,32 +502,62 @@
 
         // --- AUTHENTICATION ---
         function handleLogin() {
-            const nip = document.getElementById('loginNip').value;
-            const pass = document.getElementById('loginPassword').value;
-            const err = document.getElementById('loginError');
+    const nip = document.getElementById('loginNip').value.trim();
+    const pass = document.getElementById('loginPassword').value.trim();
+    const errorMsg = document.getElementById('loginError');
+    
+    // Sembunyikan error setiap kali tombol ditekan
+    errorMsg.classList.add('hidden');
+
+    // KONDISI 1: Cek Master Admin
+    const isAdmin = (nip === '199408312025061003' && pass === 'admin123');
+    
+    // KONDISI 2: Cek Pengguna Biasa (NIP ASN 18 digit angka, dan Password = NIP)
+    // Regex /^\d{18}$/ memastikan input persis 18 digit angka saja
+    const isNipValid = /^\d{18}$/.test(nip); 
+    const isUser = (isNipValid && pass === nip);
+
+    if (isAdmin || isUser) {
+        // Animasi transisi hilang
+        document.getElementById('loginScreen').classList.add('opacity-0');
+        
+        // Menyesuaikan tampilan UI berdasarkan Role (Admin vs User)
+        if (isAdmin) {
+            document.getElementById('userNameDisplay').innerText = "Admin Master";
+            document.getElementById('userRoleDisplay').innerText = "Administrator";
             
-            if ((nip === 'admin' && pass === 'admin') || (nip === 'user' && pass === 'user')) {
-                err.classList.add('hidden');
-                currentUserRole = nip; // Simple role assignment based on username
-                
-                // Set UI based on role
-                applyRoleUI();
-                
-                // Transition UI
-                document.getElementById('loginScreen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loginScreen').style.display = 'none';
-                    document.getElementById('mainApp').classList.remove('hidden');
-                    
-                    // Initial setup
-                    initDashboard();
-                    renderTable(dataPPNS);
-                    switchTab('dashboard');
-                }, 500);
-            } else {
-                err.classList.remove('hidden');
-            }
+            // Tampilkan elemen khusus admin (jika ada class 'admin-only')
+            document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+        } else {
+            document.getElementById('userNameDisplay').innerText = nip; // Menampilkan NIP sebagai nama
+            document.getElementById('userRoleDisplay').innerText = "Pegawai PPNS";
+            
+            // Sembunyikan elemen khusus admin untuk user biasa
+            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
         }
+
+        // Beralih ke halaman utama setelah 400ms
+        setTimeout(() => {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            initDashboard();
+            renderTableData();
+        }, 400);
+        
+    } else {
+        // Jika salah, tampilkan pesan error
+        errorMsg.classList.remove('hidden');
+        if (nip === '199408312025061003' && pass !== 'admin123') {
+            errorMsg.innerText = "Password Master Admin salah!";
+        } else if (isNipValid && pass !== nip) {
+            errorMsg.innerText = "Password untuk pengguna ASN harus sesuai dengan NIP!";
+        } else if (!isNipValid && !isAdmin) {
+            errorMsg.innerText = "NIP tidak valid! Masukkan 18 digit angka NIP.";
+        } else {
+            errorMsg.innerText = "NIP atau Password salah!";
+        }
+    }
+}
 
         function handleLogout() {
             document.getElementById('mainApp').classList.add('hidden');
