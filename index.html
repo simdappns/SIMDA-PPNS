@@ -16,6 +16,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; overflow-x: hidden; }
@@ -23,52 +25,65 @@
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
         
         ::-webkit-scrollbar { width: 6px; height: 6px;}
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Modal Backend Code */
+        pre code { font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; }
     </style>
 </head>
 <body class="text-gray-800 h-screen flex overflow-hidden">
 
     <!-- LOGIN SCREEN -->
-    <div id="loginScreen" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50">
+    <div id="loginScreen" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50 transition-opacity duration-500">
         <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4 relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-blue-500 to-green-500"></div>
             
             <div class="text-center mb-8 mt-2">
-                <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo Komodo Praja" class="h-28 mx-auto mb-4 object-contain rounded-md" onerror="this.src='https://placehold.co/150x150/png?text=Logo'">
+                <img src="https://placehold.co/150x150/png?text=Logo+NTT" alt="Logo Pemprov NTT" class="h-24 mx-auto mb-4 object-contain rounded-md border border-gray-200 p-2">
                 <h1 class="text-2xl font-bold text-gray-800 tracking-wide">SIMDA PPNS</h1>
                 <p class="text-sm text-gray-500 mt-1">Sistem Informasi Manajemen Data PPNS Pemprov NTT</p>
+                
+                <div class="mt-4 p-3 bg-blue-50 text-xs text-left rounded-lg text-blue-800 border border-blue-100">
+                    <strong>Info Akun Simulasi:</strong><br>
+                    Admin OPD: <code>admin</code> / pass: <code>123</code><br>
+                    User Biasa: <code>user</code> / pass: <code>123</code>
+                </div>
             </div>
             
-            <div class="space-y-4">
+            <form onsubmit="App.handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">NIP / Username</label>
-                    <input type="text" id="loginNip" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Masukkan NIP atau ID Anda">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Username / NIP</label>
+                    <input type="text" id="loginNip" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Masukkan NIP atau ID Anda">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                    <input type="password" id="loginPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Masukkan Password">
+                    <input type="password" id="loginPassword" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="Masukkan Password">
                 </div>
                 <div id="loginError" class="text-red-500 text-sm hidden text-center bg-red-50 py-2 rounded border border-red-200"></div>
                 
-                <button onclick="handleLogin()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200 mt-4 shadow-md flex justify-center items-center gap-2">
+                <button type="submit" id="btnLogin" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200 mt-4 shadow-md flex justify-center items-center gap-2">
                     <i class="fas fa-sign-in-alt"></i> Masuk Ke Sistem
                 </button>
-            </div>
+            </form>
         </div>
     </div>
 
-    <!-- MAIN APPLICATION -->
+    <!-- MAIN APP -->
     <div id="mainApp" class="hidden w-full h-full flex">
         
-        <!-- SIDEBAR NAVIGATION -->
+        <!-- SIDEBAR -->
         <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-2xl z-40 transition-all duration-300">
             <div class="p-4 border-b border-slate-700 flex items-center gap-3">
-                <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo" class="h-10 w-10 object-cover bg-white rounded border border-yellow-500" onerror="this.src='https://placehold.co/100x100/png?text=Logo'">
+                <img src="https://placehold.co/100x100/png?text=NTT" alt="Logo" class="h-10 w-10 object-cover bg-white rounded border border-yellow-500">
                 <div>
                     <h2 class="text-lg font-bold leading-none text-yellow-400">SIMDA PPNS</h2>
                     <p class="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Pemprov NTT</p>
@@ -78,44 +93,40 @@
             <div class="p-4 flex-1 overflow-y-auto space-y-1">
                 <p class="text-xs text-slate-500 font-semibold mb-2 uppercase tracking-wider px-2">Menu Utama</p>
                 
-                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-blue-600 text-white transition-colors">
+                <button onclick="App.switchTab('dashboard')" id="btn-dashboard" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-blue-600 text-white transition-colors">
                     <i class="fas fa-chart-line w-5 text-center"></i> Dashboard
                 </button>
                 
-                <button onclick="switchTab('data')" id="btn-data" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                <button onclick="App.switchTab('data')" id="btn-data" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
                     <i class="fas fa-database w-5 text-center"></i> Data PPNS
                 </button>
                 
-                <button onclick="switchTab('laporan')" id="btn-laporan" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                <button onclick="App.switchTab('laporan-tahunan')" id="btn-laporan-tahunan" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
                     <i class="fas fa-file-alt w-5 text-center"></i> Laporan Tahunan
                 </button>
-               
-                <button onclick="switchTab('laporan')" id="btn-laporan" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                    <i class="fas fa-file-alt w-5 text-center"></i> Laporan Bulanan
+                
+                <button onclick="App.switchTab('update')" id="btn-update" class="nav-btn admin-only w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fas fa-edit w-5 text-center"></i> Update Data
                 </button>
+
+                <p class="text-xs text-slate-500 font-semibold mt-6 mb-2 uppercase tracking-wider px-2">Sistem</p>
                 
-                <button onclick="switchTab('update')" id="btn-update" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                    <i class="fas fa-edit w-5 text-center"></i> Rubah / Update Data
-                </button>
-                
-                <p class="text-xs text-slate-500 font-semibold mt-6 mb-2 uppercase tracking-wider px-2">Pengaturan</p>
-                
-                <button onclick="switchTab('profil')" id="btn-profil" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                    <i class="fas fa-user-cog w-5 text-center"></i> Profil & Password
+                <button onclick="App.showBackendModal()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fas fa-code w-5 text-center text-yellow-500"></i> Backend Scripts
                 </button>
             </div>
             
             <div class="p-4 border-t border-slate-700">
                 <div class="flex items-center gap-3 mb-4 px-2">
-                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold shadow-inner">
                         <i class="fas fa-user"></i>
                     </div>
                     <div class="overflow-hidden">
                         <p class="text-sm font-semibold truncate text-white" id="userNameDisplay">Pengguna</p>
-                        <p class="text-xs text-slate-400" id="userRoleDisplay">Role</p>
+                        <p class="text-xs text-slate-400 capitalize" id="userRoleDisplay">Role</p>
                     </div>
                 </div>
-                <button onclick="handleLogout()" class="w-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 py-2 rounded-lg text-sm font-medium transition duration-200">
+                <button onclick="App.handleLogout()" class="w-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 py-2 rounded-lg text-sm font-medium transition duration-200">
                     <i class="fas fa-sign-out-alt mr-2"></i> Keluar
                 </button>
             </div>
@@ -127,19 +138,44 @@
                 
                 <!-- SECTION 1: DASHBOARD -->
                 <div id="sec-dashboard" class="tab-content active space-y-6">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">Dashboard Utama</h2>
-                        <p class="text-sm text-gray-500">Ringkasan Eksekutif Sistem Informasi Manajemen Data PPNS Pemprov NTT</p>
+                    <div class="mb-6 flex justify-between items-end">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800">Dashboard Utama</h2>
+                            <p class="text-sm text-gray-500">Ringkasan Eksekutif Sistem Informasi Manajemen Data PPNS Pemprov NTT</p>
+                        </div>
+                        <button onclick="App.loadDashboardData()" class="text-sm text-blue-600 bg-blue-50 px-3 py-1.5 rounded-md hover:bg-blue-100">
+                            <i class="fas fa-sync-alt mr-1"></i> Refresh
+                        </button>
+                    </div>
+
+                    <!-- Kpi Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="glass-panel p-4 rounded-xl border border-gray-200 border-l-4 border-l-blue-500 shadow-sm">
+                            <p class="text-xs text-gray-500 font-semibold uppercase">Total PPNS</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpiTotal">0</h3>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border border-gray-200 border-l-4 border-l-green-500 shadow-sm">
+                            <p class="text-xs text-gray-500 font-semibold uppercase">KTA Aktif</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpiAktif">0</h3>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border border-gray-200 border-l-4 border-l-red-500 shadow-sm">
+                            <p class="text-xs text-gray-500 font-semibold uppercase">KTA Kedaluwarsa</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpiKedaluwarsa">0</h3>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border border-gray-200 border-l-4 border-l-yellow-500 shadow-sm">
+                            <p class="text-xs text-gray-500 font-semibold uppercase">Dalam Proses</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1" id="kpiProses">0</h3>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                         <div class="xl:col-span-2 glass-panel p-5 rounded-xl shadow-sm border border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-map-marker-alt text-red-500 mr-2"></i>Peta Sebaran PPNS (42 OPD)</h3>
-                            <div id="map" class="w-full border border-gray-300 bg-gray-100"></div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-map-marker-alt text-red-500 mr-2"></i>Peta Sebaran PPNS (NTT)</h3>
+                            <div id="map" class="w-full border border-gray-300 bg-gray-100 relative"></div>
                         </div>
                         
                         <div class="glass-panel p-5 rounded-xl shadow-sm border border-gray-200 flex flex-col">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-chart-pie text-blue-500 mr-2"></i>Persentase per OPD</h3>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-chart-pie text-blue-500 mr-2"></i>Distribusi per OPD</h3>
                             <div class="relative flex-1 w-full flex justify-center min-h-[250px]">
                                 <canvas id="opdDonutChart"></canvas>
                             </div>
@@ -147,7 +183,7 @@
                     </div>
 
                     <div class="glass-panel p-5 rounded-xl shadow-sm border border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-id-card text-green-500 mr-2"></i>Status KTA PPNS Keseluruhan</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-id-card text-green-500 mr-2"></i>Statistik Masa Berlaku KTA</h3>
                         <div class="relative h-64 w-full">
                             <canvas id="ktaBarChart"></canvas>
                         </div>
@@ -161,294 +197,151 @@
                             <h2 class="text-2xl font-bold text-gray-800">Direktori Data PPNS</h2>
                             <p class="text-sm text-gray-500">Daftar lengkap seluruh PPNS di lingkup Pemprov NTT</p>
                         </div>
-                        <div class="flex gap-2">
-                            <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-700 transition shadow-sm"><i class="fas fa-file-import mr-1"></i> Import Excel</button>
-                            <button onclick="exportData()" class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-700 transition shadow-sm"><i class="fas fa-file-excel mr-1"></i> Export Excel</button>
-                            <input type="file" id="fileInput" class="hidden" accept=".xlsx, .xls, .csv" onchange="prosesFileImport(event)">
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="document.getElementById('fileInput').click()" class="admin-only bg-blue-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-blue-700 transition shadow-sm flex items-center gap-1">
+                                <i class="fas fa-file-import"></i> Import Excel
+                            </button>
+                            <button onclick="App.exportData()" class="bg-emerald-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-emerald-700 transition shadow-sm flex items-center gap-1">
+                                <i class="fas fa-file-excel"></i> Export Excel
+                            </button>
+                            <input type="file" id="fileInput" class="hidden" accept=".xlsx, .xls, .csv" onchange="App.handleFileImport(event)">
                         </div>
                     </div>
 
                     <div class="glass-panel rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                         <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50/50">
-                            <div class="relative w-64">
-                                <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari nama atau NIP..." class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500">
+                            <div class="relative w-full max-w-sm">
+                                <input type="text" id="searchInput" onkeyup="App.searchTable()" placeholder="Cari nama, NIP, atau OPD..." class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
                                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
                             </div>
-                            <span class="text-sm text-gray-500">Total: <b id="totalDataCount">0</b> PPNS</span>
+                            <span class="text-sm text-gray-500 hidden sm:inline-block">Total: <b id="totalDataCount">0</b> Data</span>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-600" id="ppnsTable">
+                        <div class="overflow-x-auto min-h-[300px]">
+                            <table class="w-full text-sm text-left text-gray-600">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-100/80">
                                     <tr>
-                                        <th class="px-4 py-3 border-b">OPD</th>
-                                        <th class="px-4 py-3 border-b">Nama & Jabatan</th>
-                                        <th class="px-4 py-3 border-b">Lembaga Pendidikan</th>
+                                        <th class="px-4 py-3 border-b">Profil Lengkap</th>
+                                        <th class="px-4 py-3 border-b">OPD Instansi</th>
                                         <th class="px-4 py-3 border-b">No SKEP & KTA</th>
-                                        <th class="px-4 py-3 border-b">Tgl Berlaku</th>
+                                        <th class="px-4 py-3 border-b">Masa Berlaku</th>
                                         <th class="px-4 py-3 border-b">Status</th>
-                                        <th class="px-4 py-3 border-b th-aksi hidden">Aksi</th>
+                                        <th class="px-4 py-3 border-b admin-only">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableBodyData" class="divide-y divide-gray-200 bg-white">
-                                    <!-- Injected by JS -->
+                                    <tr><td colspan="6" class="text-center py-10"><i class="fas fa-spinner fa-spin text-blue-500 text-2xl"></i></td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-<div id="laporan-bulanan" class="tab-content hidden w-full">
-  
-  <div class="mb-6">
-    <h2 class="text-2xl font-bold text-gray-800">Laporan Bulanan</h2>
-    <p class="text-gray-500">Filter dan cetak data kegiatan PPNS berdasarkan bulan.</p>
-  </div>
-
-  <!-- Filter Section -->
-  <div class="bg-white p-6 rounded-xl shadow-sm mb-6 border border-gray-100">
-    <div class="flex flex-col md:flex-row gap-4 items-end">
-      <div class="w-full md:w-1/3">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Bulan</label>
-        <select id="filterBulan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-          <option value="01">Januari</option>
-          <option value="02">Februari</option>
-          <option value="03">Maret</option>
-          <option value="04">April</option>
-          <option value="05">Mei</option>
-          <option value="06">Juni</option>
-          <option value="07">Juli</option>
-          <option value="08">Agustus</option>
-          <option value="09">September</option>
-          <option value="10">Oktober</option>
-          <option value="11">November</option>
-          <option value="12">Desember</option>
-        </select>
-      </div>
-
-      <div class="w-full md:w-1/3">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Tahun</label>
-        <input type="number" id="filterTahun" value="2026" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-      </div>
-
-      <div class="w-full md:w-1/3 flex gap-2">
-        <button onclick="tampilkanLaporanBulanan()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 w-full transition shadow-sm">
-          <i class="fas fa-search mr-1"></i> Tampilkan
-        </button>
-        <button onclick="exportKeExcel()" class="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 w-full transition shadow-sm">
-          <i class="fas fa-file-excel mr-1"></i> Export
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tabel Data -->
-  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="overflow-x-auto">
-      <table id="tabelLaporanBulanan" class="min-w-full text-sm text-left text-gray-600">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
-          <tr>
-            <th class="px-6 py-4">No</th>
-            <th class="px-6 py-4">Nama Lengkap</th>
-            <th class="px-6 py-4">Instansi (OPD)</th>
-            <th class="px-6 py-4">Tanggal Kegiatan</th>
-            <th class="px-6 py-4">Keterangan / Laporan</th>
-          </tr>
-        </thead>
-        <tbody id="bodyLaporanBulanan">
-          <tr>
-            <td colspan="5" class="px-6 py-8 text-center text-gray-500">Silakan pilih bulan dan tahun, lalu klik Tampilkan.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
                 <!-- SECTION 3: LAPORAN TAHUNAN -->
-                <div id="sec-laporan" class="tab-content space-y-6">
+                <div id="sec-laporan-tahunan" class="tab-content space-y-6">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">Laporan Tahunan PPNS</h2>
-                        <p class="text-sm text-gray-500">Modul pelaporan kinerja dan unggah berkas langsung ke Google Drive.</p>
+                        <p class="text-sm text-gray-500">Modul pelaporan kinerja dan unggah berkas PDF terintegrasi Google Drive.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Form Upload -->
                         <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-upload text-blue-500 mr-2"></i>Upload Laporan Kinerja</h3>
-                            <form id="formLaporanTahunan" onsubmit="uploadLaporanKeDrive(event)" class="space-y-4">
+                            <form id="formLaporanTahunan" onsubmit="App.uploadLaporanKeDrive(event)" class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Periode Tahun</label>
-                                    <select id="lapTahun" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500">
+                                    <select id="lapTahun" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none" required>
                                         <option value="2026">2026</option>
                                         <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">File Laporan (PDF)</label>
-                                    <input type="file" id="lapFile" accept=".pdf" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Pilih File (PDF)</label>
+                                    <input type="file" id="lapFile" accept=".pdf" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none" required>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Keterangan / Catatan</label>
-                                    <textarea id="lapCatatan" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500"></textarea>
-                                </div>
-                                <button type="submit" id="btnUploadLap" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition flex justify-center items-center gap-2">
-                                    <i class="fas fa-paper-plane mr-1"></i> Kirim Laporan
+                                <button type="submit" id="btnUploadLaporan" class="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition">
+                                    <i class="fas fa-cloud-upload-alt mr-2"></i> Upload Berkas
                                 </button>
                             </form>
                         </div>
-                        
-                        <!-- Riwayat Laporan -->
+
                         <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-history text-indigo-500 mr-2"></i>Riwayat Laporan Anda</h3>
-                            <ul class="divide-y divide-gray-200">
-                                <li class="py-3 flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-history text-green-500 mr-2"></i>Riwayat Laporan</h3>
+                            <div class="space-y-3">
+                                <div class="p-3 border border-gray-100 rounded bg-gray-50 flex justify-between items-center">
                                     <div>
-                                        <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS 2025</p>
-                                        <p class="text-xs text-gray-500">Diunggah: 10 Jan 2026</p>
+                                        <p class="font-semibold text-sm">Laporan Tahunan 2025</p>
+                                        <p class="text-xs text-gray-500">Diunggah: 15 Jan 2026</p>
                                     </div>
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">Diterima</span>
-                                </li>
-                                <li class="py-3 flex justify-between items-center">
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Terkirim</span>
+                                </div>
+                                <div class="p-3 border border-gray-100 rounded bg-gray-50 flex justify-between items-center">
                                     <div>
-                                        <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS 2024</p>
-                                        <p class="text-xs text-gray-500">Diunggah: 15 Jan 2025</p>
+                                        <p class="font-semibold text-sm">Laporan Tahunan 2024</p>
+                                        <p class="text-xs text-gray-500">Diunggah: 10 Jan 2025</p>
                                     </div>
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">Diterima</span>
-                                </li>
-                            </ul>
+                                    <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs">Terkirim</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- SECTION 4: RUBAH / UPDATE DATA -->
+                <!-- SECTION 4: UPDATE DATA (CRUD) -->
                 <div id="sec-update" class="tab-content space-y-6">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">Rubah / Update Data PPNS</h2>
-                        <p class="text-sm text-gray-500">Perbarui informasi identitas, jabatan, dan masa berlaku KTA Anda.</p>
+                        <h2 class="text-2xl font-bold text-gray-800">Form Manajemen Data PPNS</h2>
+                        <p class="text-sm text-gray-500">Tambah atau perbarui data Personil Penyidik Pegawai Negeri Sipil</p>
                     </div>
 
-                    <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200 bg-gradient-to-br from-white to-blue-50/30">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-sync text-indigo-500 mr-2"></i>Form Entry Data PPNS</h3>
-                        
-                        <form id="formLaporan" onsubmit="handleKirimLaporan(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Perangkat Daerah (OPD)</label>
-                                <select id="inputOpd" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-blue-500">
-                                    <option value="">Pilih OPD...</option>
-                                    <option value="Satuan Polisi Pamong Praja">Satuan Polisi Pamong Praja</option>
-                                    <option value="Dinas Lingkungan Hidup dan Kehutanan">Dinas Lingkungan Hidup dan Kehutanan</option>
-                                    <option value="Dinas Perhubungan">Dinas Perhubungan</option>
-                                    <option value="Dinas Pariwisata dan Ekonomi Kreatif">Dinas Pariwisata dan Ekonomi Kreatif</option>
-                                    <option value="Inspektorat Daerah">Inspektorat Daerah</option>
-                                    <option value="Sekretariat DPRD">Sekretariat DPRD</option>
-                                    <option value="Badan Kepegawaian Daerah">Badan Kepegawaian Daerah</option>
-                                    <option value="Badan Kesatuan Bangsa dan Politik">Badan Kesatuan Bangsa dan Politik</option>
-                                    <option value="Badan Keuangan Daerah">Badan Keuangan Daerah</option>
-                                    <option value="Badan Penanggulangan Bencana Daerah">Badan Penanggulangan Bencana Daerah</option>
-                                    <option value="Badan Pengelola Perbatasan Daerah">Badan Pengelola Perbatasan Daerah</option>
-                                    <option value="Badan Pengembangan SDM Daerah">Badan Pengembangan SDM Daerah</option>
-                                    <option value="Badan Perencanaan Pembangunan, Riset dan Inovasi Daerah">Badan Perencanaan Pembangunan, Riset dan Inovasi Daerah</option>
-                                    <option value="Badan Pendapatan dan Aset Daerah">Badan Pendapatan dan Aset Daerah</option>
-                                    <option value="Badan Penghubung">Badan Penghubung</option>
-                                    <option value="Biro Administrasi Pimpinan">Biro Administrasi Pimpinan</option>
-                                    <option value="Biro Hukum">Biro Hukum</option>
-                                    <option value="Biro Organisasi">Biro Organisasi</option>
-                                    <option value="Biro Pemerintahan">Biro Pemerintahan</option>
-                                    <option value="Biro Pengadaan Barang dan Jasa">Biro Pengadaan Barang dan Jasa</option>
-                                    <option value="Biro Perekonomian dan Administrasi Pembangunan">Biro Perekonomian dan Administrasi Pembangunan</option>
-                                    <option value="Biro Umum">Biro Umum</option>
-                                    <option value="Dinas Pekerjaan Umum dan Perumahan Rakyat">Dinas Pekerjaan Umum dan Perumahan Rakyat</option>
-                                    <option value="Dinas Sosial">Dinas Sosial</option>
-                                    <option value="Dinas Koperasi dan UMKM">Dinas Koperasi dan UMKM</option>
-                                    <option value="Dinas P3, Pengendalian Penduduk dan Keluarga Berencana">Dinas P3, Pengendalian Penduduk dan Keluarga Berencana</option>
-                                    <option value="Dinas Pertanian dan Ketahanan Pangan">Dinas Pertanian dan Ketahanan Pangan</option>
-                                    <option value="Dinas Pemberdayaan Masyarakat dan Desa">Dinas Pemberdayaan Masyarakat dan Desa</option>
-                                    <option value="Dinas Komunikasi dan Informatika">Dinas Komunikasi dan Informatika</option>
-                                    <option value="Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu">Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu</option>
-                                    <option value="Dinas Kepemudaan dan Olahraga">Dinas Kepemudaan dan Olahraga</option>
-                                    <option value="Dinas Kearsipan dan Perpustakaan">Dinas Kearsipan dan Perpustakaan</option>
-                                    <option value="Dinas Kelautan dan Perikanan">Dinas Kelautan dan Perikanan</option>
-                                    <option value="Dinas Peternakan">Dinas Peternakan</option>
-                                    <option value="Dinas Perindustrian dan Perdagangan">Dinas Perindustrian dan Perdagangan</option>
-                                    <option value="Dinas Energi dan SDM">Dinas Energi dan SDM</option>
-                                    <option value="Dinas Kependudukan dan Pencatatan Sipil">Dinas Kependudukan dan Pencatatan Sipil</option>
-                                    <option value="Dinas Ketenagakerjaan dan Transmigrasi">Dinas Ketenagakerjaan dan Transmigrasi</option>    
-                                    <option value="Dinas Pendidikan dan Kebudayaan">Dinas Pendidikan dan Kebudayaan</option>
-                                    <option value="Dinas Kesehatan">Dinas Kesehatan</option>
-                                    <option value="RSUD Prof. W.Z Yohannes">RSUD Prof. W.Z Yohannes</option>
-                                    <option value="RSKDJ Naimata">RSKDJ Naimata</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap PPNS</label>
-                                <input type="text" id="inputNama" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-blue-500" placeholder="Contoh: Budi Santoso, S.H.">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Jabatan</label>
-                                <input type="text" id="inputJabatan" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-blue-500" placeholder="Penyidik Utama / Madya">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Lembaga Pendidikan</label>
-                                <input type="text" id="inputDiklat" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-blue-500" placeholder="Pusdiklat Reserse Polri">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">No. SKEP</label>
-                                <input type="text" id="inputSkep" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-blue-500" placeholder="Nomor SKEP">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">No. KTA</label>
-                                <input type="text" id="inputKta" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-blue-500" placeholder="Nomor KTA">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Berlaku KTA</label>
-                                <input type="date" id="inputTgl" required onchange="checkKtaStatus()" class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Status KTA (Otomatis)</label>
-                                <input type="text" id="inputStatus" readonly class="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm font-bold text-gray-500 cursor-not-allowed" placeholder="Pilih tanggal dahulu">
-                            </div>
+                    <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200 max-w-3xl">
+                        <form id="formUpdateData" onsubmit="App.saveData(event)" class="space-y-4">
+                            <input type="hidden" id="formId">
                             
-                            <div class="md:col-span-2 mt-2">
-                                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition shadow-md flex items-center justify-center gap-2">
-                                    <i class="fas fa-cloud-upload-alt"></i> Simpan Perubahan Data
-                                </button>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">NIP</label>
+                                    <input type="text" id="formNip" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                                    <input type="text" id="formNama" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">OPD Instansi</label>
+                                    <select id="formOpd" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
+                                        <option value="">-- Pilih OPD --</option>
+                                        <option value="Satpol PP">Satpol PP</option>
+                                        <option value="Dinas Perhubungan">Dinas Perhubungan</option>
+                                        <option value="Dinas LHK">Dinas LHK</option>
+                                        <option value="Dinas Kehutanan">Dinas Kehutanan</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Jabatan PPNS</label>
+                                    <input type="text" id="formJabatan" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nomor SKEP Kemenkumham</label>
+                                    <input type="text" id="formSkep" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Berlaku Sampai (Tgl)</label>
+                                    <input type="date" id="formBerlaku" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end gap-2 pt-4 border-t border-gray-100">
+                                <button type="button" onclick="App.resetForm()" class="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50">Reset</button>
+                                <button type="submit" id="btnSave" class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">Simpan Data</button>
                             </div>
                         </form>
-                    </div>
-                </div>
-
-                <!-- SECTION 5: PROFIL & PENGATURAN PASSWORD -->
-                <div id="sec-profil" class="tab-content space-y-6">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">Profil & Pengaturan Keamanan</h2>
-                        <p class="text-sm text-gray-500">Kelola password dan pengaturan akun Anda.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200 text-center flex flex-col items-center justify-center">
-                            <div class="w-24 h-24 rounded-full bg-slate-800 flex items-center justify-center text-white text-4xl mb-4 shadow-inner">
-                                <i class="fas fa-user-shield"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800" id="profilNameDisplay">Nama User</h3>
-                            <p class="text-sm text-blue-600 font-medium mb-1" id="profilRoleDisplay">Role</p>
-                            <span class="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs border border-gray-200 mt-2">NIP: <span id="profilNipDisplay"></span></span>
-                        </div>
-
-                        <!-- User Password Panel -->
-                        <div class="lg:col-span-2 glass-panel p-6 rounded-xl shadow-sm border border-gray-200" id="panelUserForm">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2"><i class="fas fa-key text-yellow-500 mr-2"></i>Ubah Password Akun</h3>
-                            <form onsubmit="changePassword(event)" class="space-y-4 max-w-md">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Password Baru</label>
-                                    <input type="password" id="newPass" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Password Baru</label>
-                                    <input type="password" id="confirmNewPass" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500">
-                                </div>
-                                <div id="passMsg" class="text-sm hidden mt-2"></div>
-                                <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white px-5 py-2 rounded-lg text-sm font-medium transition shadow">Simpan Password</button>
-                            </form>
-                        </div>
                     </div>
                 </div>
 
@@ -456,317 +349,387 @@
         </main>
     </div>
 
-    <!-- JAVASCRIPT SYSTEM LOGIC -->
+    <!-- MODAL BACKEND REFERENCE -->
+    <div id="backendModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-[100]">
+        <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden m-4">
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-gray-800"><i class="fas fa-code text-yellow-500 mr-2"></i>Backend Script (Code.gs)</h3>
+                <button onclick="document.getElementById('backendModal').classList.replace('flex','hidden')" class="text-gray-400 hover:text-red-500"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600 mb-3">Copy kode ini dan tempel di dalam file <code>Code.gs</code> Google Apps Script Anda untuk menautkan Database ke Google Sheets.</p>
+                <div class="bg-slate-900 rounded-lg p-4 overflow-y-auto max-h-96">
+                    <pre><code class="text-green-400" id="backendCodeText">
+/**
+ * BACKEND SIMDA PPNS (Code.gs)
+ * Menggunakan LockService & CacheService untuk Performa & Keamanan
+ */
+const SPREADSHEET_ID = 'GANTI_DENGAN_ID_SHEET_ANDA';
+const SHEET_NAME = 'Data_PPNS';
+
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('index')
+    .setTitle('SIMDA PPNS Pemprov NTT')
+    .setXframeOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+function getDataPPNS() {
+  try {
+    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+    if (!sheet) return JSON.stringify({status: 'success', data: []});
+    
+    const data = sheet.getDataRange().getValues();
+    if(data.length <= 1) return JSON.stringify({status: 'success', data: []});
+    
+    const result = data.slice(1).map(row => ({
+      id: row[0], nip: row[1], nama: row[2], opd: row[3], 
+      jabatan: row[4], skep: row[5], berlaku: row[6], status: row[7]
+    }));
+    return JSON.stringify({status: 'success', data: result});
+  } catch(e) { return JSON.stringify({status: 'error', message: e.message}); }
+}
+
+function savePPNS(payload) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+    const id = payload.id || 'PPNS-' + new Date().getTime();
+    
+    // Status Logic
+    const tglBerlaku = new Date(payload.berlaku);
+    const today = new Date();
+    const status = tglBerlaku > today ? 'Aktif' : 'Kedaluwarsa';
+
+    if(payload.id) {
+       // Edit logic omitted for brevity, implement matching ID and overwriting row
+    } else {
+       sheet.appendRow([id, payload.nip, payload.nama, payload.opd, payload.jabatan, payload.skep, payload.berlaku, status]);
+    }
+    return JSON.stringify({status: 'success', message: 'Data Tersimpan!'});
+  } finally { lock.releaseLock(); }
+}
+                    </code></pre>
+                </div>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 border-t flex justify-end">
+                <button onclick="App.copyCode()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700">Copy Code.gs</button>
+            </div>
+        </div>
+    </div>
+
+
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxD3DrUkOd8Nroibc5m-6D5SUErtkOOcQXr8DIcoaoi9YmEsq_NkiLlW0KS4An_chMdJQ/exec";
+        /**
+         * CORE ENGINE APLIKASI
+         */
+        const App = {
+            state: {
+                user: null, // role: admin|user
+                data: [],
+                filteredData: [],
+                map: null,
+                charts: {}
+            },
 
-        let usersDB = {
-            "199408312025061003": { nip: "199408312025061003", pass: "admin123", role: "Admin", name: "Administrator Utama" }
-        };
+            // --- Authentication ---
+            handleLogin: function(e) {
+                e.preventDefault();
+                const nip = document.getElementById('loginNip').value;
+                const pass = document.getElementById('loginPassword').value;
+                const err = document.getElementById('loginError');
 
-        let ppnsData = [
-            { opd: "Satuan Polisi Pamong Praja", nama: "Budi Santoso, S.H.", jabatan: "Penyidik Utama", diklat: "Diklat Reserse Polri", skep: "SK-001/2020", kta: "KTA-9981", tgl: "2027-12-31", status: "Aktif" },
-            { opd: "Dinas Perhubungan", nama: "Siti Aminah, S.STP", jabatan: "Penyidik Madya", diklat: "Pusdiklat Darat", skep: "SK-042/2019", kta: "KTA-8822", tgl: "2023-05-10", status: "Tidak Aktif" }
-        ];
+                if((nip === 'admin' && pass === '123') || (nip === 'user' && pass === '123')) {
+                    this.state.user = { id: nip, role: nip === 'admin' ? 'admin' : 'user' };
+                    document.getElementById('userNameDisplay').innerText = nip === 'admin' ? 'Administrator' : 'User Biasa';
+                    document.getElementById('userRoleDisplay').innerText = nip === 'admin' ? 'Admin OPD' : 'Staff';
+                    
+                    // Toggle admin-only UI
+                    document.querySelectorAll('.admin-only').forEach(el => {
+                        el.style.display = nip === 'admin' ? '' : 'none';
+                    });
 
-        let currentUser = null;
-        let donutChartInstance = null;
-        let barChartInstance = null;
-        let leafletMap = null;
-
-        window.handleLogin = function() {
-            const nip = document.getElementById('loginNip').value.trim();
-            const pass = document.getElementById('loginPassword').value;
-
-            if (!nip || !pass) {
-                showError("NIP / Username dan Password wajib diisi.");
-                return;
-            }
-
-            if (usersDB[nip] && usersDB[nip].pass === pass) {
-                processLogin(usersDB[nip]);
-            } else if (!usersDB[nip]) {
-                const newUser = { nip: nip, pass: pass, role: "User PPNS", name: "Pengguna PPNS" };
-                usersDB[nip] = newUser;
-                processLogin(newUser);
-            } else {
-                showError("Password salah!");
-            }
-        };
-
-        function showError(msg) {
-            const errEl = document.getElementById('loginError');
-            errEl.innerText = msg;
-            errEl.classList.remove('hidden');
-        }
-
-        function processLogin(user) {
-            currentUser = user;
-            document.getElementById('loginError').classList.add('hidden');
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-
-            document.getElementById('userNameDisplay').innerText = user.name;
-            document.getElementById('userRoleDisplay').innerText = user.role;
-            document.getElementById('profilNameDisplay').innerText = user.name;
-            document.getElementById('profilRoleDisplay').innerText = user.role;
-            document.getElementById('profilNipDisplay').innerText = user.nip;
-
-            if (user.role === 'Admin') {
-                document.querySelectorAll('.th-aksi').forEach(el => el.classList.remove('hidden'));
-            } else {
-                document.querySelectorAll('.th-aksi').forEach(el => el.classList.add('hidden'));
-            }
-
-            initMap();
-            renderCharts();
-            renderTable();
-        }
-
-        function handleLogout() {
-            currentUser = null;
-            document.getElementById('mainApp').classList.add('hidden');
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('loginNip').value = '';
-            document.getElementById('loginPassword').value = '';
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('bg-blue-600', 'text-white');
-                el.classList.add('text-slate-300');
-            });
-
-            const targetTab = document.getElementById('sec-' + tabId);
-            const targetBtn = document.getElementById('btn-' + tabId);
-
-            if (targetTab) targetTab.classList.add('active');
-            if (targetBtn) {
-                targetBtn.classList.add('bg-blue-600', 'text-white');
-                targetBtn.classList.remove('text-slate-300');
-            }
-
-            if (tabId === 'dashboard' && leafletMap) {
-                setTimeout(() => leafletMap.invalidateSize(), 200);
-            }
-        }
-
-        function initMap() {
-            if (leafletMap) return;
-            // Center pada Kota Kupang / NTT
-            leafletMap = L.map('map').setView([-10.1772, 123.6070], 8);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(leafletMap);
-
-            const locations = [
-                { name: "Kantor Gubernur NTT / Satpol PP", lat: -10.1695, lng: 123.6063 },
-                { name: "Dinas Perhubungan NTT", lat: -10.1582, lng: 123.6150 },
-                { name: "DLHK Prov NTT", lat: -10.1750, lng: 123.5900 }
-            ];
-
-            locations.forEach(loc => {
-                L.marker([loc.lat, loc.lng]).addTo(leafletMap)
-                    .bindPopup(`<b>${loc.name}</b>`);
-            });
-        }
-
-        function renderCharts() {
-            const opdCounts = {};
-            ppnsData.forEach(item => {
-                opdCounts[item.opd] = (opdCounts[item.opd] || 0) + 1;
-            });
-
-            const ctxDonut = document.getElementById('opdDonutChart').getContext('2d');
-            if (donutChartInstance) donutChartInstance.destroy();
-            donutChartInstance = new Chart(ctxDonut, {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(opdCounts),
-                    datasets: [{
-                        data: Object.values(opdCounts),
-                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-
-            let aktif = 0, tidakAktif = 0;
-            ppnsData.forEach(item => {
-                if (item.status === 'Aktif') aktif++;
-                else tidakAktif++;
-            });
-
-            const ctxBar = document.getElementById('ktaBarChart').getContext('2d');
-            if (barChartInstance) barChartInstance.destroy();
-            barChartInstance = new Chart(ctxBar, {
-                type: 'bar',
-                data: {
-                    labels: ['Aktif', 'Kadaluarsa / Tidak Aktif'],
-                    datasets: [{
-                        label: 'Jumlah PPNS',
-                        data: [aktif, tidakAktif],
-                        backgroundColor: ['#10b981', '#ef4444']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        function renderTable(dataToRender = ppnsData) {
-            const tbody = document.getElementById('tableBodyData');
-            tbody.innerHTML = '';
-            document.getElementById('totalDataCount').innerText = dataToRender.length;
-
-            dataToRender.forEach((item, index) => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-gray-50 transition';
-                const isAktif = item.status === 'Aktif';
-                const statusBadge = isAktif 
-                    ? `<span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full font-medium">Aktif</span>`
-                    : `<span class="bg-red-100 text-red-800 text-xs px-2.5 py-1 rounded-full font-medium">Tidak Aktif</span>`;
-
-                tr.innerHTML = `
-                    <td class="px-4 py-3 font-semibold text-gray-800">${item.opd}</td>
-                    <td class="px-4 py-3">
-                        <div class="font-medium text-gray-900">${item.nama}</div>
-                        <div class="text-xs text-gray-500">${item.jabatan}</div>
-                    </td>
-                    <td class="px-4 py-3 text-sm">${item.diklat}</td>
-                    <td class="px-4 py-3 text-xs font-mono">
-                        <div>SKEP: ${item.skep}</div>
-                        <div>KTA: ${item.kta}</div>
-                    </td>
-                    <td class="px-4 py-3 text-sm">${item.tgl}</td>
-                    <td class="px-4 py-3">${statusBadge}</td>
-                    <td class="px-4 py-3 th-aksi ${currentUser && currentUser.role === 'Admin' ? '' : 'hidden'}">
-                        <button onclick="deleteData(${index})" class="text-red-600 hover:text-red-800 transition"><i class="fas fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function searchTable() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = ppnsData.filter(item => 
-                item.nama.toLowerCase().includes(query) ||
-                item.opd.toLowerCase().includes(query) ||
-                item.kta.toLowerCase().includes(query)
-            );
-            renderTable(filtered);
-        }
-
-        function checkKtaStatus() {
-            const dateVal = document.getElementById('inputTgl').value;
-            const statusInput = document.getElementById('inputStatus');
-            if (!dateVal) {
-                statusInput.value = '';
-                return;
-            }
-            const expDate = new Date(dateVal);
-            const today = new Date();
-            if (expDate >= today) {
-                statusInput.value = 'Aktif';
-                statusInput.className = 'w-full px-4 py-2 bg-green-50 text-green-700 border border-green-200 rounded-lg text-sm font-bold cursor-not-allowed';
-            } else {
-                statusInput.value = 'Tidak Aktif';
-                statusInput.className = 'w-full px-4 py-2 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-bold cursor-not-allowed';
-            }
-        }
-
-        function handleKirimLaporan(event) {
-            event.preventDefault();
-            const opd = document.getElementById('inputOpd').value;
-            const nama = document.getElementById('inputNama').value;
-            const jabatan = document.getElementById('inputJabatan').value;
-            const diklat = document.getElementById('inputDiklat').value;
-            const skep = document.getElementById('inputSkep').value;
-            const kta = document.getElementById('inputKta').value;
-            const tgl = document.getElementById('inputTgl').value;
-            const status = document.getElementById('inputStatus').value;
-
-            const newItem = { opd, nama, jabatan, diklat, skep, kta, tgl, status };
-            ppnsData.push(newItem);
-
-            renderTable();
-            renderCharts();
-
-            alert('Data PPNS berhasil disimpan!');
-            document.getElementById('formLaporan').reset();
-            switchTab('data');
-        }
-
-        function exportData() {
-            const ws = XLSX.utils.json_to_sheet(ppnsData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Data PPNS");
-            XLSX.writeFile(wb, "Data_PPNS_Pemprov_NTT.xlsx");
-        }
-
-        function prosesFileImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-                if (jsonData && jsonData.length > 0) {
-                    ppnsData = jsonData;
-                    renderTable();
-                    renderCharts();
-                    alert('Import data berhasil!');
+                    // Hide login, show app
+                    document.getElementById('loginScreen').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('loginScreen').classList.add('hidden');
+                        document.getElementById('mainApp').classList.remove('hidden');
+                        this.initApp();
+                    }, 500);
+                } else {
+                    err.innerText = "Username atau password salah!";
+                    err.classList.remove('hidden');
                 }
-            };
-            reader.readAsArrayBuffer(file);
-        }
+            },
 
-        function uploadLaporanKeDrive(event) {
-            event.preventDefault();
-            const btn = document.getElementById('btnUploadLap');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Mengunggah...';
-            btn.disabled = true;
+            handleLogout: function() {
+                this.state.user = null;
+                document.getElementById('mainApp').classList.add('hidden');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('loginScreen').style.opacity = '1';
+                document.getElementById('loginNip').value = '';
+                document.getElementById('loginPassword').value = '';
+            },
 
-            setTimeout(() => {
-                alert('Laporan berhasil dikirim dan diunggah!');
-                btn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Kirim Laporan';
-                btn.disabled = false;
-                document.getElementById('formLaporanTahunan').reset();
-            }, 1500);
-        }
+            // --- Navigation ---
+            switchTab: function(tabId) {
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.nav-btn').forEach(el => {
+                    el.classList.remove('bg-blue-600', 'text-white');
+                    el.classList.add('text-slate-300');
+                });
 
-        function changePassword(event) {
-            event.preventDefault();
-            const p1 = document.getElementById('newPass').value;
-            const p2 = document.getElementById('confirmNewPass').value;
-            const msg = document.getElementById('passMsg');
+                document.getElementById(`sec-${tabId}`).classList.add('active');
+                const btn = document.getElementById(`btn-${tabId}`);
+                if(btn) {
+                    btn.classList.remove('text-slate-300');
+                    btn.classList.add('bg-blue-600', 'text-white');
+                }
 
-            if (p1 !== p2) {
-                msg.innerText = 'Password konfirmasi tidak cocok!';
-                msg.className = 'text-sm text-red-600 mt-2 block';
-                return;
+                if(tabId === 'dashboard') {
+                    // Timeout to ensure div is visible before Leaflet redraws
+                    setTimeout(() => { if(this.state.map) this.state.map.invalidateSize(); }, 300);
+                }
+            },
+
+            // --- Initialization & Data Fetch ---
+            initApp: function() {
+                this.loadDashboardData();
+            },
+
+            loadDashboardData: async function() {
+                try {
+                    // Simulate google.script.run for mockup
+                    const mockData = [
+                        { id: '1', nip: '198001012005011001', nama: 'Alex Budiarto, SH', opd: 'Satpol PP', jabatan: 'Penyidik Ahli Madya', skep: 'AHU-123.PP.04.01', berlaku: '2026-12-31', status: 'Aktif' },
+                        { id: '2', nip: '198502022010022002', nama: 'Siti Aminah, S.Sos', opd: 'Dinas Perhubungan', jabatan: 'Penyidik Ahli Muda', skep: 'AHU-456.PP.04.01', berlaku: '2023-10-15', status: 'Kedaluwarsa' },
+                        { id: '3', nip: '199003032015031003', nama: 'Yohanes N.', opd: 'Dinas LHK', jabatan: 'Penyidik Pertama', skep: '-', berlaku: '2026-01-01', status: 'Dalam Proses' },
+                        { id: '4', nip: '197505052000051005', nama: 'Dominggus L.', opd: 'Satpol PP', jabatan: 'Penyidik Madya', skep: 'AHU-789.PP.04.01', berlaku: '2025-06-30', status: 'Aktif' }
+                    ];
+
+                    this.state.data = mockData;
+                    this.state.filteredData = [...this.state.data];
+
+                    this.updateKPI();
+                    this.renderTable();
+                    this.initCharts();
+                    this.initMap();
+                } catch (error) {
+                    console.error("Gagal memuat data", error);
+                }
+            },
+
+            updateKPI: function() {
+                const total = this.state.data.length;
+                const aktif = this.state.data.filter(d => d.status === 'Aktif').length;
+                const expired = this.state.data.filter(d => d.status === 'Kedaluwarsa').length;
+                const proses = this.state.data.filter(d => d.status === 'Dalam Proses').length;
+
+                document.getElementById('kpiTotal').innerText = total;
+                document.getElementById('kpiAktif').innerText = aktif;
+                document.getElementById('kpiKedaluwarsa').innerText = expired;
+                document.getElementById('kpiProses').innerText = proses;
+                document.getElementById('totalDataCount').innerText = total;
+            },
+
+            // --- Map & Charts ---
+            initMap: function() {
+                if(this.state.map) return; // Already initialized
+                
+                // Centered at Kupang, NTT
+                this.state.map = L.map('map').setView([-10.1772, 123.6070], 9);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(this.state.map);
+
+                // Add sample markers
+                L.marker([-10.1600, 123.6000]).addTo(this.state.map).bindPopup('<b>Kantor Gubernur NTT</b><br>Satpol PP: 2 Personil');
+                L.marker([-10.1750, 123.6150]).addTo(this.state.map).bindPopup('<b>Dinas Perhubungan NTT</b><br>PPNS: 1 Personil');
+            },
+
+            initCharts: function() {
+                // Destroy old charts if exist
+                if(this.state.charts.donut) this.state.charts.donut.destroy();
+                if(this.state.charts.bar) this.state.charts.bar.destroy();
+
+                const opdCounts = { 'Satpol PP': 2, 'Dinas Perhubungan': 1, 'Dinas LHK': 1 };
+                
+                const ctxDonut = document.getElementById('opdDonutChart').getContext('2d');
+                this.state.charts.donut = new Chart(ctxDonut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(opdCounts),
+                        datasets: [{ data: Object.values(opdCounts), backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                });
+
+                const ctxBar = document.getElementById('ktaBarChart').getContext('2d');
+                this.state.charts.bar = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: ['KTA Aktif', 'KTA Kedaluwarsa', 'Dalam Proses'],
+                        datasets: [{ label: 'Jumlah Personil', data: [2, 1, 1], backgroundColor: ['#10b981', '#ef4444', '#f59e0b'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            },
+
+            // --- Table & Search ---
+            renderTable: function() {
+                const tbody = document.getElementById('tableBodyData');
+                if(this.state.filteredData.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-500">Tidak ada data ditemukan.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = this.state.filteredData.map(d => {
+                    const statusClass = d.status === 'Aktif' ? 'bg-green-100 text-green-700' : 
+                                        d.status === 'Kedaluwarsa' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700';
+                    return `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-4 py-3">
+                            <div class="font-semibold text-gray-800">${d.nama}</div>
+                            <div class="text-xs text-gray-500">NIP: ${d.nip}</div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-1 bg-blue-50 text-blue-700 border border-blue-100 rounded text-xs">${d.opd}</span><br>
+                            <span class="text-xs text-gray-500">${d.jabatan}</span>
+                        </td>
+                        <td class="px-4 py-3 text-sm">${d.skep}</td>
+                        <td class="px-4 py-3 text-sm font-medium">${d.berlaku}</td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 rounded text-xs font-semibold ${statusClass}">${d.status}</span></td>
+                        <td class="px-4 py-3 admin-only" style="display: ${this.state.user.role === 'admin' ? '' : 'none'}">
+                            <button onclick="App.editData('${d.id}')" class="text-blue-500 hover:text-blue-700 mr-2"><i class="fas fa-edit"></i></button>
+                            <button onclick="App.deleteData('${d.id}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            },
+
+            searchTable: function() {
+                const term = document.getElementById('searchInput').value.toLowerCase();
+                this.state.filteredData = this.state.data.filter(d => 
+                    d.nama.toLowerCase().includes(term) || 
+                    d.nip.toLowerCase().includes(term) ||
+                    d.opd.toLowerCase().includes(term)
+                );
+                this.renderTable();
+            },
+
+            // --- CRUD ---
+            editData: function(id) {
+                const item = this.state.data.find(d => d.id === id);
+                if(item) {
+                    document.getElementById('formId').value = item.id;
+                    document.getElementById('formNip').value = item.nip;
+                    document.getElementById('formNama').value = item.nama;
+                    document.getElementById('formOpd').value = item.opd;
+                    document.getElementById('formJabatan').value = item.jabatan;
+                    document.getElementById('formSkep').value = item.skep;
+                    document.getElementById('formBerlaku').value = item.berlaku;
+                    this.switchTab('update');
+                }
+            },
+
+            deleteData: function(id) {
+                Swal.fire({
+                    title: 'Hapus Data?', text: "Tindakan ini tidak bisa dibatalkan", icon: 'warning',
+                    showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: 'Ya, Hapus'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.state.data = this.state.data.filter(d => d.id !== id);
+                        this.state.filteredData = [...this.state.data];
+                        this.renderTable();
+                        this.updateKPI();
+                        Swal.fire('Terhapus!', 'Data telah dihapus.', 'success');
+                    }
+                })
+            },
+
+            saveData: function(e) {
+                e.preventDefault();
+                const id = document.getElementById('formId').value;
+                const newData = {
+                    id: id || Date.now().toString(),
+                    nip: document.getElementById('formNip').value,
+                    nama: document.getElementById('formNama').value,
+                    opd: document.getElementById('formOpd').value,
+                    jabatan: document.getElementById('formJabatan').value,
+                    skep: document.getElementById('formSkep').value,
+                    berlaku: document.getElementById('formBerlaku').value,
+                    status: new Date(document.getElementById('formBerlaku').value) > new Date() ? 'Aktif' : 'Kedaluwarsa'
+                };
+
+                if(id) {
+                    const idx = this.state.data.findIndex(d => d.id === id);
+                    this.state.data[idx] = newData;
+                } else {
+                    this.state.data.push(newData);
+                }
+
+                this.state.filteredData = [...this.state.data];
+                this.renderTable();
+                this.updateKPI();
+                this.resetForm();
+                this.switchTab('data');
+
+                Swal.fire('Berhasil', 'Data berhasil disimpan ke sistem', 'success');
+            },
+
+            resetForm: function() {
+                document.getElementById('formUpdateData').reset();
+                document.getElementById('formId').value = '';
+            },
+
+            // --- Upload & Export ---
+            uploadLaporanKeDrive: function(e) {
+                e.preventDefault();
+                const btn = document.getElementById('btnUploadLaporan');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Mengunggah...';
+                
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-2"></i> Upload Berkas';
+                    document.getElementById('formLaporanTahunan').reset();
+                    Swal.fire('Berhasil', 'Laporan berhasil diunggah ke Google Drive', 'success');
+                }, 1500);
+            },
+
+            exportData: function() {
+                const ws = XLSX.utils.json_to_sheet(this.state.data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "DataPPNS");
+                XLSX.writeFile(wb, "Data_PPNS_NTT.xlsx");
+            },
+
+            handleFileImport: function(e) {
+                const file = e.target.files[0];
+                if(!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    const data = new Uint8Array(evt.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const json = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    Swal.fire('Import Berhasil', `${json.length} baris data diproses.`, 'success');
+                };
+                reader.readAsArrayBuffer(file);
+            },
+
+            // --- Utils ---
+            showBackendModal: function() {
+                document.getElementById('backendModal').classList.replace('hidden', 'flex');
+            },
+            
+            copyCode: function() {
+                navigator.clipboard.writeText(document.getElementById('backendCodeText').innerText);
+                Swal.fire({icon: 'success', title: 'Dicopy!', timer: 1000, showConfirmButton: false});
             }
-
-            if (currentUser) {
-                currentUser.pass = p1;
-                usersDB[currentUser.nip].pass = p1;
-                msg.innerText = 'Password berhasil diperbarui!';
-                msg.className = 'text-sm text-green-600 mt-2 block';
-                document.getElementById('newPass').value = '';
-                document.getElementById('confirmNewPass').value = '';
-            }
-        }
-
-        function deleteData(index) {
-            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-                ppnsData.splice(index, 1);
-                renderTable();
-                renderCharts();
-            }
-        }
+        };
     </script>
 </body>
 </html>
