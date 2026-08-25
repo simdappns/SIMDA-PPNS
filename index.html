@@ -923,5 +923,125 @@
             showToast('Password berhasil diperbarui', 'success');
         }
     </script>
+    <!-- TAMBAHKAN SCRIPT INI TEPAT DI ATAS </body> -->
+    <script>
+        // --- LOGIKA LOGIN & PEMBAGIAN HAK AKSES ---
+        function handleLogin() {
+            const nipInput = document.getElementById('loginNip').value.trim();
+            const passwordInput = document.getElementById('loginPassword').value.trim();
+            const loginError = document.getElementById('loginError');
+            
+            // Format Regex untuk mengecek apakah NIP terdiri dari 18 digit angka (Format NIP ASN)
+            const isFormatNipValid = /^\d{18}$/.test(nipInput);
+
+            // 1. Cek jika NIP & Password ADMIN
+            if (nipInput === '199408312025061003' && passwordInput === 'admin123') {
+                masukKeSistem('admin', nipInput, 'Administrator PPNS');
+            } 
+            // 2. Cek jika NIP formatnya benar (18 angka) BUKAN admin & Password PENGGUNA
+            else if (isFormatNipValid && nipInput !== '199408312025061003' && passwordInput === 'pengguna123') {
+                masukKeSistem('user', nipInput, 'Pengguna (User)');
+            } 
+            // 3. Jika salah semua
+            else {
+                loginError.classList.remove('hidden');
+                loginError.innerText = "NIP atau Password salah!";
+                
+                // Tambahan peringatan jika format NIP kurang dari 18 digit
+                if (nipInput.length !== 18 && nipInput !== '') {
+                    loginError.innerText = "NIP harus terdiri dari 18 digit angka!";
+                }
+            }
+        }
+
+        // Fungsi saat login berhasil
+        function masukKeSistem(role, nip, roleName) {
+            // Sembunyikan error jika sebelumnya muncul
+            document.getElementById('loginError').classList.add('hidden');
+
+            // Transisi menyembunyikan layar login dan memunculkan aplikasi
+            const loginScreen = document.getElementById('loginScreen');
+            loginScreen.classList.add('opacity-0');
+            setTimeout(() => {
+                loginScreen.classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+            }, 500);
+
+            // Update nama/NIP di Sidebar dan Profil
+            document.getElementById('userNameDisplay').innerText = nip;
+            document.getElementById('userRoleDisplay').innerText = roleName;
+            
+            if(document.getElementById('profileName')) document.getElementById('profileName').innerText = roleName;
+            if(document.getElementById('profileNip')) document.getElementById('profileNip').innerText = 'NIP: ' + nip;
+
+            // MENGATUR TAMPILAN BERDASARKAN ROLE (ADMIN vs USER)
+            const adminElements = document.querySelectorAll('.admin-only');
+            adminElements.forEach(el => {
+                if (role === 'admin') {
+                    // Munculkan fitur admin (Tombol Import/Export & Menu Update)
+                    el.style.display = ''; 
+                } else {
+                    // Sembunyikan fitur admin untuk user biasa
+                    el.style.display = 'none'; 
+                }
+            });
+
+            // Tampilkan notifikasi berhasil login
+            showToast('Berhasil masuk sebagai ' + roleName);
+            
+            // Buka halaman dashboard pertama kali
+            switchTab('dashboard');
+        }
+
+        function handleLogout() {
+            // Kosongkan inputan
+            document.getElementById('loginNip').value = '';
+            document.getElementById('loginPassword').value = '';
+            
+            // Sembunyikan aplikasi dan munculkan layar login
+            document.getElementById('mainApp').classList.add('hidden');
+            const loginScreen = document.getElementById('loginScreen');
+            loginScreen.classList.remove('hidden');
+            
+            // Sedikit delay agar transisi opasitas terlihat smooth
+            setTimeout(() => {
+                loginScreen.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        // --- FUNGSI PENDUKUNG UI (TAB & TOAST) ---
+        function switchTab(tabId) {
+            // Sembunyikan semua konten tab
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // Reset gaya tombol navigasi
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('text-slate-300');
+            });
+
+            // Aktifkan tab yang dipilih
+            document.getElementById('sec-' + tabId).classList.add('active');
+            
+            // Beri warna pada tombol navigasi yang aktif
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800');
+            activeBtn.classList.add('bg-blue-600', 'text-white');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.add('show');
+            
+            // Hilangkan toast setelah 3 detik
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
 </body>
 </html>
