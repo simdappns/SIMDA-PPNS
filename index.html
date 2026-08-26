@@ -158,6 +158,98 @@
                         <p class="text-sm text-gray-500">Ringkasan Eksekutif Sistem Informasi Manajemen Data PPNS Pemprov NTT</p>
                     </div>
 
+                    <!-- KETERANGAN & PENGUMUMAN SIMDA PPNS -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    
+    <!-- KOLOM KIRI (Daftar Pengumuman SIMDA PPNS) -->
+    <div class="lg:col-span-2 space-y-4">
+        
+        <!-- PENGUMUMAN 1: PENTING -->
+        <div class="bg-white border border-gray-200 border-l-4 border-l-teal-600 rounded-lg shadow-sm p-5">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded shadow-sm">PENTING</span>
+                <h3 class="font-bold text-gray-800 text-sm md:text-base">Batas Waktu Unggah Laporan Bulanan PPNS</h3>
+            </div>
+            <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1 mb-3">
+                <li>Setiap Penyidik Pegawai Negeri Sipil (PPNS) wajib mengunggah Laporan Bulanan Kegiatan <strong>setiap bulan berjalan</strong>.</li>
+                <li>Batas akhir pengunggahan dokumen laporan bulanan adalah tanggal <strong>5 pada bulan berikutnya</strong>.</li>
+                <li>Kebijakan pembatasan ini berlaku untuk pengisian laporan <strong>periode tahun 2026 dan seterusnya</strong>.</li>
+            </ul>
+            <button onclick="switchTab('laporanBulanan')" class="bg-teal-100 text-teal-800 hover:bg-teal-200 transition text-xs font-semibold px-4 py-1.5 rounded-full">
+                Unggah Laporan Now
+            </button>
+        </div>
+
+        <!-- PENGUMUMAN 2: INFO -->
+        <div class="bg-white border border-gray-200 border-l-4 border-l-teal-600 rounded-lg shadow-sm p-5">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="bg-teal-500 text-white text-xs font-bold px-2 py-0.5 rounded shadow-sm">INFO</span>
+                <h3 class="font-bold text-gray-800 text-sm md:text-base">Pembaruan Data Masa Berlaku KTA & SKEP PPNS</h3>
+            </div>
+            <p class="text-sm text-gray-600 mb-3 leading-relaxed">
+                Bagi PPNS yang <strong>Kartu Tanda Anggota (KTA)</strong> atau <strong>SKEP Pengangkatan</strong> akan habis masa berlakunya dalam kurun waktu 6 bulan ke depan, dimohon untuk segera melakukan pembaruan data pada menu Update Data atau berkoordinasi dengan Sekretariat PPNS.
+            </p>
+            <p class="text-sm text-gray-500 mb-3 italic">
+                <span class="underline font-semibold not-italic">Catatan:</span> Pastikan file SKEP dan KTA terlampir dalam format PDF yang jelas dan terbaca.
+            </p>
+            <button onclick="switchTab('data')" class="bg-teal-100 text-teal-800 hover:bg-teal-200 transition text-xs font-semibold px-4 py-1.5 rounded-full">
+                Cek Data PPNS
+            </button>
+        </div>
+
+    </div>
+
+    <!-- KOLOM KANAN (Narahubung & Petunjuk SIMDA PPNS) -->
+    <div class="space-y-4">
+        
+        <!-- BANTUAN NARAHUBUNG SEKRETARIAT PPNS -->
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div class="bg-sky-50 p-4 border-b border-gray-200 flex gap-3 items-start">
+                <div class="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center text-white flex-shrink-0 text-xl font-bold shadow-sm">
+                    ?
+                </div>
+                <div>
+                    <p class="text-sm text-gray-700 font-medium">Kendala Input / Validasi Data PPNS?</p>
+                    <p class="text-xs text-gray-500 mt-1">Silakan hubungi <strong>Sekretariat PPNS Pemprov NTT</strong></p>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h4 class="text-sm font-bold text-blue-700">ADMIN SIMDA PPNS</h4>
+                        <p class="text-xs text-green-600 mt-1 flex items-center gap-1"><i class="fab fa-whatsapp"></i> 0811-4331-894</p>
+                    </div>
+                    <a href="https://wa.me/628114331894" target="_blank" class="bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium px-3 py-1.5 rounded flex items-center gap-1 transition shadow-sm">
+                        <i class="fab fa-whatsapp"></i> Kirim Pesan
+                    </a>
+                </div>
+                <div class="text-[11px] text-gray-600 space-y-1">
+                    <p class="font-semibold text-gray-700">Saat berkonsultasi, mohon melampirkan:</p>
+                    <ol class="list-decimal pl-4 space-y-0.5">
+                        <li>Nama Lengkap & NIP PPNS.</li>
+                        <li>Asal Perangkat Daerah / OPD.</li>
+                        <li>Tangkapan layar (screenshot) kendala sistem.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUKU PETUNJUK SIMDA PPNS -->
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex items-center gap-4">
+            <div class="text-4xl text-red-500">
+                <i class="fas fa-file-pdf"></i>
+            </div>
+            <div class="flex-1">
+                <h4 class="text-sm font-semibold text-gray-700 mb-2">Manual Book SIMDA PPNS</h4>
+                <a href="https://drive.google.com/file/d/17AYE0m8oMWKZAWjNEMChCo4MJU2oWQPX/view?usp=sharing" target="_blank" class="inline-block bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium px-4 py-1.5 rounded transition shadow-sm">
+                    <i class="fas fa-search mr-1"></i> Buka Petunjuk
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+                    
                     <!-- BARIS ATAS: STATISTIK & GRAFIK -->
                     <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
                         <!-- CHART PERSENTASE OPD -->
