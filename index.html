@@ -1010,18 +1010,50 @@
             }
         }
 
-        function handleGantiPassword(e) {
+        const API_URL = "https://script.google.com/macros/s/AKfycbyxsfeG-KfS_SsR4nFHHI3eXRP1jDCbSSe_0u8W0s8LPc_F0D1DVDmshGdCQ25-Cdyqig/exec"; // Jangan lupa ganti dengan URL asli Anda
+
+        async function handleGantiPassword(e) {
             e.preventDefault();
+            const oldPass = document.getElementById('oldPassword').value;
             const newPass = document.getElementById('newPassword').value;
             const confirmPass = document.getElementById('confirmPassword').value;
-
-            if (newPass !== confirmPass) {
-                showToast('Password baru tidak cocok', 'error');
-                return;
-            }
             
-            e.target.reset();
-            showToast('Password berhasil diperbarui', 'success');
+            const userNip = document.getElementById('loginNip').value.trim(); 
+
+            if (!oldPass || !newPass || !confirmPass) {
+                showToast("Semua kolom password harus diisi!", false); return;
+            }
+            if (newPass.length < 6) {
+                showToast("Password baru minimal 6 karakter!", false); return;
+            }
+            if (newPass !== confirmPass) {
+                showToast("Konfirmasi password tidak cocok!", false); return;
+            }
+
+            showToast("Sedang menyimpan password ke Google Sheets...");
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: "updatePassword",
+                        nip: userNip,
+                        newPassword: newPass
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    showToast("Selesai! Password berhasil diubah di Google Sheet!");
+                    e.target.reset();
+                } else {
+                    showToast(result.message, false);
+                }
+            } catch (error) {
+                showToast("Gagal terhubung ke Google Sheets.", false);
+                console.error(error);
+            }
         }
     </script>
 </body>
