@@ -627,59 +627,66 @@
         }
 
         // --- AUTHENTICATION ---
+        // --- AUTHENTICATION ---
         function handleLogin() {
             const nip = document.getElementById('loginNip').value.trim();
             const pass = document.getElementById('loginPassword').value.trim();
             const errorMsg = document.getElementById('loginError');
             
             errorMsg.classList.add('hidden');
-
-            const isAdmin = (nip === '199408312025061003' && pass === 'admin123');
-            const isNipValid = /^\d{18}$/.test(nip); 
-            const isUser = (isNipValid && pass === 'pengguna123');
-
-            if (isAdmin || isUser) {
-                document.getElementById('loginScreen').classList.add('opacity-0');
+            
+            // 1. Pengecekan Login Master Admin
+            if (nip === '199408312025061003' && pass === 'admin123') {
+                currentUserRole = 'admin';
+                document.getElementById('userNameDisplay').innerText = "Admin Master";
+                document.getElementById('userRoleDisplay').innerText = "Administrator";
+                document.getElementById('profileName').innerText = "Admin Utama";
+                document.getElementById('profileNip').innerText = "NIP: " + nip;
+                document.getElementById('profileRoleBadge').innerText = "Administrator Sistem";
+                document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
                 
-                if (isAdmin) {
-                    currentUserRole = 'admin';
-                    document.getElementById('userNameDisplay').innerText = "Admin Master";
-                    document.getElementById('userRoleDisplay').innerText = "Administrator";
-                    document.getElementById('profileName').innerText = "Admin Utama";
-                    document.getElementById('profileNip').innerText = "NIP: " + nip;
-                    document.getElementById('profileRoleBadge').innerText = "Administrator Sistem";
-                    document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
-                } else {
-                    currentUserRole = 'user';
-                    document.getElementById('userNameDisplay').innerText = nip; 
-                    document.getElementById('userRoleDisplay').innerText = "Pegawai PPNS";
-                    document.getElementById('profileName').innerText = "Pengguna Sistem";
-                    document.getElementById('profileNip').innerText = "NIP: " + nip;
-                    document.getElementById('profileRoleBadge').innerText = "Pengguna Daerah";
-                    document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
-                }
-
-                setTimeout(() => {
-                    document.getElementById('loginScreen').classList.add('hidden');
-                    document.getElementById('mainApp').classList.remove('hidden');
-                    
-                    // PANGGIL FIREBASE SAAT LOGIN BERHASIL
-                    loadDataFromFirebase(); 
-                    showToast('Berhasil masuk ke sistem', 'success');
-                }, 400);
-                
+                masukKeSistem();
             } else {
-                errorMsg.classList.remove('hidden');
-                if (nip === '199408312025061003' && pass !== 'admin123') {
-                    errorMsg.innerText = "Password Master Admin salah!";
-                } else if (isNipValid && pass !== 'pengguna123') {
-                    errorMsg.innerText = "Password pengguna salah! Gunakan password: pengguna123";
-                } else if (!isNipValid && !isAdmin) {
-                    errorMsg.innerText = "NIP tidak valid! Masukkan 18 digit angka NIP.";
-                } else {
-                    errorMsg.innerText = "NIP atau Password salah!";
-                }
+                // 2. Pengecekan Login Pengguna ke Firebase Database
+                db.ref('users/' + nip).once('value').then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        if (userData.password === pass) {
+                            currentUserRole = 'user';
+                            document.getElementById('userNameDisplay').innerText = nip; 
+                            document.getElementById('userRoleDisplay').innerText = "Pegawai PPNS";
+                            document.getElementById('profileName').innerText = "Pengguna Sistem";
+                            document.getElementById('profileNip').innerText = "NIP: " + nip;
+                            document.getElementById('profileRoleBadge').innerText = "Pengguna Sistem";
+                            document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+                            
+                            masukKeSistem();
+                        } else {
+                            tampilkanError("Password salah!");
+                        }
+                    } else {
+                        tampilkanError("NIP Anda belum terdaftar! Hubungi Admin.");
+                    }
+                }).catch(error => {
+                    tampilkanError("Gagal terhubung ke database.");
+                });
             }
+        }
+
+        // Fungsi pendukung proses masuk
+        function masukKeSistem() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            loadDataFromFirebase(); 
+            showToast('Berhasil masuk ke sistem', 'success');
+        }
+
+        // Fungsi pendukung pesan kesalahan
+        function tampilkanError(pesan) {
+            const errorMsg = document.getElementById('loginError');
+            errorMsg.innerText = pesan;
+            errorMsg.classList.remove('hidden');
         }
 
         function handleLogout() {
