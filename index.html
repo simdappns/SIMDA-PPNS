@@ -17,6 +17,10 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Firebase SDK (Versi 8 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; overflow-x: hidden; }
         #map { height: 450px; z-index: 1; border-radius: 0.5rem; }
@@ -55,7 +59,6 @@
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-blue-500 to-green-500"></div>
             
             <div class="text-center mb-8 mt-2">
-                <!-- Fallback image placeholder -->
                 <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo" class="h-28 mx-auto mb-4 object-contain rounded-md shadow-sm">
                 <h1 class="text-2xl font-bold text-gray-800 tracking-wide">SIMDA PPNS</h1>
                 <p class="text-sm text-gray-500 mt-1">Sistem Informasi Manajemen Data PPNS Pemprov NTT</p>
@@ -159,96 +162,88 @@
                     </div>
 
                     <!-- KETERANGAN & PENGUMUMAN SIMDA PPNS -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-    
-    <!-- KOLOM KIRI (Daftar Pengumuman SIMDA PPNS) -->
-    <div class="lg:col-span-2 space-y-4">
-        
-        <!-- PENGUMUMAN 1: PENTING -->
-        <div class="bg-white border border-gray-200 border-l-4 border-l-teal-600 rounded-lg shadow-sm p-5">
-            <div class="flex items-center gap-2 mb-3">
-                <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded shadow-sm">PENTING</span>
-                <h3 class="font-bold text-gray-800 text-sm md:text-base">Batas Waktu Unggah Laporan Bulanan PPNS</h3>
-            </div>
-            <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1 mb-3">
-                <li>Setiap Penyidik Pegawai Negeri Sipil (PPNS) wajib mengunggah Laporan Bulanan Kegiatan <strong>setiap bulan berjalan</strong>.</li>
-                <li>Batas akhir pengunggahan dokumen laporan bulanan adalah tanggal <strong>5 pada bulan berikutnya</strong>.</li>
-                <li>Kebijakan pembatasan ini berlaku untuk pengisian laporan <strong>periode tahun 2026 dan seterusnya</strong>.</li>
-            </ul>
-            <button onclick="switchTab('laporanBulanan')" class="bg-teal-100 text-teal-800 hover:bg-teal-200 transition text-xs font-semibold px-4 py-1.5 rounded-full">
-                Unggah Laporan Now
-            </button>
-        </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        
+                        <!-- KOLOM KIRI -->
+                        <div class="lg:col-span-2 space-y-4">
+                            <!-- PENGUMUMAN 1: PENTING -->
+                            <div class="bg-white border border-gray-200 border-l-4 border-l-teal-600 rounded-lg shadow-sm p-5">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded shadow-sm">PENTING</span>
+                                    <h3 class="font-bold text-gray-800 text-sm md:text-base">Batas Waktu Unggah Laporan Bulanan PPNS</h3>
+                                </div>
+                                <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1 mb-3">
+                                    <li>Setiap Penyidik Pegawai Negeri Sipil (PPNS) wajib mengunggah Laporan Bulanan Kegiatan <strong>setiap bulan berjalan</strong>.</li>
+                                    <li>Batas akhir pengunggahan dokumen laporan bulanan adalah tanggal <strong>5 pada bulan berikutnya</strong>.</li>
+                                    <li>Kebijakan pembatasan ini berlaku untuk pengisian laporan <strong>periode tahun 2026 dan seterusnya</strong>.</li>
+                                </ul>
+                                <button onclick="switchTab('laporanBulanan')" class="bg-teal-100 text-teal-800 hover:bg-teal-200 transition text-xs font-semibold px-4 py-1.5 rounded-full">
+                                    Unggah Laporan Now
+                                </button>
+                            </div>
 
-        <!-- PENGUMUMAN 2: INFO -->
-        <div class="bg-white border border-gray-200 border-l-4 border-l-teal-600 rounded-lg shadow-sm p-5">
-            <div class="flex items-center gap-2 mb-3">
-                <span class="bg-teal-500 text-white text-xs font-bold px-2 py-0.5 rounded shadow-sm">INFO</span>
-                <h3 class="font-bold text-gray-800 text-sm md:text-base">Pembaruan Data Masa Berlaku KTA & SKEP PPNS</h3>
-            </div>
-            <p class="text-sm text-gray-600 mb-3 leading-relaxed">
-                Bagi PPNS yang <strong>Kartu Tanda Anggota (KTA)</strong> atau <strong>SKEP Pengangkatan</strong> akan habis masa berlakunya dalam kurun waktu 6 bulan ke depan, dimohon untuk segera melakukan pembaruan data pada menu Update Data atau berkoordinasi dengan Sekretariat PPNS.
-            </p>
-            <p class="text-sm text-gray-500 mb-3 italic">
-                <span class="underline font-semibold not-italic">Catatan:</span> Pastikan file SKEP dan KTA terlampir dalam format PDF yang jelas dan terbaca.
-            </p>
-            <button onclick="switchTab('data')" class="bg-teal-100 text-teal-800 hover:bg-teal-200 transition text-xs font-semibold px-4 py-1.5 rounded-full">
-                Cek Data PPNS
-            </button>
-        </div>
+                            <!-- PENGUMUMAN 2: INFO -->
+                            <div class="bg-white border border-gray-200 border-l-4 border-l-teal-600 rounded-lg shadow-sm p-5">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="bg-teal-500 text-white text-xs font-bold px-2 py-0.5 rounded shadow-sm">INFO</span>
+                                    <h3 class="font-bold text-gray-800 text-sm md:text-base">Pembaruan Data Masa Berlaku KTA & SKEP PPNS</h3>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-3 leading-relaxed">
+                                    Bagi PPNS yang <strong>Kartu Tanda Anggota (KTA)</strong> atau <strong>SKEP Pengangkatan</strong> akan habis masa berlakunya dalam kurun waktu 6 bulan ke depan, dimohon untuk segera melakukan pembaruan data pada menu Update Data atau berkoordinasi dengan Sekretariat PPNS.
+                                </p>
+                                <p class="text-sm text-gray-500 mb-3 italic">
+                                    <span class="underline font-semibold not-italic">Catatan:</span> Pastikan file SKEP dan KTA terlampir dalam format PDF yang jelas dan terbaca.
+                                </p>
+                                <button onclick="switchTab('data')" class="bg-teal-100 text-teal-800 hover:bg-teal-200 transition text-xs font-semibold px-4 py-1.5 rounded-full">
+                                    Cek Data PPNS
+                                </button>
+                            </div>
+                        </div>
 
-    </div>
+                        <!-- KOLOM KANAN -->
+                        <div class="space-y-4">
+                            <!-- BANTUAN NARAHUBUNG SEKRETARIAT PPNS -->
+                            <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                                <div class="bg-sky-50 p-4 border-b border-gray-200 flex gap-3 items-start">
+                                    <div class="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center text-white flex-shrink-0 text-xl font-bold shadow-sm">?</div>
+                                    <div>
+                                        <p class="text-sm text-gray-700 font-medium">Kendala Input / Validasi Data PPNS?</p>
+                                        <p class="text-xs text-gray-500 mt-1">Silakan hubungi <strong>Sekretariat PPNS Pemprov NTT</strong></p>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex justify-between items-center mb-4">
+                                        <div>
+                                            <h4 class="text-sm font-bold text-blue-700">ADMIN SIMDA PPNS</h4>
+                                            <p class="text-xs text-green-600 mt-1 flex items-center gap-1"><i class="fab fa-whatsapp"></i> 0811-4331-894</p>
+                                        </div>
+                                        <a href="https://wa.me/628114331894" target="_blank" class="bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium px-3 py-1.5 rounded flex items-center gap-1 transition shadow-sm">
+                                            <i class="fab fa-whatsapp"></i> Kirim Pesan
+                                        </a>
+                                    </div>
+                                    <div class="text-[11px] text-gray-600 space-y-1">
+                                        <p class="font-semibold text-gray-700">Saat berkonsultasi, mohon melampirkan:</p>
+                                        <ol class="list-decimal pl-4 space-y-0.5">
+                                            <li>Nama Lengkap & NIP PPNS.</li>
+                                            <li>Asal Perangkat Daerah / OPD.</li>
+                                            <li>Tangkapan layar (screenshot) kendala sistem.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
 
-    <!-- KOLOM KANAN (Narahubung & Petunjuk SIMDA PPNS) -->
-    <div class="space-y-4">
-        
-        <!-- BANTUAN NARAHUBUNG SEKRETARIAT PPNS -->
-        <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-            <div class="bg-sky-50 p-4 border-b border-gray-200 flex gap-3 items-start">
-                <div class="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center text-white flex-shrink-0 text-xl font-bold shadow-sm">
-                    ?
-                </div>
-                <div>
-                    <p class="text-sm text-gray-700 font-medium">Kendala Input / Validasi Data PPNS?</p>
-                    <p class="text-xs text-gray-500 mt-1">Silakan hubungi <strong>Sekretariat PPNS Pemprov NTT</strong></p>
-                </div>
-            </div>
-            <div class="p-4">
-                <div class="flex justify-between items-center mb-4">
-                    <div>
-                        <h4 class="text-sm font-bold text-blue-700">ADMIN SIMDA PPNS</h4>
-                        <p class="text-xs text-green-600 mt-1 flex items-center gap-1"><i class="fab fa-whatsapp"></i> 0811-4331-894</p>
+                            <!-- BUKU PETUNJUK SIMDA PPNS -->
+                            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex items-center gap-4">
+                                <div class="text-4xl text-red-500"><i class="fas fa-file-pdf"></i></div>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-semibold text-gray-700 mb-2">Manual Book SIMDA PPNS</h4>
+                                    <a href="https://drive.google.com/file/d/17AYE0m8oMWKZAWjNEMChCo4MJU2oWQPX/view?usp=sharing" target="_blank" class="inline-block bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium px-4 py-1.5 rounded transition shadow-sm">
+                                        <i class="fas fa-search mr-1"></i> Buka Petunjuk
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <a href="https://wa.me/628114331894" target="_blank" class="bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium px-3 py-1.5 rounded flex items-center gap-1 transition shadow-sm">
-                        <i class="fab fa-whatsapp"></i> Kirim Pesan
-                    </a>
-                </div>
-                <div class="text-[11px] text-gray-600 space-y-1">
-                    <p class="font-semibold text-gray-700">Saat berkonsultasi, mohon melampirkan:</p>
-                    <ol class="list-decimal pl-4 space-y-0.5">
-                        <li>Nama Lengkap & NIP PPNS.</li>
-                        <li>Asal Perangkat Daerah / OPD.</li>
-                        <li>Tangkapan layar (screenshot) kendala sistem.</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-
-        <!-- BUKU PETUNJUK SIMDA PPNS -->
-        <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex items-center gap-4">
-            <div class="text-4xl text-red-500">
-                <i class="fas fa-file-pdf"></i>
-            </div>
-            <div class="flex-1">
-                <h4 class="text-sm font-semibold text-gray-700 mb-2">Manual Book SIMDA PPNS</h4>
-                <a href="https://drive.google.com/file/d/17AYE0m8oMWKZAWjNEMChCo4MJU2oWQPX/view?usp=sharing" target="_blank" class="inline-block bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium px-4 py-1.5 rounded transition shadow-sm">
-                    <i class="fas fa-search mr-1"></i> Buka Petunjuk
-                </a>
-            </div>
-        </div>
-
-    </div>
-</div>
                     
                     <!-- BARIS ATAS: STATISTIK & GRAFIK -->
                     <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -299,19 +294,19 @@
                             <span class="text-sm text-gray-500 font-medium bg-white px-3 py-1 rounded-full border shadow-sm">Total: <b id="totalDataCount">0</b> PPNS</span>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-600 min-w-[800px]" id="ppnsTable">
+                            <table class="w-full text-sm text-left text-gray-600 min-w-[1000px]" id="ppnsTable">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-100/80">
                                     <tr>
                                         <th class="px-4 py-3 border-b">No</th>
                                         <th class="px-4 py-3 border-b">OPD</th>
-                                        <th class="px-4 py-3 border-b">Nama PPNS</th>
+                                        <th class="px-4 py-3 border-b">Nama & NIP</th>
                                         <th class="px-4 py-3 border-b">Jabatan</th>
-                                        <th class="px-4 py-3 border-b">Lembaga Pendiidikan dan Pembentukan</th>
+                                        <th class="px-4 py-3 border-b">Lembaga Pendidikan</th>
                                         <th class="px-4 py-3 border-b">No SKEP</th>
                                         <th class="px-4 py-3 border-b">No KTA</th>
                                         <th class="px-4 py-3 border-b">Tgl Berlaku KTA</th>
                                         <th class="px-4 py-3 border-b">Status</th>
-                                        <th class="px-4 py-3 border-b">Sudah Disumpah/Belum Disumpah</th>
+                                        <th class="px-4 py-3 border-b">Sumpah</th>
                                         <th id="thAksi" class="px-4 py-3 border-b text-center admin-only">Aksi</th>
                                     </tr>
                                 </thead>
@@ -323,7 +318,7 @@
                     </div>
                 </div>
 
-                <!-- SECTION: LAPORAN BULANAN -->
+                <!-- SECTION 3: LAPORAN BULANAN -->
                 <div id="sec-laporanBulanan" class="tab-content space-y-6">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">Laporan Bulanan PPNS</h2>
@@ -382,7 +377,7 @@
                     </div>
                 </div>
 
-                <!-- SECTION 3: LAPORAN TAHUNAN -->
+                <!-- SECTION 4: LAPORAN TAHUNAN & UPDATE DATA -->
                 <div id="sec-laporan" class="tab-content space-y-6">
                     <div class="mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">Laporan Tahunan PPNS</h2>
@@ -413,32 +408,17 @@
                                 </button>
                             </form>
                         </div>
-                        
-                        <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-history text-indigo-500 mr-2"></i>Riwayat Laporan Anda</h3>
-                            <ul class="divide-y divide-gray-200" id="riwayatLaporanList">
-                                <li class="py-3 flex justify-between items-center">
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS 2025</p>
-                                        <p class="text-xs text-gray-500">Diunggah: 10 Jan 2026</p>
-                                    </div>
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium border border-green-200">Diterima</span>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
 
-                <!-- SECTION 4: RUBAH / UPDATE DATA -->
+                <!-- SECTION UPDATE DATA -->
                 <div id="sec-update" class="tab-content space-y-6">
                     <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">Rubah / Tambah Data PPNS</h2>
-                        <p class="text-sm text-gray-500">Perbarui informasi identitas, jabatan, dan masa berlaku KTA.</p>
+                        <h2 class="text-2xl font-bold text-gray-800">Formulir Update Data PPNS</h2>
+                        <p class="text-sm text-gray-500">Tambah atau perbarui data keanggotaan PPNS Anda.</p>
                     </div>
 
-                    <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200 bg-gradient-to-br from-white to-blue-50/30">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fas fa-sync text-indigo-500 mr-2"></i>Form Entry Data PPNS</h3>
-                        
+                    <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200">
                         <form id="formUpdateData" onsubmit="handleSimpanData(event)" class="space-y-4">
                             <!-- Hidden ID field for updates -->
                             <input type="hidden" id="inputId" value="">
@@ -493,19 +473,15 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">OPD</label>
-                                    <input type="text" id="inputNama" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none" placeholder="Cth: Yohanes, S.H., M.H.">
-                                </div>
-                                <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                                    <input type="text" id="inputPangkat" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none" placeholder="Cth: Penata Tk. I (III/d)">
+                                    <input type="text" id="inputNama" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none" placeholder="Cth: Yohanes, S.H., M.H.">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">NIP</label>
                                     <input type="text" id="inputNip" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none" placeholder="198xxxxxxxxx">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Pangkat / Jabatan</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Pangkat / Golongan</label>
                                     <input type="text" id="inputPangkat" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none" placeholder="Cth: Penata Tk. I (III/d)">
                                 </div>
                                 <div>
@@ -517,12 +493,16 @@
                                     <input type="text" id="inputKta" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none" placeholder="Nomor Kartu Tanda Anggota...">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Lembaga Pendiidikan dan Pembentukan</label>
-                                    <input type="text" id="inputPangkat" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none" placeholder="Cth: Lembaga Pendidikan Polri Pusdik Reskrim Polri Lemdikpolri">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Lembaga Pendidikan Pembentukan</label>
+                                    <input type="text" id="inputLembaga" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none" placeholder="Cth: Diklat Reserse Lemdiklat Polri">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Sudah Disumpah/Belum Disumpah</label>
-                                    <input type="text" id="inputPangkat" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 outline-none" placeholder="Cth: Sudah)">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Status Sumpah</label>
+                                    <select id="inputSumpah" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 outline-none">
+                                        <option value="">Pilih Status...</option>
+                                        <option value="Sudah Disumpah">Sudah Disumpah</option>
+                                        <option value="Belum Disumpah">Belum Disumpah</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Berlaku KTA</label>
@@ -584,22 +564,47 @@
     </div>
 
     <script>
-        // --- GLOBAL STATE & MOCK DATA ---
+        // --- 1. SETUP FIREBASE ---
+        // PASTE FIREBASE CONFIG ANDA DI SINI
+       const firebaseConfig = {
+    apiKey: "AIzaSyDvLMtNuKYw8b-Y7zszJ7OJMhw5U5ZhRQU",
+    authDomain: "simda-ppns.firebaseapp.com",
+    databaseURL: "https://simda-ppns-default-rtdb.firebaseio.com",
+    projectId: "simda-ppns",
+    storageBucket: "simda-ppns.firebasestorage.app",
+    messagingSenderId: "929734133788",
+    appId: "1:929734133788:web:2c14cf1644877aeec177d9",
+    measurementId: "G-SHCRIPQBN5"
+};
+
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // --- GLOBAL STATE & DATA ---
         let currentUserRole = 'admin'; // 'admin' or 'user'
         let mapInstance = null;
         let opdChartInstance = null;
         let ktaChartInstance = null;
+        let dataPPNS = []; // Kosongkan, karena akan diisi OTOMATIS dari Firebase
 
-        // Mock Data PPNS (Bisa ditambah/hapus secara dinamis)
-        let dataPPNS = [
-            { id: 1, opd: "Satpol PP", nama: "Drs. Yohanis, M.Si", nip: "197501012000121001", pangkat: "Pembina (IV/a)", skep: "AHU-123.45", kta: "KTA-001", tglBerlaku: "2027-12-31", lat: -10.1772, lng: 123.6070, kota: "Kupang" },
-            { id: 2, opd: "Dinas Lingkungan Hidup", nama: "Ir. Maria", nip: "198005102005012002", pangkat: "Penata Tk.I (III/d)", skep: "AHU-456.78", kta: "KTA-002", tglBerlaku: "2024-10-15", lat: -8.5833, lng: 122.9667, kota: "Maumere" },
-            { id: 3, opd: "Dinas Perhubungan", nama: "Markus, S.H.", nip: "198211202008031003", pangkat: "Penata (III/c)", skep: "AHU-789.01", kta: "KTA-003", tglBerlaku: "2028-05-20", lat: -9.6500, lng: 119.4167, kota: "Waingapu" },
-            { id: 4, opd: "Satpol PP", nama: "Agustinus, S.IP", nip: "198502142010011004", pangkat: "Penata Muda Tk.I (III/b)", skep: "AHU-111.22", kta: "KTA-004", tglBerlaku: "2026-08-10", lat: -8.4500, lng: 123.4167, kota: "Larantuka" },
-            { id: 5, opd: "Dinas Pariwisata", nama: "Elizabeth, S.Par", nip: "199007072015022005", pangkat: "Penata Muda (III/a)", skep: "AHU-333.44", kta: "KTA-005", tglBerlaku: "2025-01-30", lat: -8.6500, lng: 121.0889, kota: "Ende" },
-            { id: 6, opd: "Inspektorat Daerah", nama: "Drs. Paulus, Ak.", nip: "197212121998031006", pangkat: "Pembina Tk.I (IV/b)", skep: "AHU-555.66", kta: "KTA-006", tglBerlaku: "2023-11-01", lat: -10.1500, lng: 123.6000, kota: "Kupang" },
-            { id: 7, opd: "Dinas Kelautan dan Perikanan", nama: "Fransiscus, S.Pi", nip: "198303032009021007", pangkat: "Penata Tk.I (III/d)", skep: "AHU-777.88", kta: "KTA-007", tglBerlaku: "2027-04-12", lat: -8.5000, lng: 119.8667, kota: "Labuan Bajo" }
-        ];
+        // --- 2. SINKRONISASI DATA REALTIME DARI FIREBASE ---
+        function loadDataFromFirebase() {
+            // Mendengarkan perubahan data di folder 'ppnsData' secara Realtime
+            db.ref('ppnsData').on('value', (snapshot) => {
+                dataPPNS = []; // Kosongkan array lokal
+                snapshot.forEach((childSnapshot) => {
+                    const childData = childSnapshot.val();
+                    childData.id = childSnapshot.key; // Jadikan key Firebase sebagai ID
+                    dataPPNS.push(childData);
+                });
+                
+                // Render ulang tampilan setiap kali ada perubahan di database
+                renderTable(dataPPNS);
+                updateDashboardStats();
+                initMap();
+            });
+        }
 
         // --- UTILITY: TOAST NOTIFICATION ---
         function showToast(message, type = 'success') {
@@ -627,22 +632,15 @@
             const pass = document.getElementById('loginPassword').value.trim();
             const errorMsg = document.getElementById('loginError');
             
-            // Sembunyikan pesan error terlebih dahulu
             errorMsg.classList.add('hidden');
 
-            // KONDISI 1: Cek Master Admin
             const isAdmin = (nip === '199408312025061003' && pass === 'admin123');
-            
-            // KONDISI 2: Cek Pengguna Biasa 
-            // Validasi NIP (Harus 18 digit angka). Password untuk semua user: pengguna123
             const isNipValid = /^\d{18}$/.test(nip); 
             const isUser = (isNipValid && pass === 'pengguna123');
 
             if (isAdmin || isUser) {
-                // Animasi transisi hilang
                 document.getElementById('loginScreen').classList.add('opacity-0');
                 
-                // Menyesuaikan tampilan UI berdasarkan Role
                 if (isAdmin) {
                     currentUserRole = 'admin';
                     document.getElementById('userNameDisplay').innerText = "Admin Master";
@@ -658,21 +656,19 @@
                     document.getElementById('profileName').innerText = "Pengguna Sistem";
                     document.getElementById('profileNip').innerText = "NIP: " + nip;
                     document.getElementById('profileRoleBadge').innerText = "Pengguna Daerah";
-                    // Hilangkan tombol/fitur khusus admin
                     document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
                 }
 
-                // Beralih ke halaman utama setelah animasi selesai
                 setTimeout(() => {
                     document.getElementById('loginScreen').classList.add('hidden');
                     document.getElementById('mainApp').classList.remove('hidden');
-                    initDashboard(); // Inisiasi Grafik & Peta
-                    renderTable(dataPPNS); // Render Tabel
+                    
+                    // PANGGIL FIREBASE SAAT LOGIN BERHASIL
+                    loadDataFromFirebase(); 
                     showToast('Berhasil masuk ke sistem', 'success');
                 }, 400);
                 
             } else {
-                // Tampilkan pesan error berdasarkan kasus salah
                 errorMsg.classList.remove('hidden');
                 if (nip === '199408312025061003' && pass !== 'admin123') {
                     errorMsg.innerText = "Password Master Admin salah!";
@@ -697,10 +693,12 @@
                 document.getElementById('loginPassword').value = '';
             }, 100);
             
-            // Bersihkan instance Canvas dan Map agar tidak menumpuk saat login lagi
             if(mapInstance) { mapInstance.remove(); mapInstance = null; }
             if(opdChartInstance) { opdChartInstance.destroy(); opdChartInstance = null; }
             if(ktaChartInstance) { ktaChartInstance.destroy(); ktaChartInstance = null; }
+            
+            // Hentikan sinkronisasi Firebase saat logout
+            db.ref('ppnsData').off();
         }
 
         function toggleMobileMenu() {
@@ -730,7 +728,6 @@
                 activeBtn.classList.add('bg-blue-600', 'text-white');
             }
             
-            // Fix ukuran map jika tab yang dibuka adalah dashboard
             if(tabId === 'dashboard' && mapInstance) {
                 setTimeout(() => { mapInstance.invalidateSize(); }, 200);
             }
@@ -741,18 +738,12 @@
         }
 
         // --- DASHBOARD: CHARTS & MAPS ---
-        function initDashboard() {
-            updateDashboardStats();
-            initMap();
-        }
-
         function updateDashboardStats() {
             const opdCounts = {};
             let ktaAktif = 0;
             let ktaExpired = 0;
             const now = new Date();
 
-            // Hitung secara otomatis dari dataPPNS saat ini
             dataPPNS.forEach(item => {
                 opdCounts[item.opd] = (opdCounts[item.opd] || 0) + 1;
                 const validUntil = new Date(item.tglBerlaku);
@@ -760,7 +751,6 @@
                 else { ktaExpired++; }
             });
 
-            // 1. Donut Chart (OPD)
             const opdLabels = Object.keys(opdCounts);
             const opdData = Object.values(opdCounts);
             const ctxDonut = document.getElementById('opdDonutChart').getContext('2d');
@@ -784,7 +774,6 @@
                 }
             });
 
-            // 2. Bar Chart (KTA)
             const ctxBar = document.getElementById('ktaBarChart').getContext('2d');
             if(ktaChartInstance) ktaChartInstance.destroy();
             ktaChartInstance = new Chart(ctxBar, {
@@ -809,17 +798,13 @@
 
         function initMap() {
             if(mapInstance) mapInstance.remove();
-            
-            // Koordinat Satpol PP Provinsi NTT (Sekretariat / Kupang area)
             const satpolPpCoords = [-10.162705, 123.596001];
-            
             mapInstance = L.map('map').setView(satpolPpCoords, 8);
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(mapInstance);
 
-            // Marker khusus untuk Sekretariat Satpol PP Provinsi NTT
             const sekreIcon = L.icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -879,8 +864,8 @@
                 let actionsHtml = '-';
                 if(currentUserRole === 'admin') {
                     actionsHtml = `
-                        <button onclick="editData(${item.id})" class="text-blue-500 hover:text-blue-700 mr-2 p-1" title="Edit"><i class="fas fa-edit"></i></button>
-                        <button onclick="hapusData(${item.id})" class="text-red-500 hover:text-red-700 p-1" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+                        <button onclick="editData('${item.id}')" class="text-blue-500 hover:text-blue-700 mr-2 p-1" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button onclick="hapusData('${item.id}')" class="text-red-500 hover:text-red-700 p-1" title="Hapus"><i class="fas fa-trash-alt"></i></button>
                     `;
                 }
 
@@ -891,12 +876,13 @@
                         <div class="font-semibold text-gray-800">${item.nama}</div>
                         <div class="text-xs text-gray-500">NIP. ${item.nip}</div>
                     </td>
-                    <td class="px-4 py-3 border-b">
-                        <div>SKEP: ${item.skep}</div>
-                        <div class="text-xs text-gray-500">KTA: ${item.kta}</div>
-                    </td>
+                    <td class="px-4 py-3 border-b">${item.pangkat || '-'}</td>
+                    <td class="px-4 py-3 border-b">${item.lembaga || '-'}</td>
+                    <td class="px-4 py-3 border-b">${item.skep || '-'}</td>
+                    <td class="px-4 py-3 border-b">${item.kta || '-'}</td>
                     <td class="px-4 py-3 border-b text-center">${item.tglBerlaku}</td>
                     <td class="px-4 py-3 border-b text-center">${getStatusHtml(item.tglBerlaku)}</td>
+                    <td class="px-4 py-3 border-b text-center">${item.sumpah || '-'}</td>
                     <td class="px-4 py-3 border-b text-center admin-only ${currentUserRole !== 'admin' ? 'hidden' : ''}">
                         ${actionsHtml}
                     </td>
@@ -908,18 +894,19 @@
         function searchTable() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const filteredData = dataPPNS.filter(item => 
-                item.nama.toLowerCase().includes(input) || 
-                item.nip.toLowerCase().includes(input) ||
-                item.opd.toLowerCase().includes(input)
+                (item.nama && item.nama.toLowerCase().includes(input)) || 
+                (item.nip && item.nip.toLowerCase().includes(input)) ||
+                (item.opd && item.opd.toLowerCase().includes(input))
             );
             renderTable(filteredData);
         }
 
+        // --- 3. CREATE & UPDATE KE FIREBASE ---
         function handleSimpanData(e) {
             e.preventDefault();
-            const id = document.getElementById('inputId').value;
+            const idInput = document.getElementById('inputId').value;
+            
             const newData = {
-                id: id ? parseInt(id) : Date.now(),
                 opd: document.getElementById('inputOpd').value,
                 nama: document.getElementById('inputNama').value,
                 nip: document.getElementById('inputNip').value,
@@ -927,49 +914,51 @@
                 skep: document.getElementById('inputSkep').value,
                 kta: document.getElementById('inputKta').value,
                 tglBerlaku: document.getElementById('inputTglBerlaku').value,
-                lat: -8.6500, // Koordinat standar sementara jika tambah baru
-                lng: 121.0889,
-                kota: "NTT"
+                lembaga: document.getElementById('inputLembaga').value,
+                sumpah: document.getElementById('inputSumpah').value,
+                lat: -10.1500, lng: 123.6000, kota: "Kupang" // Default Map
             };
 
-            if (id) {
-                const idx = dataPPNS.findIndex(d => d.id == id);
-                dataPPNS[idx] = newData;
-                showToast('Data berhasil diperbarui', 'success');
+            if (idInput) {
+                // Update data di Firebase
+                db.ref('ppnsData/' + idInput).update(newData)
+                    .then(() => showToast('Data berhasil diperbarui di server!', 'success'))
+                    .catch(err => showToast('Error: ' + err.message, 'error'));
             } else {
-                dataPPNS.push(newData);
-                showToast('Data berhasil ditambahkan', 'success');
+                // Tambah data baru ke Firebase
+                db.ref('ppnsData').push(newData)
+                    .then(() => showToast('Data baru berhasil disimpan ke server!', 'success'))
+                    .catch(err => showToast('Error: ' + err.message, 'error'));
             }
-            
+
             resetFormUpdate();
-            updateDashboardStats(); // Refresh chart karena data berubah
-            initMap(); // Refresh map
-            renderTable(dataPPNS); // Refresh tabel
             switchTab('data');
         }
 
         function editData(id) {
-            const item = dataPPNS.find(d => d.id === id);
+            const item = dataPPNS.find(d => String(d.id) === String(id));
             if(!item) return;
             
             document.getElementById('inputId').value = item.id;
             document.getElementById('inputOpd').value = item.opd;
             document.getElementById('inputNama').value = item.nama;
+            document.getElementById('inputPangkat').value = item.pangkat || '';
             document.getElementById('inputNip').value = item.nip;
-            document.getElementById('inputPangkat').value = item.pangkat;
-            document.getElementById('inputSkep').value = item.skep;
-            document.getElementById('inputKta').value = item.kta;
+            document.getElementById('inputSkep').value = item.skep || '';
+            document.getElementById('inputKta').value = item.kta || '';
             document.getElementById('inputTglBerlaku').value = item.tglBerlaku;
+            document.getElementById('inputLembaga').value = item.lembaga || '';
+            document.getElementById('inputSumpah').value = item.sumpah || '';
             
             switchTab('update');
         }
 
+        // --- 4. DELETE DARI FIREBASE ---
         function hapusData(id) {
-            dataPPNS = dataPPNS.filter(d => d.id !== id);
-            updateDashboardStats();
-            initMap();
-            renderTable(dataPPNS);
-            showToast('Data berhasil dihapus', 'success');
+            if(!confirm("Yakin ingin menghapus data ini secara permanen dari server?")) return;
+            db.ref('ppnsData/' + id).remove()
+                .then(() => showToast('Data berhasil dihapus dari server!', 'success'))
+                .catch(err => showToast('Gagal menghapus: ' + err.message, 'error'));
         }
 
         function resetFormUpdate() {
@@ -1018,10 +1007,8 @@
         }
 
         // --- GOOGLE DRIVE INTEGRATION (VIA APPS SCRIPT) ---
-        // TODO: Masukkan URL Web App Google Apps Script Anda di dalam tanda kutip di bawah ini!
         const SCRIPT_URL_LAPORAN = "https://script.google.com/macros/s/AKfycbwvWfV5t_yRPFsCcXAwMXs8tapLEpFkvIb8QGnWGu_Js1fpIgXag0w5HF2hA5qloMQhgA/exec";
 
-        // Fungsi mengubah file PDF menjadi Base64 agar bisa dikirim via API
         function getFileBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1043,14 +1030,12 @@
             if (!fileInput.files[0]) return;
             const file = fileInput.files[0];
 
-            // Tampilkan animasi Loading UI
             const originalBtnHtml = btnSubmit.innerHTML;
             btnSubmit.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i> Mengirim ke Drive...`;
             btnSubmit.disabled = true;
 
             try {
                 if (SCRIPT_URL_LAPORAN !== "") {
-                    // JIKA URL DRIVE SUDAH DI-SET, LAKUKAN PENGIRIMAN NYATA
                     const base64Data = await getFileBase64(file);
                     const formData = new URLSearchParams();
                     formData.append('jenisLaporan', 'Bulanan');
@@ -1061,14 +1046,11 @@
                     formData.append('mimeType', file.type);
                     formData.append('fileData', base64Data);
 
-                    // Kirim ke Google Apps Script
                     await fetch(SCRIPT_URL_LAPORAN, { method: 'POST', body: formData });
                 } else {
-                    // JIKA URL KOSONG, SIMULASIKAN LOADING UNTUK DEMO
                     await new Promise(r => setTimeout(r, 1500));
                 }
 
-                // Tambahkan ke riwayat tampilan UI
                 const ul = document.getElementById('riwayatLaporanBulanList');
                 const li = document.createElement('li');
                 li.className = "py-3 flex justify-between items-center bg-green-50/30 px-2 rounded mt-2 border border-green-100 transition-all";
@@ -1087,7 +1069,6 @@
                 showToast('Gagal mengirim ke Drive. Cek koneksi.', 'error');
                 console.error(error);
             } finally {
-                // Kembalikan tombol ke semula
                 btnSubmit.innerHTML = originalBtnHtml;
                 btnSubmit.disabled = false;
             }
@@ -1104,14 +1085,12 @@
             if (!fileInput.files[0]) return;
             const file = fileInput.files[0];
 
-            // Tampilkan animasi Loading UI
             const originalBtnHtml = btnSubmit.innerHTML;
             btnSubmit.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i> Mengirim ke Drive...`;
             btnSubmit.disabled = true;
 
             try {
                 if (SCRIPT_URL_LAPORAN !== "") {
-                    // JIKA URL DRIVE SUDAH DI-SET, LAKUKAN PENGIRIMAN NYATA
                     const base64Data = await getFileBase64(file);
                     const formData = new URLSearchParams();
                     formData.append('jenisLaporan', 'Tahunan');
@@ -1122,25 +1101,24 @@
                     formData.append('mimeType', file.type);
                     formData.append('fileData', base64Data);
 
-                    // Kirim ke Google Apps Script
                     await fetch(SCRIPT_URL_LAPORAN, { method: 'POST', body: formData });
                 } else {
-                    // JIKA URL KOSONG, SIMULASIKAN LOADING UNTUK DEMO
                     await new Promise(r => setTimeout(r, 1500));
                 }
 
-                // Tambahkan ke riwayat tampilan UI
                 const ul = document.getElementById('riwayatLaporanList');
-                const li = document.createElement('li');
-                li.className = "py-3 flex justify-between items-center bg-blue-50/50 px-2 rounded mt-2 border border-blue-100 transition-all";
-                li.innerHTML = `
-                    <div>
-                        <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS ${tahun}</p>
-                        <p class="text-xs text-gray-500">Diunggah: ${new Date().toLocaleDateString('id-ID')}</p>
-                    </div>
-                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium border border-blue-200">Terkirim ke Drive</span>
-                `;
-                ul.prepend(li);
+                if (ul) {
+                    const li = document.createElement('li');
+                    li.className = "py-3 flex justify-between items-center bg-blue-50/50 px-2 rounded mt-2 border border-blue-100 transition-all";
+                    li.innerHTML = `
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">Laporan Kinerja PPNS ${tahun}</p>
+                            <p class="text-xs text-gray-500">Diunggah: ${new Date().toLocaleDateString('id-ID')}</p>
+                        </div>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium border border-blue-200">Terkirim ke Drive</span>
+                    `;
+                    ul.prepend(li);
+                }
                 
                 document.getElementById('formLaporanTahunan').reset();
                 showToast(SCRIPT_URL_LAPORAN ? 'Laporan tahunan berhasil dikirim ke Google Drive!' : 'Simulasi: File terkirim!', 'success');
@@ -1148,13 +1126,12 @@
                 showToast('Gagal mengirim ke Drive. Cek koneksi.', 'error');
                 console.error(error);
             } finally {
-                // Kembalikan tombol ke semula
                 btnSubmit.innerHTML = originalBtnHtml;
                 btnSubmit.disabled = false;
             }
         }
 
-        const API_URL = "https://script.google.com/macros/s/AKfycbyxsfeG-KfS_SsR4nFHHI3eXRP1jDCbSSe_0u8W0s8LPc_F0D1DVDmshGdCQ25-Cdyqig/exec"; // Jangan lupa ganti dengan URL asli Anda
+        const API_URL = "https://script.google.com/macros/s/AKfycbyxsfeG-KfS_SsR4nFHHI3eXRP1jDCbSSe_0u8W0s8LPc_F0D1DVDmshGdCQ25-Cdyqig/exec";
 
         async function handleGantiPassword(e) {
             e.preventDefault();
@@ -1165,13 +1142,13 @@
             const userNip = document.getElementById('loginNip').value.trim(); 
 
             if (!oldPass || !newPass || !confirmPass) {
-                showToast("Semua kolom password harus diisi!", false); return;
+                showToast("Semua kolom password harus diisi!", 'error'); return;
             }
             if (newPass.length < 6) {
-                showToast("Password baru minimal 6 karakter!", false); return;
+                showToast("Password baru minimal 6 karakter!", 'error'); return;
             }
             if (newPass !== confirmPass) {
-                showToast("Konfirmasi password tidak cocok!", false); return;
+                showToast("Konfirmasi password tidak cocok!", 'error'); return;
             }
 
             showToast("Sedang menyimpan password ke Google Sheets...");
@@ -1189,13 +1166,13 @@
                 const result = await response.json();
 
                 if (result.status === "success") {
-                    showToast("Selesai! Password berhasil diubah di Google Sheet!");
+                    showToast("Selesai! Password berhasil diubah di Google Sheet!", 'success');
                     e.target.reset();
                 } else {
-                    showToast(result.message, false);
+                    showToast(result.message, 'error');
                 }
             } catch (error) {
-                showToast("Gagal terhubung ke Google Sheets.", false);
+                showToast("Gagal terhubung ke Google Sheets.", 'error');
                 console.error(error);
             }
         }
