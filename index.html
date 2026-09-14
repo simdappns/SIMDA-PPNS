@@ -104,6 +104,10 @@
                     <i class="fas fa-database w-5 text-center"></i> Data PPNS
                 </button>
 
+                <button onclick="switchTab('kasus')" id="btn-kasus" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fas fa-briefcase w-5 text-center"></i> Data Kasus
+                </button>
+                
                 <button onclick="switchTab('laporanBulanan')" id="btn-laporanBulanan" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
                     <i class="fas fa-calendar-alt w-5 text-center"></i> Laporan Bulanan
                 </button>
@@ -160,7 +164,24 @@
                         <h2 class="text-2xl font-bold text-gray-800">Dashboard Utama</h2>
                         <p class="text-sm text-gray-500">Ringkasan Eksekutif Sistem Informasi Manajemen Data PPNS Pemprov NTT</p>
                     </div>
-
+                    <!-- NEW: WIDGET KARTU JUMLAH TOTAL -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="glass-panel p-5 rounded-xl shadow-sm border border-l-4 border-l-blue-500 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">Total PPNS Terdaftar</p>
+                                <h3 class="text-3xl font-bold text-gray-800" id="dashTotalPPNS">0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 text-xl"><i class="fas fa-users"></i></div>
+                        </div>
+                        <div class="glass-panel p-5 rounded-xl shadow-sm border border-l-4 border-l-red-500 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500 font-semibold mb-1">Total Kasus Ditangani</p>
+                                <h3 class="text-3xl font-bold text-gray-800" id="dashTotalKasus">0</h3>
+                            </div>
+                            <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-500 text-xl"><i class="fas fa-briefcase"></i></div>
+                        </div>
+                    </div>
+        
                     <!-- KETERANGAN & PENGUMUMAN SIMDA PPNS -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                         
@@ -318,6 +339,64 @@
                     </div>
                 </div>
 
+                <!-- NEW SECTION: DATA KASUS -->
+                <div id="sec-kasus" class="tab-content space-y-6">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Manajemen Data Kasus</h2>
+                        <p class="text-sm text-gray-500">Pencatatan dan rekapitulasi data kasus yang ditangani oleh PPNS.</p>
+                    </div>
+
+                    <!-- Form Tambah Kasus -->
+                    <div class="glass-panel p-6 rounded-xl shadow-sm border border-gray-200 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2"><i class="fas fa-plus-circle text-blue-500 mr-2"></i>Tambah / Edit Kasus</h3>
+                        <form id="formKasus" onsubmit="handleSimpanKasus(event)" class="flex flex-col md:flex-row gap-4 items-end">
+                            <input type="hidden" id="kasusId" value="">
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Judul Kasus / Pelanggaran</label>
+                                <input type="text" id="kasusJudul" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none" placeholder="Cth: Penertiban Tambang Ilegal di Kab. TTS">
+                            </div>
+                            <div class="w-full md:w-1/4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Kasus</label>
+                                <input type="date" id="kasusTanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
+                            </div>
+                            <div class="w-full md:w-1/4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <select id="kasusStatus" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 outline-none">
+                                    <option value="Proses">Dalam Proses</option>
+                                    <option value="Selesai">Selesai / P21</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium h-[42px] whitespace-nowrap shadow-sm transition">
+                                <i class="fas fa-save mr-1"></i> Simpan Kasus
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tabel Kasus -->
+                    <div class="glass-panel rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50/50">
+                            <h3 class="font-semibold text-gray-700">Daftar Kasus Tersimpan</h3>
+                            <span class="text-sm text-gray-500 font-medium bg-white px-3 py-1 rounded-full border shadow-sm">Total: <b id="lblTotalKasusTabel">0</b> Kasus</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-600 min-w-[600px]">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100/80">
+                                    <tr>
+                                        <th class="px-4 py-3 border-b w-12 text-center">No</th>
+                                        <th class="px-4 py-3 border-b">Judul Kasus</th>
+                                        <th class="px-4 py-3 border-b w-32">Tanggal</th>
+                                        <th class="px-4 py-3 border-b w-32 text-center">Status</th>
+                                        <th class="px-4 py-3 border-b w-32 text-center admin-only">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBodyKasus" class="divide-y divide-gray-200 bg-white">
+                                    <!-- Injected by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- SECTION 3: LAPORAN BULANAN -->
                 <div id="sec-laporanBulanan" class="tab-content space-y-6">
                     <div class="mb-6">
@@ -336,7 +415,14 @@
                                             <option value="Januari">Januari</option>
                                             <option value="Februari">Februari</option>
                                             <option value="Maret">Maret</option>
+                                            <option value="April">April</option>
+                                            <option value="Mei">Mei</option>
+                                            <option value="Juni">Juni</option>
                                             <option value="Juli" selected>Juli</option>
+                                            <option value="Agustus">Agustus</option>
+                                            <option value="September">September</option>
+                                            <option value="Oktober">Oktober</option>
+                                            <option value="November">November</option>
                                             <option value="Desember">Desember</option>
                                         </select>
                                     </div>
@@ -604,6 +690,17 @@
                 updateDashboardStats();
                 initMap();
             });
+
+            db.ref('kasusData').on('value', (snapshot) => {
+                dataKasus = [];
+                snapshot.forEach((childSnapshot) => {
+                    const childData = childSnapshot.val();
+                    childData.id = childSnapshot.key;
+                    dataKasus.push(childData);
+                });
+                renderTableKasus(dataKasus);
+                updateDashboardTotalKasus(); 
+            });
         }
 
         // --- UTILITY: TOAST NOTIFICATION ---
@@ -706,6 +803,7 @@
             
             // Hentikan sinkronisasi Firebase saat logout
             db.ref('ppnsData').off();
+            db.ref('kasusData').off();
         }
 
         function toggleMobileMenu() {
@@ -801,6 +899,11 @@
                     scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
                 }
             });
+        }
+
+        function updateDashboardTotalKasus() {
+            const dashEl = document.getElementById('dashTotalKasus');
+            if (dashEl) dashEl.innerText = dataKasus.length;
         }
 
         function initMap() {
@@ -906,6 +1009,85 @@
                 (item.opd && item.opd.toLowerCase().includes(input))
             );
             renderTable(filteredData);
+        }
+
+        // --- NEW: LOGIKA CRUD KASUS ---
+        function renderTableKasus(data) {
+            const tbody = document.getElementById('tableBodyKasus');
+            tbody.innerHTML = '';
+            document.getElementById('lblTotalKasusTabel').innerText = data.length;
+
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-blue-50/50 transition duration-150";
+                
+                let actionsHtml = '-';
+                if(currentUserRole === 'admin') {
+                    actionsHtml = `
+                        <button type="button" onclick="editKasus('${item.id}')" class="text-blue-500 hover:text-blue-700 mr-2 p-1" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button type="button" onclick="hapusKasus('${item.id}')" class="text-red-500 hover:text-red-700 p-1" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+                    `;
+                }
+
+                const statusBagde = item.status === 'Selesai' 
+                    ? '<span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full font-medium border border-green-200">Selesai</span>'
+                    : '<span class="bg-yellow-100 text-yellow-800 text-xs px-2.5 py-1 rounded-full font-medium border border-yellow-200">Proses</span>';
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3 border-b text-center">${index + 1}</td>
+                    <td class="px-4 py-3 border-b font-medium text-gray-800">${item.judul}</td>
+                    <td class="px-4 py-3 border-b">${item.tanggal}</td>
+                    <td class="px-4 py-3 border-b text-center">${statusBagde}</td>
+                    <td class="px-4 py-3 border-b text-center admin-only ${currentUserRole !== 'admin' ? 'hidden' : ''}">
+                        ${actionsHtml}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleSimpanKasus(e) {
+            e.preventDefault();
+            const idInput = document.getElementById('kasusId').value;
+            
+            const newDataKasus = {
+                judul: document.getElementById('kasusJudul').value,
+                tanggal: document.getElementById('kasusTanggal').value,
+                status: document.getElementById('kasusStatus').value,
+                uploader_nip: document.getElementById('profileNip').innerText.replace('NIP: ', '') // Tracking uploader
+            };
+
+            if (idInput) {
+                db.ref('kasusData/' + idInput).update(newDataKasus)
+                    .then(() => showToast('Data Kasus berhasil diperbarui!', 'success'))
+                    .catch(err => showToast('Error: ' + err.message, 'error'));
+            } else {
+                db.ref('kasusData').push(newDataKasus)
+                    .then(() => showToast('Kasus baru berhasil disimpan!', 'success'))
+                    .catch(err => showToast('Error: ' + err.message, 'error'));
+            }
+
+            document.getElementById('formKasus').reset();
+            document.getElementById('kasusId').value = '';
+        }
+
+        function editKasus(id) {
+            const item = dataKasus.find(d => String(d.id) === String(id));
+            if(!item) return;
+            
+            document.getElementById('kasusId').value = item.id;
+            document.getElementById('kasusJudul').value = item.judul;
+            document.getElementById('kasusTanggal').value = item.tanggal;
+            document.getElementById('kasusStatus').value = item.status;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll ke form
+        }
+
+        function hapusKasus(id) {
+            if(!confirm("Yakin ingin menghapus data kasus ini?")) return;
+            db.ref('kasusData/' + id).remove()
+                .then(() => showToast('Data kasus dihapus!', 'success'))
+                .catch(err => showToast('Gagal menghapus: ' + err.message, 'error'));
         }
 
         // --- 3. CREATE & UPDATE KE FIREBASE ---
