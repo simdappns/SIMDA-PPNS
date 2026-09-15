@@ -83,7 +83,6 @@
     </div>
 
     <div id="mainApp" class="hidden w-full h-full flex absolute inset-0 bg-gray-50">
-        <!-- SIDEBAR NAVIGATION -->
         <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-2xl z-40 transition-all duration-300 flex-shrink-0 hidden md:flex">
             <div class="p-4 border-b border-slate-700 flex items-center gap-3">
                 <img src="ChatGPTImageJul20202602_23_06AM-Photoroo.jpeg" alt="Logo" class="h-10 w-10 object-cover bg-white rounded border border-yellow-500">
@@ -167,36 +166,7 @@
             </header>
             
             <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full">
-                
-                <p class="text-xs text-slate-500 font-semibold mt-6 mb-2 uppercase tracking-wider px-2">Peraturan Perundang-undangan</p>
 
-                <a href="http://jdih.nttprov.go.id/dokumen/peraturan" target="_blank" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                    <i class="fas fa-balance-scale w-5 text-center"></i> JDIH Pemprov NTT
-                    <i class="fas fa-external-link-alt ml-auto text-xs opacity-50"></i>
-                </a>
-                
-                <p class="text-xs text-slate-500 font-semibold mt-6 mb-2 uppercase tracking-wider px-2">Pengaturan (Setting)</p>
-                
-                <button onclick="switchTab('profil')" id="btn-profil" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-                    <i class="fas fa-user-cog w-5 text-center"></i> Rubah Profil & Password
-                </button>
-            </div>
-            
-            <div class="p-4 border-t border-slate-700">
-                <div class="flex items-center gap-3 mb-4 px-2">
-                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="overflow-hidden">
-                        <p class="text-sm font-semibold truncate text-white" id="userNameDisplay">Admin PPNS</p>
-                        <p class="text-xs text-slate-400" id="userRoleDisplay">Administrator</p>
-                    </div>
-                </div>
-                <button onclick="handleLogout()" class="w-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 py-2 rounded-lg text-sm font-medium transition duration-200">
-                    <i class="fas fa-sign-out-alt mr-2"></i> Keluar
-                </button>
-            </div>
-        </aside> 
                 <!-- SECTION 1: DASHBOARD -->
                 <div id="sec-dashboard" class="tab-content active space-y-6">
                     <div class="mb-6">
