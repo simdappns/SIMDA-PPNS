@@ -119,6 +119,55 @@
                 <button onclick="switchTab('update')" id="btn-update" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
                     <i class="fas fa-edit w-5 text-center"></i> Rubah / Update Data
                 </button>
+
+                <!-- Tombol Menu Survei -->
+                <button onclick="switchTab('survei')" id="btn-survei" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors mt-2">
+                    <i class="fas fa-clipboard-list w-5 text-center text-purple-400"></i> Survei Kepuasan
+                </button>
+                
+                <p class="text-xs text-slate-500 font-semibold mt-6 mb-2 uppercase tracking-wider px-2">Peraturan Perundang-undangan</p>
+
+                <a href="http://jdih.nttprov.go.id/dokumen/peraturan" target="_blank" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fas fa-balance-scale w-5 text-center"></i> JDIH Pemprov NTT
+                    <i class="fas fa-external-link-alt ml-auto text-xs opacity-50"></i>
+                </a>
+                
+                <p class="text-xs text-slate-500 font-semibold mt-6 mb-2 uppercase tracking-wider px-2">Pengaturan (Setting)</p>
+                
+                <button onclick="switchTab('profil')" id="btn-profil" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fas fa-user-cog w-5 text-center"></i> Rubah Profil & Password
+                </button>
+            </div>
+            
+            <div class="p-4 border-t border-slate-700">
+                <div class="flex items-center gap-3 mb-4 px-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="text-sm font-semibold truncate text-white" id="userNameDisplay">Admin PPNS</p>
+                        <p class="text-xs text-slate-400" id="userRoleDisplay">Administrator</p>
+                    </div>
+                </div>
+                <button onclick="handleLogout()" class="w-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/50 py-2 rounded-lg text-sm font-medium transition duration-200">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Keluar
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+            <!-- Mobile Header -->
+            <header class="md:hidden bg-white shadow-sm flex items-center justify-between p-4 z-30">
+                <div class="flex items-center gap-2">
+                    <img src="https://placehold.co/100x100/1e293b/ffffff?text=SIMDA" alt="Logo" class="h-8 w-8 object-cover rounded">
+                    <h2 class="text-md font-bold text-slate-800">SIMDA PPNS</h2>
+                </div>
+                <button onclick="toggleMobileMenu()" class="text-slate-600 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </header>
+            
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full">
                 
                 <p class="text-xs text-slate-500 font-semibold mt-6 mb-2 uppercase tracking-wider px-2">Peraturan Perundang-undangan</p>
 
@@ -264,12 +313,34 @@
                             <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex items-center gap-4">
                                 <div class="text-4xl text-red-500"><i class="fas fa-file-pdf"></i></div>
                                 <div class="flex-1">
-                                    <h4 class="text-sm font-semibold text-gray-700 mb-2">Manual Book SIMDA PPNS</h4>
-                                    <a href="https://drive.google.com/file/d/1QkHLbQF4Beoxvt8SxyvlA-P4OHgfaXd3/view?usp=sharing" target="_blank" class="inline-block bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium px-4
-                                    <p class="text-xs text-gray-500 mb-2 leading-tight">Cari Produk Hukum Daerah (Perda, Pergub, dll).</p>
-                                    a href="https://jdih.nttprov.go.id/" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-1.5 rounded transition shadow-sm">
+                                    <h4 class="text-sm font-semibold text-gray-700 mb-2">Manual Book SIMDA</h4>
+                                    <a href="https://drive.google.com/file/d/1QkHLbQF4Beoxvt8SxyvlA-P4OHgfaXd3/view?usp=sharing" target="_blank" class="inline-block bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium px-4 py-1.5 rounded transition shadow-sm">
+                                        <i class="fas fa-search mr-1"></i> Buka Petunjuk
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- PORTAL JDIH NTT -->
+                            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex items-center gap-4">
+                                <div class="text-4xl text-blue-600"><i class="fas fa-gavel"></i></div>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-semibold text-gray-700 mb-1">Portal JDIH NTT</h4>
+                                    <p class="text-xs text-gray-500 mb-2 leading-tight">Cari Produk Hukum Daerah.</p>
+                                    <a href="https://jdih.nttprov.go.id/" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-1.5 rounded transition shadow-sm">
                                         <i class="fas fa-external-link-alt mr-1"></i> Buka Portal JDIH
                                     </a>
+                                </div>
+                            </div>
+
+                            <!-- BANNER SURVEI KEPUASAN -->
+                            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg shadow-sm p-4 flex items-center gap-4 text-white mt-4">
+                                <div class="text-4xl text-white opacity-90"><i class="fas fa-smile-beam"></i></div>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-bold mb-1">Survei Kepuasan</h4>
+                                    <p class="text-xs opacity-90 mb-3 leading-tight">Bantu kami meningkatkan kualitas layanan aplikasi ini.</p>
+                                    <button onclick="switchTab('survei')" class="bg-white text-purple-700 hover:bg-gray-100 text-xs font-bold px-4 py-1.5 rounded-full transition shadow-sm">
+                                        Isi Survei Sekarang
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -428,7 +499,7 @@
                                             <option value="Mei">Mei</option>
                                             <option value="Juni">Juni</option>
                                             <option value="Juli" selected>Juli</option>
-                                            <option value="Agustus">Agustus</option>
+                                            <option value="Agustus"selected> Agustus</option>
                                             <option value="September">September</option>
                                             <option value="Oktober">Oktober</option>
                                             <option value="November">November</option>
@@ -615,6 +686,25 @@
                     </div>
                 </div>
 
+                <!-- SECTION SURVEI KEPUASAN -->
+                <div id="sec-survei" class="tab-content space-y-6">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Survei Kepuasan Pengguna</h2>
+                        <p class="text-sm text-gray-500">Masukan dan saran Anda sangat berarti bagi pengembangan sistem SIMDA PPNS ke depannya.</p>
+                    </div>
+                    <div class="glass-panel p-2 md:p-6 rounded-xl shadow-sm border border-gray-200 w-full h-[800px]">
+                        <iframe 
+                            src="https://forms.gle/8DL139pP5PKZJzHJ7" 
+                            width="100%" 
+                            height="100%" 
+                            frameborder="0" 
+                            marginheight="0" 
+                            marginwidth="0">
+                            Memuat Survei...
+                        </iframe>
+                    </div>
+                </div>
+
                 <!-- SECTION 5: PROFIL -->
                 <div id="sec-profil" class="tab-content space-y-6">
                     <div class="mb-6">
@@ -632,27 +722,6 @@
                                 <span class="mt-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-medium border border-blue-200" id="profileRoleBadge">Administrator Sistem</span>
                             </div>
                         </div>
-
-                        <!-- SECTION SURVEI KEPUASAN -->
-                <div id="sec-survei" class="tab-content space-y-6">
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-gray-800">Survei Kepuasan Pengguna</h2>
-                        <p class="text-sm text-gray-500">Masukan dan saran Anda sangat berarti bagi pengembangan sistem SIMDA PPNS ke depannya.</p>
-                    </div>
-                    <div class="glass-panel p-2 md:p-6 rounded-xl shadow-sm border border-gray-200 w-full h-[800px]">
-                        <!-- GANTI ATRIBUT 'src' DI BAWAH INI DENGAN LINK GOOGLE FORM ANDA -->
-                        <iframe 
-                            src="https://forms.gle/8DL139pP5PKZJzHJ7" 
-                            width="100%" 
-                            height="100%" 
-                            frameborder="0" 
-                            marginheight="0" 
-                            marginwidth="0">
-                            Memuat Survei...
-                        </iframe>
-                    </div>
-                </div>
-
                         <form onsubmit="handleGantiPassword(event)" class="space-y-4">
                             <h4 class="font-semibold text-gray-700 mb-2 border-l-4 border-blue-500 pl-2">Ubah Password</h4>
                             <div>
